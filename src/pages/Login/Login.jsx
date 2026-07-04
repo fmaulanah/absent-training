@@ -1,54 +1,41 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Box, Container, Paper } from "@mui/material";
+import LoginForm from "./LoginForm";
 
 function Login() {
-    const navigate = useNavigate();
-
-    const [userId, setUserId] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleLogin = () => {
-    console.log("Login Click");
-
-    console.log("User :", userId);
-    console.log("Password :", password);
-
-    navigate("/home");
-    }
 
     return (
-        <div>
 
-            <h2>Login</h2>
+        <Box
+            sx={{
+                minHeight: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                background:
+                    "linear-gradient(135deg,#0F005F 0%,#24126A 100%)"
+            }}
+        >
 
-            <input
-                type="text"
-                placeholder="User ID"
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
-            />
+            <Container maxWidth="sm">
 
-            <br /><br />
+                <Paper
+                    elevation={8}
+                    sx={{
+                        p: 5,
+                        borderRadius: 4
+                    }}
+                >
 
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
+                    <LoginForm />
 
-            <br /><br />
+                </Paper>
 
-            <button onClick={handleLogin}>
-                Login
-            </button>
+            </Container>
 
-            <p>User ID : {userId}</p>
+        </Box>
 
-            <p>Password : {password}</p>
-
-        </div>
     );
+
 }
 
 export default Login;

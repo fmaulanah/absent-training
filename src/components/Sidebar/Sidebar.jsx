@@ -1,57 +1,68 @@
 import {
-    FaHome,
-    FaCalendarAlt,
-    FaDoorOpen,
-    FaCog,
-    FaSignOutAlt
-} from "react-icons/fa";
+
+    Box,
+
+    Divider,
+
+    List
+
+} from "@mui/material";
+
+import { useNavigate, useLocation } from "react-router-dom";
+
+import { MENUS } from "../../constants/menu";
+
+import SidebarHeader from "./SidebarHeader";
+
+import SidebarItem from "./SidebarItem";
+
+import SidebarFooter from "./SidebarFooter";
 
 function Sidebar(){
 
-    const menus = [
-        {
-            id:1,
-            title:"Home",
-            icon:<FaHome />
-        },
-        {
-            id:2,
-            title:"Schedule",
-            icon:<FaCalendarAlt />
-        },
-        {
-            id:3,
-            title:"Room",
-            icon:<FaDoorOpen />
-        },
-        {
-            id:4,
-            title:"Setting",
-            icon:<FaCog />
-        },
-        {
-            id:5,
-            title:"Test",
-            icon:<FaCog />
-        }
-    ];
+    const navigate = useNavigate();
+
+    const location = useLocation();
 
     return(
 
-        <aside className="sidebar">
+        <Box
+            sx={{
+                display:"flex",
+                flexDirection:"column",
+                height:"100%"
+            }}
+        >
 
-            <div className="sidebar-menu">
+            <SidebarHeader/>
 
-               
+            <Divider/>
 
-            </div>
+            <List>
 
-            <div className="sidebar-footer">
+                {MENUS.map((menu)=>(
 
-                
-            </div>
+                    <SidebarItem
 
-        </aside>
+                        key={menu.id}
+
+                        title={menu.title}
+
+                        icon={menu.icon}
+
+                        selected={location.pathname===menu.path}
+
+                        onClick={()=>navigate(menu.path)}
+
+                    />
+
+                ))}
+
+            </List>
+
+            <SidebarFooter/>
+
+        </Box>
 
     );
 

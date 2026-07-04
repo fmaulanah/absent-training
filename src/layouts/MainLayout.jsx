@@ -1,26 +1,72 @@
 import { Outlet } from "react-router-dom";
-
-import Header from "../components/Header/Header";
 import Sidebar from "../components/Sidebar/Sidebar";
+import Header from "../components/Header/Header";
+
+import {
+    AppBar,
+    Toolbar,
+    Drawer,
+    Box,
+    Typography,
+    CssBaseline
+} from "@mui/material";
+
+const drawerWidth = 260;
 
 function MainLayout() {
+
     return (
-        <div className="layout">
 
-            <Header />
+        <Box sx={{ display: "flex" }}>
 
-            <div className="layout-body">
+            <CssBaseline />
 
-                <Sidebar />
+            <Drawer
+                variant="permanent"
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    "& .MuiDrawer-paper": {
+                        width: drawerWidth,
+                        boxSizing: "border-box"
+                    }
+                }}
+            >
 
-                <main className="layout-content">
+                <Box p={2}>
+
+                    <Sidebar />
+
+                </Box>
+
+            </Drawer>
+
+            <Box
+                component="main"
+                sx={{
+                    flexGrow: 1,
+                    bgcolor:"#F5F7FA",
+                    minHeight: "100vh"
+                }}
+            >
+                <Header />
+
+                <Box
+                    sx={{
+                        p: 3
+                    }}
+                >
+
                     <Outlet />
-                </main>
 
-            </div>
+                </Box>
 
-        </div>
+            </Box>
+
+        </Box>
+
     );
+
 }
 
 export default MainLayout;
