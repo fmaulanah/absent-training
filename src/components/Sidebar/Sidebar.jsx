@@ -1,8 +1,3 @@
-import "./Sidebar.css";
-
-import Avatar from "../Avatar/Avatar";
-import MenuItem from "../MenuItem/MenuItem";
-
 import {
     FaHome,
     FaCalendarAlt,
@@ -45,27 +40,15 @@ function Sidebar(){
 
         <aside className="sidebar">
 
-            <Avatar/>
-
             <div className="sidebar-menu">
 
-                {menus.map((menu)=>(
-                    <MenuItem
-                        key={menu.id}
-                        title={menu.title}
-                        icon={menu.icon}
-                    />
-                ))}
+               
 
             </div>
 
             <div className="sidebar-footer">
 
-                <MenuItem
-                    title="Logout"
-                    icon={<FaSignOutAlt />}
-                />
-
+                
             </div>
 
         </aside>
