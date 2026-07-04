@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 
 import Login from "../pages/Login/Login";
-import Home from "../pages/Home/Home";
+import Home from "../pages/dashboard/dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
@@ -15,7 +15,7 @@ function AppRoutes() {
 
             <Route
                 path="/"
-                element={<Navigate to="/home" replace />}
+                element={<Navigate to="/dashboard" replace />}
             />
 
             <Route
@@ -40,7 +40,7 @@ function AppRoutes() {
             >
 
                 <Route
-                    path="/home"
+                    path="/dashboard"
                     element={<Home />}
                 />
 

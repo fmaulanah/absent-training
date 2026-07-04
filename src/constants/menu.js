@@ -8,7 +8,7 @@ export const MENUS = [
         id: 1,
         title: "Dashboard",
         icon: DashboardIcon,
-        path: "/home"
+        path: "/dashboard"
     },
     {
         id: 2,

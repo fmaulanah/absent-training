@@ -51,7 +51,7 @@ function LoginForm() {
 
             login(user);
 
-            navigate("/home");
+            navigate("/dashboard");
 
         } catch (err) {
 

@@ -4,7 +4,11 @@ import {
     Typography
 } from "@mui/material";
 
+import { useAuth } from "../../../context/AuthContext";
+
 function UserProfile() {
+    
+    const { user } = useAuth();
 
     return (
 
@@ -31,7 +35,7 @@ function UserProfile() {
                 <Typography
                     fontWeight={600}
                 >
-                    Fikri
+                    {user?.EMP_NAME}
                 </Typography>
 
                 <Typography
@@ -40,7 +44,7 @@ function UserProfile() {
                         color:"rgba(255,255,255,.75)"
                     }}
                 >
-                    IT Programmer
+                    {user?.DEPT_NM}
                 </Typography>
 
             </Box>

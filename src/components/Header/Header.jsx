@@ -12,19 +12,27 @@ function Header() {
     return (
 
         <Paper
-            elevation={0}
+            elevation={1}
             sx={{
+                position: "fixed",
 
-                px:4,
+                top: 0,
 
-                py:3,
+                left: 260,
 
-                bgcolor:"primary.main",
+                right: 0,
 
-                color:"white",
+                zIndex: (theme) => theme.zIndex.drawer - 1,
 
-                borderRadius:0
+                px: 4,
 
+                py: 3,
+
+                bgcolor: "primary.main",
+
+                color: "white",
+
+                borderRadius: 0
             }}
         >
 

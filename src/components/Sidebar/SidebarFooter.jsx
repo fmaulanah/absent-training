@@ -15,11 +15,34 @@ import {
 } from "@mui/material";
 
 import PersonIcon from "@mui/icons-material/Person";
-
 import LogoutIcon from "@mui/icons-material/Logout";
 
-function SidebarFooter(){
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
+function SidebarFooter(){
+    
+    const navigate = useNavigate();
+
+    const { user } = useAuth();
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+
+        if (!window.confirm("Logout dari aplikasi?")) {
+
+            return;
+
+        }
+
+        logout();
+
+        navigate("/login", {
+            replace: true
+        });
+
+    };
+    
     return(
 
         <Box
@@ -47,7 +70,8 @@ function SidebarFooter(){
                     </ListItemIcon>
 
                     <ListItemText
-                        primary="Fikri"
+                        primary={user?.EMP_NAME}
+                        secondary={user?.ROLE_ID}
                     />
 
                 </ListItemButton>
@@ -58,6 +82,7 @@ function SidebarFooter(){
                         mx:1,
                         color:"error.main"
                     }}
+                    onClick={handleLogout}
                 >
 
                     <ListItemIcon>
@@ -70,7 +95,7 @@ function SidebarFooter(){
                         primary="Logout"
                     />
 
-                </ListItemButton>
+                </ListItemButton >
 
             </List>
 

@@ -53,7 +53,8 @@ function MainLayout() {
 
                 <Box
                     sx={{
-                        p: 3
+                        mt: 12,
+                        p:3
                     }}
                 >
 
