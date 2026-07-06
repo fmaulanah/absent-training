@@ -19,6 +19,8 @@ import { createDummyTrainings } from "../../constants/scheduleData";
 
 import roomService from "../../services/roomService";
 
+import useResponsive from "../../hooks/useResponsive";
+
 function Dashboard() {
 
     const navigate = useNavigate();
@@ -31,6 +33,8 @@ function Dashboard() {
 
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState("");
+
+    const { isMobile } = useResponsive();
 
     const loadRooms = async () => {
 
@@ -84,7 +88,13 @@ function Dashboard() {
                 subtitle="Ringkasan jadwal training."
             />
 
-            <Grid container spacing={3}>
+            <Grid
+                container
+                spacing={{
+                    xs: 2,
+                    md: 3
+                }}
+            >
                 <Grid size={{ xs: 12, md: 4 }}>
                     <DashboardStat
                         title="Schedule Bulan Ini"
@@ -118,8 +128,19 @@ function Dashboard() {
                             <Box
                                 sx={{
                                     display: "flex",
-                                    gap: 2,
-                                    alignItems: "center"
+                                    flexDirection: {
+                                        xs: "column",
+                                        md: "row"
+                                    },
+                                    alignItems: {
+                                        xs: "stretch",
+                                        md: "center"
+                                    },
+                                    gap: 1.5,
+                                    width: {
+                                        xs: "100%",
+                                        md: "auto"
+                                    }
                                 }}
                             >
 
@@ -130,7 +151,10 @@ function Dashboard() {
                                     value={selectedRoom}
                                     onChange={(event) => setSelectedRoom(event.target.value)}
                                     sx={{
-                                        minWidth: 180
+                                        minWidth: {
+                                            xs: "100%",
+                                            md: 180
+                                        }
                                     }}
                                 >
 
@@ -154,6 +178,12 @@ function Dashboard() {
                                 <AppButton
                                     startIcon={<CalendarMonthIcon />}
                                     onClick={() => navigate("/schedule")}
+                                    sx={{
+                                        width: {
+                                            xs: "100%",
+                                            md: "auto"
+                                        }
+                                    }}
                                 >
                                     Buka Schedule
                                 </AppButton>
@@ -171,25 +201,33 @@ function Dashboard() {
                             <List disablePadding>
                                 {filteredTrainings.map((training, index) => (
                                     <Box key={training.id}>
-                                        <ListItem
-                                            disableGutters
-                                            secondaryAction={(
-                                                <Chip
-                                                    label={roomMap[training.room] || training.room}
-                                                    size="small"
-                                                    variant="outlined"
-                                                    color="primary"
-                                                />
-                                            )}
-                                        >
-                                            <ListItemText
-                                                primary={training.title}
-                                                secondary={`${dayjs(training.date).format("DD/MM/YYYY")} • ${training.time} • ${training.trainerName}`}
-                                                slotProps={{
-                                                    primary: { fontWeight: 700 },
-                                                    secondary: { mt: 0.5 }
+                                        <ListItem>
+                                            <Box
+                                                sx={{
+                                                    width: "100%"
                                                 }}
-                                            />
+                                            >
+                                                <ListItemText
+                                                    primary={training.title}
+                                                    secondary={`${dayjs(training.date).format("DD/MM/YYYY")} • ${training.time} • ${training.trainerName}`}
+                                                    slotProps={{
+                                                        primary: { fontWeight: 700 },
+                                                        secondary: { mt: 0.5 }
+                                                    }}
+                                                />
+
+                                                <Chip
+                                                    label={roomMap[training.room] ?? training.room}
+                                                    size="small"
+                                                    color="primary"
+                                                    variant="outlined"
+                                                    sx={{
+                                                        mt: 1,
+                                                        alignSelf: "flex-start"
+                                                    }}
+                                                />
+                                            </Box>
+
                                         </ListItem>
                                         {index < filteredTrainings.length - 1 && <Divider />}
                                     </Box>

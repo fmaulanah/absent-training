@@ -1,28 +1,34 @@
-import {
-
-    Box,
-
-    Divider,
-
-    List
-
-} from "@mui/material";
-
+import { Box, Divider, List } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { MENUS } from "../../constants/menu";
 
 import SidebarHeader from "./SidebarHeader";
-
 import SidebarItem from "./SidebarItem";
-
 import SidebarFooter from "./SidebarFooter";
 
-function Sidebar(){
+function Sidebar({
+
+    isMobile,
+
+    onClose
+
+}) {
 
     const navigate = useNavigate();
-
     const location = useLocation();
+
+    const handleMenuClick = (path) => {
+
+        navigate(path);
+
+        if (isMobile) {
+
+            onClose();
+
+        }
+
+    };
 
     return(
 
@@ -52,7 +58,7 @@ function Sidebar(){
 
                         selected={location.pathname===menu.path}
 
-                        onClick={()=>navigate(menu.path)}
+                        onClick={() => handleMenuClick(menu.path)}
 
                     />
 

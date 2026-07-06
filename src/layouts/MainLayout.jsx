@@ -1,4 +1,8 @@
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
+import { useTheme } from "@mui/material/styles";
+
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Header from "../components/Header/Header";
 
@@ -15,6 +19,11 @@ const drawerWidth = 260;
 
 function MainLayout() {
 
+    const theme = useTheme();
+
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
     return (
 
         <Box sx={{ display: "flex" }}>
@@ -22,7 +31,12 @@ function MainLayout() {
             <CssBaseline />
 
             <Drawer
-                variant="permanent"
+                variant={isMobile ? "temporary" : "permanent"}
+                open={isMobile ? drawerOpen : true}
+                onClose={() => setDrawerOpen(false)}
+                ModalProps={{
+                    keepMounted: true
+                }}
                 sx={{
                     width: drawerWidth,
                     flexShrink: 0,
@@ -35,7 +49,10 @@ function MainLayout() {
 
                 <Box p={2}>
 
-                    <Sidebar />
+                    <Sidebar
+                        isMobile={isMobile}
+                        onClose={() => setDrawerOpen(false)}
+                    />
 
                 </Box>
 
@@ -45,11 +62,17 @@ function MainLayout() {
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    bgcolor:"#F5F7FA",
+                    width: {
+                        md: `calc(100% - ${drawerWidth}px)`
+                    },
+                    bgcolor: "#F5F7FA",
                     minHeight: "100vh"
                 }}
             >
-                <Header />
+                <Header
+                    isMobile={isMobile}
+                    onMenuClick={() => setDrawerOpen(true)}
+                />
 
                 <Box
                     sx={{

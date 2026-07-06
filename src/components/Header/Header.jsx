@@ -1,12 +1,16 @@
-import {
-    Paper,
-    Box
-} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Paper, Box, IconButton, Typography } from "@mui/material";
 
 import Clock from "../common/Clock/Clock";
 import UserProfile from "../common/User/UserProfile";
 
-function Header() {
+function Header({
+
+    isMobile,
+
+    onMenuClick
+
+}) {
 
     return (
 
@@ -17,7 +21,10 @@ function Header() {
 
                 top: 0,
 
-                left: 260,
+                left: {
+                    xs: 0,
+                    md: 260
+                },
 
                 right: 0,
 
@@ -38,14 +45,44 @@ function Header() {
             <Box
                 sx={{
                     display: "flex",
-                    justifyContent: "flex-end",
+                    justifyContent: "space-between",
                     alignItems: "center"
                 }}
             >
-
                 <Box
                     sx={{
                         display: "flex",
+                        alignItems: "center",
+                        gap: 1
+                    }}
+                >
+
+                    {isMobile && (
+
+                        <IconButton
+                            color="inherit"
+                            onClick={onMenuClick}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+
+                    )}
+
+                    <Typography
+                        variant="h6"
+                        fontWeight={700}
+                    >
+                        CSG Training
+                    </Typography>
+
+                </Box>
+
+                <Box
+                    sx={{
+                        display: {
+                            xs: "none",
+                            md: "flex"
+                        },
                         alignItems: "center",
                         gap: 4
                     }}

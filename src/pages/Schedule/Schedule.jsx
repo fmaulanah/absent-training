@@ -10,6 +10,8 @@ import AppButton from "../../components/common/Button/AppButton";
 import CalendarToolbar from "./components/CalendarToolbar";
 import TrainingDialog from "./components/TrainingDialog";
 import TrainingDetailDialog from "./components/TrainingDetailDialog";
+import ScheduleList from "./components/ScheduleList";
+import CalendarGrid from "./components/CalendarGrid";
 
 import calendarService from "../../services/calendarService";
 import trainerService from "../../services/trainerService";
@@ -17,8 +19,9 @@ import roomService from "../../services/roomService";
 
 import { createDummyTrainings } from "../../constants/scheduleData";
 
+import useResponsive from "../../hooks/useResponsive";
 
-const WEEKDAYS = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+
 const MONTHS = [
     "Januari", "Februari", "Maret", "April", "Mei", "Juni",
     "Juli", "Agustus", "September", "Oktober", "November", "Desember"
@@ -39,6 +42,7 @@ const initialForm = {
 };
 
 function Schedule() {
+
     const [month, setMonth] = useState(dayjs().startOf("month"));
     const [trainings, setTrainings] = useState(createDummyTrainings);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -48,6 +52,8 @@ function Schedule() {
     const [trainerError, setTrainerError] = useState("");
     const [holidays, setHolidays] = useState([]);
     const [rooms, setRooms] = useState([]);
+
+    const { isMobile } = useResponsive();
 
     const calendarDays = useMemo(() => {
         const leadingDays = month.day();
@@ -64,6 +70,33 @@ function Schedule() {
             holidays.map(item => dayjs(item.CAL_DATE, "YYYYMMDD").format("YYYY-MM-DD"))
         );
     }, [holidays]);
+
+    const roomMap = useMemo(() => (
+
+        Object.fromEntries(
+
+            rooms.map(room => [
+
+                room.ROOM_ID,
+
+                room.ROOM_NM
+
+            ])
+
+        )
+
+    ), [rooms]);
+
+    const monthlyTrainings = useMemo(() => (
+
+        trainings.filter(training =>
+
+            dayjs(training.date).format("YYYY-MM") ===
+            month.format("YYYY-MM")
+
+        )
+
+    ), [trainings, month]);
 
     const handleChange = (event) => {
 
@@ -250,14 +283,6 @@ function Schedule() {
             <PageHeader
                 title="Training Schedule"
                 subtitle="Kelola jadwal dan agenda training."
-                // action={(
-                //     <AppButton
-                //         startIcon={<AddIcon />}
-                //         onClick={openCreateDialog}
-                //     >
-                //         Tambah Training
-                //     </AppButton>
-                // )}
             />
 
             <AppCard
@@ -271,105 +296,43 @@ function Schedule() {
                         onAddTraining={openCreateDialog}
                     />
                 }
-                sx={{ "& .MuiCardContent-root": { p: 0 } }}
+                sx={{
+                    "& .MuiCardContent-root": {
+                        p: 0
+                    }
+                }}
             >
-                <Box
-                    sx={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(7, minmax(0, 1fr))"
-                    }}
-                >
-                    {WEEKDAYS.map((day) => (
-                        <Box
-                            key={day}
-                            sx={{
-                                py: 1.5,
-                                textAlign: "center",
-                                bgcolor: "grey.50",
-                                borderBottom: 1,
-                                borderColor: "divider"
-                            }}
-                        >
-                            <Typography variant="body2" fontWeight={700}>
-                                {day}
-                            </Typography>
-                        </Box>
-                    ))}
 
-                    {calendarDays.map((day, index) => {
-                        const date = day ? month.date(day).format("YYYY-MM-DD") : null;
-                        const dayTrainings = trainings.filter((item) => item.date === date);
-                        const isToday = date === dayjs().format("YYYY-MM-DD");
-                        const isHoliday = holidaySet.has(date);
+                {isMobile ? (
 
-                        return (
-                            <Box
-                                key={`${day ?? "empty"}-${index}`}
-                                sx={{
-                                    minHeight: { xs: 90, md: 125 },
-                                    p: 1,
-                                    borderRight: (index + 1) % 7 === 0 ? 0 : 1,
-                                    borderBottom: 1,
-                                    borderColor: "divider",
-                                    bgcolor: !day ? "grey.50" : isHoliday ? "#FFF5F5" : "background.paper"
-                                }}
-                            >
-                                {day && (
-                                    <>
-                                        <Box
-                                            sx={{
-                                                width: 30,
-                                                height: 30,
-                                                mb: 0.5,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                borderRadius: "50%",
-                                                bgcolor: isToday ? "primary.main" : "transparent",
-                                                color: isToday ? "white" : isHoliday ? "error.main" : "text.primary"
-                                            }}
-                                        >
-                                            <Typography
-                                                variant="body2"
-                                                fontWeight={isToday || isHoliday ? 700 : 400}
-                                                color={
-                                                    isToday
-                                                        ? "white"
-                                                        : isHoliday
-                                                            ? "error.main"
-                                                            : "text.primary"
-                                                }
-                                            >
-                                                {day}
-                                            </Typography>
-                                        </Box>
+                    <ScheduleList
 
-                                        {dayTrainings.map((training) => (
-                                            <Chip
-                                                key={training.id}
-                                                label={`${training.time} ${training.title}`}
-                                                color="primary"
-                                                size="small"
-                                                clickable
-                                                onClick={() => setSelectedTraining(training)}
-                                                title={`${training.title} - ${training.room} - ${training.trainer}`}
-                                                sx={{
-                                                    width: "100%",
-                                                    mb: 0.5,
-                                                    justifyContent: "flex-start",
-                                                    "& .MuiChip-label": {
-                                                        overflow: "hidden",
-                                                        textOverflow: "ellipsis"
-                                                    }
-                                                }}
-                                            />
-                                        ))}
-                                    </>
-                                )}
-                            </Box>
-                        );
-                    })}
-                </Box>
+                        trainings={monthlyTrainings}
+
+                        roomMap={roomMap}
+
+                        onSelectTraining={setSelectedTraining}
+
+                    />
+
+                ) : (
+
+                    <CalendarGrid
+
+                        month={month}
+
+                        calendarDays={calendarDays}
+
+                        trainings={trainings}
+
+                        holidaySet={holidaySet}
+
+                        onSelectTraining={setSelectedTraining}
+
+                    />
+
+                )}
+
             </AppCard>
 
             <TrainingDialog
