@@ -31,11 +31,11 @@
        FONT
     ====================================================== */
 
-    --font-primary: Calibri, sans-serif;
+    --font-primary: Calibri, "Times New Roman", Cooper;
 
-    --font-secondary: "Times New Roman", serif;
+    --font-secondary: "Times New Roman", Calibri, Cooper;
 
-    --font-title: Cooper, Calibri, serif;
+    --font-title: Cooper, Calibri, "Times New Roman";
 
     /* ======================================================
        FONT SIZE

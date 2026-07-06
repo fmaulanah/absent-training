@@ -12,23 +12,19 @@ function RoomStatus() {
             }}
         >
 
-            <CardContent>
+            <Typography
+                variant="h6"
+                fontWeight={600}
+            >
+                Room Availability
+            </Typography>
 
-                <Typography
-                    variant="h6"
-                    fontWeight={600}
-                >
-                    Room Availability
-                </Typography>
-
-                <Typography
-                    color="text.secondary"
-                    mt={2}
-                >
-                    No data yet.
-                </Typography>
-
-            </CardContent>
+            <Typography
+                color="text.secondary"
+                mt={2}
+            >
+                No data yet.
+            </Typography>
 
         </AppCard>
 

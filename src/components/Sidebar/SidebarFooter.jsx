@@ -55,7 +55,7 @@ function SidebarFooter(){
 
             <List>
 
-                <ListItemButton
+                {/* <ListItemButton
                     sx={{
                         borderRadius:2,
                         mx:1,
@@ -74,7 +74,7 @@ function SidebarFooter(){
                         secondary={user?.ROLE_ID}
                     />
 
-                </ListItemButton>
+                </ListItemButton> */}
 
                 <ListItemButton
                     sx={{

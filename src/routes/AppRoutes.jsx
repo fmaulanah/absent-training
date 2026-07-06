@@ -3,7 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 
 import Login from "../pages/Login/Login";
-import Home from "../pages/dashboard/dashboard";
+import Dashboard from "../pages/dashboard/dashboard";
+import Schedule from "../pages/Schedule/Schedule";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
@@ -41,7 +42,12 @@ function AppRoutes() {
 
                 <Route
                     path="/dashboard"
-                    element={<Home />}
+                    element={<Dashboard />}
+                />
+
+                <Route
+                    path="/schedule"
+                    element={<Schedule />}
                 />
 
             </Route>

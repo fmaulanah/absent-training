@@ -4,12 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthContext";
 
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-
-
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme/theme";
 import App from "./App.jsx";

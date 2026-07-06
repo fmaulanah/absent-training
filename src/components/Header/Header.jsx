@@ -1,7 +1,6 @@
 import {
     Paper,
-    Box,
-    Typography
+    Box
 } from "@mui/material";
 
 import Clock from "../common/Clock/Clock";
@@ -39,30 +38,10 @@ function Header() {
             <Box
                 sx={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent: "flex-end",
                     alignItems: "center"
                 }}
             >
-
-                <Box>
-
-                    <Typography
-                        variant="h5"
-                        fontWeight={700}
-                        color="inherit"
-                    >
-                        Dashboard
-                    </Typography>
-
-                    <Typography
-                        sx={{
-                            color:"rgba(255,255,255,.75)"
-                        }}
-                    >
-                        Welcome back!
-                    </Typography>
-
-                </Box>
 
                 <Box
                     sx={{

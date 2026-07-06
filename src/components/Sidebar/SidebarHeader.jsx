@@ -26,7 +26,7 @@ function SidebarHeader() {
             />
 
             <Typography
-                variant="h6"
+                variant="h4"
                 fontWeight="bold"
                 color="primary"
             >
@@ -36,7 +36,7 @@ function SidebarHeader() {
             </Typography>
 
             <Typography
-                variant="body2"
+                variant="body"
                 color="text.secondary"
             >
 

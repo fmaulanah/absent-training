@@ -12,23 +12,19 @@ function TodaySchedule() {
             }}
         >
 
-            <CardContent>
+            <Typography
+                variant="h6"
+                fontWeight={600}
+            >
+                Today's Schedule
+            </Typography>
 
-                <Typography
-                    variant="h6"
-                    fontWeight={600}
-                >
-                    Today's Schedule
-                </Typography>
-
-                <Typography
-                    color="text.secondary"
-                    mt={2}
-                >
-                    No data yet.
-                </Typography>
-
-            </CardContent>
+            <Typography
+                color="text.secondary"
+                mt={2}
+            >
+                No data yet.
+            </Typography>
 
         </AppCard>
 

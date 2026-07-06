@@ -15,17 +15,5 @@ export const MENUS = [
         title: "Schedule",
         icon: CalendarMonthIcon,
         path: "/schedule"
-    },
-    {
-        id: 3,
-        title: "Room",
-        icon: MeetingRoomIcon,
-        path: "/room"
-    },
-    {
-        id: 4,
-        title: "Setting",
-        icon: SettingsIcon,
-        path: "/setting"
     }
 ];

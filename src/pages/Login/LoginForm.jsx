@@ -10,6 +10,7 @@ import { useAuth } from "../../context/AuthContext";
 
 import authService from "../../services/authService";
 import AppButton from "../../components/common/Button/AppButton";
+import Logo from "../../assets/logo/logo.png";
 
 function LoginForm() {
 
@@ -71,27 +72,47 @@ function LoginForm() {
 
         <Box>
 
-            <Typography
-                variant="h4"
+            <Box
                 sx={{
-                    fontWeight: 700,
-                    textAlign: "center",
-                    mb: 1
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 3,
+                    mb: 4,
                 }}
             >
-                Login
-            </Typography>
+                <Box
+                    component="img"
+                    src={Logo}
+                    alt="CSG Logo"
+                    sx={{
+                        width: 90,
+                        height: "auto",
+                        display: "block",
+                    }}
+                />
 
-            <Typography
-                variant="body1"
-                sx={{
-                    textAlign: "center",
-                    color: "text.secondary",
-                    mb: 4
-                }}
-            >
-                CSG Training Scheduler
-            </Typography>
+                <Box>
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            fontWeight: 700,
+                            mb: 0.5,
+                        }}
+                    >
+                        Login
+                    </Typography>
+
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            color: "text.secondary",
+                        }}
+                    >
+                        CSG Training Scheduler
+                    </Typography>
+                </Box>
+            </Box>
 
             <TextField
                 fullWidth

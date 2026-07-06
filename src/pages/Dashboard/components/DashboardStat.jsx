@@ -18,42 +18,40 @@ function DashboardStat({
             }}
         >
 
-            <CardContent>
+
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: 2
+                }}
+            >
+
+                <Typography
+                    variant="body2"
+                    color="text.secondary"
+                >
+                    {title}
+                </Typography>
 
                 <Box
                     sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mb: 2
+                        color: color
                     }}
                 >
-
-                    <Typography
-                        variant="body2"
-                        color="text.secondary"
-                    >
-                        {title}
-                    </Typography>
-
-                    <Box
-                        sx={{
-                            color: color
-                        }}
-                    >
-                        {icon}
-                    </Box>
-
+                    {icon}
                 </Box>
 
-                <Typography
-                    variant="h4"
-                    fontWeight={700}
-                >
-                    {value}
-                </Typography>
+            </Box>
 
-            </CardContent>
+            <Typography
+                variant="h4"
+                fontWeight={700}
+            >
+                {value}
+            </Typography>
+
 
         </AppCard>
 
