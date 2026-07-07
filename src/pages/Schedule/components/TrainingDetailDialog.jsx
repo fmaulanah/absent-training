@@ -1,25 +1,44 @@
 import dayjs from "dayjs";
 
-import {
-    Box,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Typography
-} from "@mui/material";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Divider, Chip} from "@mui/material";
 
 import AppButton from "../../../components/common/Button/AppButton";
 
-function TrainingDetailDialog({
-    training,
-    rooms,
-    open,
-    onClose,
-    onEdit
-}) {
-
+function TrainingDetailDialog({ training, rooms, open, onClose, onEdit }) 
+{
     const roomName = training ? rooms.find(room => room.ROOM_ID === training.room)?.ROOM_NM ?? training.room : "";
+
+    const DetailItem = ({ label, value }) => (
+
+        <Box
+            sx={{
+                mb: 2.5
+            }}
+        >
+
+            <Typography
+                variant="h6"
+                fontWeight={200}
+                sx={{
+                    mb: .5
+                }}
+            >
+
+                {label}
+
+            </Typography>
+
+            <Typography
+                variant="body1"
+            >
+
+                {value || "-"}
+
+            </Typography>
+
+        </Box>
+
+    );
 
     return (
 
@@ -27,15 +46,8 @@ function TrainingDetailDialog({
             open={open}
             onClose={onClose}
             fullWidth
-            maxWidth="sm"
+            maxWidth="xs"
         >
-
-            <DialogTitle>
-
-                Detail Training
-
-            </DialogTitle>
-
             {training && (
 
                 <DialogContent>
@@ -43,69 +55,70 @@ function TrainingDetailDialog({
                     <Typography
                         variant="h5"
                         fontWeight={700}
-                        gutterBottom
                     >
                         {training.title}
                     </Typography>
 
+                    <Divider
+                        sx={{
+                            my: 2
+                        }}
+                    />
+
                     <Typography
-                        variant="body2"
+                        variant="h6"
                         color="text.secondary"
-                        mb={3}
+                        sx={{
+                            mb: 3,
+                            fontWeight: 600,
+                            letterSpacing: 0.5,
+                            textTransform: "uppercase"
+                        }}
                     >
                         Informasi Training
                     </Typography>
 
-                    <Box
-                        sx={{
-                            display: "grid",
-                            gridTemplateColumns: "140px 1fr",
-                            rowGap: 2.5,
-                            columnGap: 3
-                        }}
+                    <DetailItem
+                        label="Tanggal"
+                        value={
+                            training.startDate === training.endDate
+                                ? dayjs(training.startDate).format("DD MMMM YYYY")
+                                : `${dayjs(training.startDate).format("DD MMMM YYYY")} - ${dayjs(training.endDate).format("DD MMMM YYYY")}`
+                        }
+                    />
+
+                    <DetailItem
+                        label="Ruangan"
+                        value={roomName}
+                    />
+
+                    <DetailItem
+                        label="NIK"
+                        value={training.trainerId}
+                    />
+
+                    <DetailItem
+                        label="Nama Trainer"
+                        value={training.trainerName}
+                    />
+
+                    <DetailItem
+                        label="Keterangan"
+                        value={training.memo}
+                    />
+
+                    <Typography
+                        variant="h6"
+                        fontWeight={200}
                     >
+                        Status
+                    </Typography>
 
-                        <Typography fontWeight={600} color="text.secondary">
-                            Tanggal
-                        </Typography>
-
-                        <Typography>
-                            {dayjs(training.date).format("DD MMMM YYYY")}
-                        </Typography>
-
-                        <Typography fontWeight={600} color="text.secondary">
-                            Waktu
-                        </Typography>
-
-                        <Typography>
-                            {training.time}
-                        </Typography>
-
-                        <Typography fontWeight={600} color="text.secondary">
-                            Ruangan
-                        </Typography>
-
-                        <Typography>
-                            {roomName}
-                        </Typography>
-
-                        <Typography fontWeight={600} color="text.secondary">
-                            Trainer ID
-                        </Typography>
-
-                        <Typography>
-                            {training.trainerId || "-"}
-                        </Typography>
-
-                        <Typography fontWeight={600} color="text.secondary">
-                            Trainer
-                        </Typography>
-
-                        <Typography>
-                            {training.trainerName || "-"}
-                        </Typography>
-
-                    </Box>
+                    <Chip
+                        label={training.useYn === "Y" ? "Aktif" : "Non Aktif"}
+                        color={training.useYn === "Y" ? "success" : "default"}
+                        size="small"
+                    />
 
                 </DialogContent>
 

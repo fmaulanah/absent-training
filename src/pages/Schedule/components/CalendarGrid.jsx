@@ -1,15 +1,8 @@
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
 
-function CalendarGrid({
-
-    month,
-    calendarDays,
-    trainings,
-    holidaySet,
-    onSelectTraining
-
-}) {
+function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTraining, onShowMore }) 
+{
 
     const WEEKDAYS = [
         "Min",
@@ -58,19 +51,15 @@ function CalendarGrid({
 
             {calendarDays.map((day, index) => {
 
-                const date = day
-                    ? month.date(day).format("YYYY-MM-DD")
-                    : null;
+                const date = day ? month.date(day).format("YYYY-MM-DD") : null;
 
-                const dayTrainings = trainings.filter(
-                    item => item.date === date
-                );
+                const dayTrainings = trainings.filter(item => item.startDate === date);
 
-                const isToday =
-                    date === dayjs().format("YYYY-MM-DD");
+                const visibleTrainings = dayTrainings.slice(0, 2);
+                const hiddenCount = dayTrainings.length - visibleTrainings.length;
 
-                const isHoliday =
-                    holidaySet.has(date);
+                const isToday = date === dayjs().format("YYYY-MM-DD");
+                const isHoliday = holidaySet.has(date);
 
                 return (
 
@@ -143,30 +132,67 @@ function CalendarGrid({
 
                                 </Box>
 
-                                {dayTrainings.map(training => (
-
-                                    <Chip
+                                {visibleTrainings.map(training => (
+<Box
                                         key={training.id}
-                                        label={`${training.time} ${training.title}`}
-                                        color="primary"
-                                        size="small"
-                                        clickable
-                                        onClick={() =>
-                                            onSelectTraining(training)
-                                        }
-                                        title={`${training.title} - ${training.room} - ${training.trainerName}`}
+                                        onClick={() => onSelectTraining(training)}
                                         sx={{
-                                            width: "100%",
-                                            mb: .5,
-                                            justifyContent: "flex-start",
-                                            "& .MuiChip-label": {
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis"
+                                            mb: 0.5,
+                                            p: 0.75,
+                                            borderRadius: 1,
+                                            bgcolor: "primary.main",
+                                            color: "white",
+                                            cursor: "pointer",
+                                            "&:hover": {
+                                                bgcolor: "primary.dark"
                                             }
                                         }}
-                                    />
+                                    >
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                display: "block",
+                                                fontWeight: 700
+                                            }}
+                                        >
+                                            {training.title}
+                                        </Typography>
+
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                display: "block",
+                                                opacity: .8
+                                            }}
+                                        >
+                                            {training.trainerName}
+                                        </Typography>
+                                    </Box>
 
                                 ))}
+
+                                {hiddenCount > 0 && (
+
+                                    <Typography
+                                        variant="caption"
+                                        onClick={() => { onShowMore(date, dayTrainings) }}
+                                        sx={{
+                                            display: "block",
+                                            mt: .5,
+                                            color: "primary.main",
+                                            fontWeight: 700,
+                                            cursor: "pointer",
+                                            "&:hover": {
+                                                textDecoration: "underline"
+                                            }
+                                        }}
+                                    >
+
+                                        +{hiddenCount} lainnya
+
+                                    </Typography>
+
+                                )}
 
                             </>
 

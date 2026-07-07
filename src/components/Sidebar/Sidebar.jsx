@@ -7,13 +7,7 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarItem from "./SidebarItem";
 import SidebarFooter from "./SidebarFooter";
 
-function Sidebar({
-
-    isMobile,
-
-    onClose
-
-}) {
+function Sidebar({ isMobile, onClose }) {
 
     const navigate = useNavigate();
     const location = useLocation();

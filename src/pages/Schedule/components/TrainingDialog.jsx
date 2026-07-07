@@ -1,40 +1,12 @@
-import {
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    MenuItem,
-    TextField
-} from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextField, FormControlLabel, Checkbox } from "@mui/material";
 
+import CircularProgress from "@mui/material/CircularProgress";
 import AppButton from "../../../components/common/Button/AppButton";
+import LoadingOverlay from "../../../components/common/Loading/LoadingOverlay";
 
-function TrainingDialog({
-
-    open,
-    editingId,
-    form,
-    rooms,
-    trainerError,
-    onChange,
-    onSearchTrainer,
-    onTrainerKeyDown,
-    onClose,
-    onSubmit
-}) {
-
-    const closeFormDialog = () => {
-
-        setTrainerError("");
-
-        setDialogOpen(false);
-
-        setEditingId(null);
-
-        setForm(initialForm);
-
-    };
-
+function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
+                          onChange, onSearchTrainer, onTrainerKeyDown, onClose, onSubmit }) 
+{
     return (
 
         <Dialog
@@ -69,6 +41,7 @@ function TrainingDialog({
                     label="Nama Training"
                     value={form.title}
                     onChange={onChange}
+                    disabled={saving}
                     required
                     sx={{
                         gridColumn: "1 / -1"
@@ -76,11 +49,12 @@ function TrainingDialog({
                 />
 
                 <TextField
-                    name="date"
-                    label="Tanggal"
+                    name="startDate"
+                    label="Tanggal Mulai"
                     type="date"
-                    value={form.date}
+                    value={form.startDate}
                     onChange={onChange}
+                    disabled={saving}
                     required
                     slotProps={{
                         inputLabel: {
@@ -90,11 +64,12 @@ function TrainingDialog({
                 />
 
                 <TextField
-                    name="time"
-                    label="Waktu"
-                    type="time"
-                    value={form.time}
+                    name="endDate"
+                    label="Tanggal Selesai"
+                    type="date"
+                    value={form.endDate}
                     onChange={onChange}
+                    disabled={saving}
                     required
                     slotProps={{
                         inputLabel: {
@@ -112,6 +87,7 @@ function TrainingDialog({
                     onKeyDown={onTrainerKeyDown}
                     error={Boolean(trainerError)}
                     helperText={trainerError}
+                    disabled={saving}
                     required
                 />
 
@@ -119,6 +95,7 @@ function TrainingDialog({
                     name="trainerName"
                     label="Nama Trainer"
                     value={form.trainerName}
+                    disabled={saving}
                     slotProps={{
                         input: {
                             readOnly: true
@@ -136,6 +113,7 @@ function TrainingDialog({
                     label="Ruangan"
                     select
                     value={form.room}
+                    disabled={saving}
                     onChange={onChange}
                     required
                 >
@@ -154,6 +132,36 @@ function TrainingDialog({
                     ))}
 
                 </TextField>
+
+                <TextField
+                    name="memo"
+                    label="Keterangan"
+                    value={form.memo}
+                    onChange={onChange}
+                    disabled={saving}
+                    multiline
+                    rows={3}
+                    sx={{
+                        gridColumn: "1 / -1"
+                    }}
+                />
+
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={form.useYn === "Y"}
+                            onChange={(event) =>
+                                onChange({
+                                    target: {
+                                        name: "useYn",
+                                        value: event.target.checked ? "Y" : "N"
+                                    }
+                                })
+                            }
+                        />
+                    }
+                    label="Training Aktif"
+                />
 
             </DialogContent>
 
@@ -178,11 +186,10 @@ function TrainingDialog({
 
                 <AppButton
                     type="submit"
+                    disabled={saving}
+                    startIcon={saving ? <CircularProgress size={18} color="inherit" /> : null}
                 >
-
-                    {editingId
-                        ? "Simpan Perubahan"
-                        : "Simpan Training"}
+                    {saving ? "Menyimpan..." : editingId ? "Simpan Perubahan" : "Simpan Training"}
 
                 </AppButton>
 

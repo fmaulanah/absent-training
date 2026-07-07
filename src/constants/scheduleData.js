@@ -9,121 +9,145 @@ export const createDummyTrainings = () => {
         {
             id: 1,
             title: "Safety Induction",
-            date: currentMonth.date(2).format("YYYY-MM-DD"),
-            time: "08:00",
+            startDate: currentMonth.date(2).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(2).format("YYYY-MM-DD"),
             room: "TR01",
             trainerId: "23070001",
-            trainerName: "Budi Santoso"
+            trainerName: "Budi Santoso",
+            memo: "Training keselamatan kerja untuk karyawan baru.",
+            useYn: "Y"
         },
 
         {
             id: 2,
             title: "Leadership Training",
-            date: currentMonth.date(4).format("YYYY-MM-DD"),
-            time: "09:00",
+            startDate: currentMonth.date(4).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(4).format("YYYY-MM-DD"),
             room: "TR02",
             trainerId: "23070002",
-            trainerName: "Siti Rahma"
+            trainerName: "Siti Rahma",
+            memo: "Leadership dasar untuk Supervisor.",
+            useYn: "Y"
         },
 
         {
             id: 3,
             title: "Fire Fighting",
-            date: currentMonth.date(6).format("YYYY-MM-DD"),
-            time: "13:00",
+            startDate: currentMonth.date(6).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(6).format("YYYY-MM-DD"),
             room: "TR03",
             trainerId: "23070003",
-            trainerName: "Andi Wijaya"
+            trainerName: "Andi Wijaya",
+            memo: "Simulasi penggunaan APAR.",
+            useYn: "Y"
         },
 
         {
             id: 4,
             title: "5S Awareness",
-            date: currentMonth.date(8).format("YYYY-MM-DD"),
-            time: "08:30",
+            startDate: currentMonth.date(8).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(8).format("YYYY-MM-DD"),
             room: "TR01",
             trainerId: "23070004",
-            trainerName: "Rudi Hartono"
+            trainerName: "Rudi Hartono",
+            memo: "Penerapan budaya 5S.",
+            useYn: "Y"
         },
 
         {
             id: 5,
             title: "Quality Awareness",
-            date: currentMonth.date(10).format("YYYY-MM-DD"),
-            time: "10:00",
+            startDate: currentMonth.date(10).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(10).format("YYYY-MM-DD"),
             room: "TR05",
             trainerId: "23070005",
-            trainerName: "Yuni Astuti"
+            trainerName: "Yuni Astuti",
+            memo: "Pengenalan kualitas produk.",
+            useYn: "Y"
         },
 
         {
             id: 6,
             title: "First Aid Training",
-            date: currentMonth.date(12).format("YYYY-MM-DD"),
-            time: "13:00",
+            startDate: currentMonth.date(12).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(12).format("YYYY-MM-DD"),
             room: "TR02",
             trainerId: "23070006",
-            trainerName: "Fajar Nugroho"
+            trainerName: "Fajar Nugroho",
+            memo: "Pertolongan pertama pada kecelakaan kerja.",
+            useYn: "Y"
         },
 
         {
             id: 7,
             title: "Forklift Safety",
-            date: currentMonth.date(15).format("YYYY-MM-DD"),
-            time: "08:00",
+            startDate: currentMonth.date(15).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(15).format("YYYY-MM-DD"),
             room: "TR04",
             trainerId: "23070007",
-            trainerName: "Dewi Lestari"
+            trainerName: "Dewi Lestari",
+            memo: "Keselamatan operator forklift.",
+            useYn: "Y"
         },
 
         {
             id: 8,
             title: "Chemical Handling",
-            date: currentMonth.date(18).format("YYYY-MM-DD"),
-            time: "09:30",
+            startDate: currentMonth.date(18).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(18).format("YYYY-MM-DD"),
             room: "TR03",
             trainerId: "23070008",
-            trainerName: "Ahmad Fauzi"
+            trainerName: "Ahmad Fauzi",
+            memo: "Penanganan bahan kimia berbahaya.",
+            useYn: "Y"
         },
 
         {
             id: 9,
             title: "Machine Safety",
-            date: currentMonth.date(21).format("YYYY-MM-DD"),
-            time: "08:30",
+            startDate: currentMonth.date(21).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(21).format("YYYY-MM-DD"),
             room: "TR01",
             trainerId: "23070009",
-            trainerName: "Rina Marlina"
+            trainerName: "Rina Marlina",
+            memo: "Keselamatan pengoperasian mesin produksi.",
+            useYn: "Y"
         },
 
         {
             id: 10,
             title: "ISO 9001 Awareness",
-            date: currentMonth.date(23).format("YYYY-MM-DD"),
-            time: "10:00",
+            startDate: currentMonth.date(23).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(23).format("YYYY-MM-DD"),
             room: "TR05",
             trainerId: "23070010",
-            trainerName: "Agus Prasetyo"
+            trainerName: "Agus Prasetyo",
+            memo: "Pengenalan sistem manajemen mutu ISO 9001.",
+            useYn: "Y"
         },
 
         {
             id: 11,
             title: "Problem Solving",
-            date: currentMonth.date(26).format("YYYY-MM-DD"),
-            time: "13:00",
+            startDate: currentMonth.date(26).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(26).format("YYYY-MM-DD"),
             room: "TR02",
             trainerId: "23070011",
-            trainerName: "Lina Kusuma"
+            trainerName: "Lina Kusuma",
+            memo: "Metode penyelesaian masalah menggunakan PDCA.",
+            useYn: "Y"
         },
 
         {
             id: 12,
             title: "Kaizen Improvement",
-            date: currentMonth.date(29).format("YYYY-MM-DD"),
-            time: "09:00",
+            startDate: currentMonth.date(29).format("YYYY-MM-DD"),
+            endDate: currentMonth.date(29).format("YYYY-MM-DD"),
             room: "TR04",
             trainerId: "23070012",
-            trainerName: "Eko Saputra"
+            trainerName: "Eko Saputra",
+            memo: "Continuous Improvement dan Kaizen.",
+            useYn: "Y"
         }
 
     ];

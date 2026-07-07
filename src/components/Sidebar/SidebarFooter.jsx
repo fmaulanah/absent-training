@@ -1,18 +1,4 @@
-import {
-
-    Box,
-
-    Divider,
-
-    List,
-
-    ListItemButton,
-
-    ListItemIcon,
-
-    ListItemText
-
-} from "@mui/material";
+import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";

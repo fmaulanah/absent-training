@@ -1,16 +1,6 @@
 import dayjs from "dayjs";
 
-import {
-
-    Box,
-
-    Chip,
-
-    Stack,
-
-    Typography
-
-} from "@mui/material";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -19,15 +9,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import AppCard from "../../../components/common/Card/AppCard";
 
-function ScheduleList({
-
-    trainings,
-
-    roomMap,
-
-    onSelectTraining
-
-}) {
+function ScheduleList({ trainings, roomMap, onSelectTraining }) 
+{
 
     if (!trainings.length) {
 
@@ -55,7 +38,7 @@ function ScheduleList({
     return (
 
         <Stack
-            spacing={1}
+            spacing={2}
             sx={{
                 width: "100%"
             }}
@@ -66,7 +49,6 @@ function ScheduleList({
                 <AppCard
                     key={training.id}
                     sx={{
-                        p:2,
                         width:"100%",
                         cursor:"pointer",
                         "&:hover": {
@@ -74,7 +56,6 @@ function ScheduleList({
                             boxShadow: 6
                         }
                     }}
-
                 >
 
                     <Box
@@ -111,60 +92,32 @@ function ScheduleList({
 
                             </Typography>
 
-                            <Stack
-
-                                direction="row"
-
-                                spacing={1}
-
-                                alignItems="center"
-
-                                mt={1}
-
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                    mt: 1
+                                }}
                             >
 
                                 <CalendarMonthIcon fontSize="small"/>
 
                                 <Typography variant="body2">
 
-                                    {dayjs(training.date).format("DD MMM YYYY")}
+                                    {dayjs(training.startDate).format("DD MMM YYYY")}
 
                                 </Typography>
 
-                            </Stack>
+                            </Box>
 
-                            <Stack
-
-                                direction="row"
-
-                                spacing={1}
-
-                                alignItems="center"
-
-                                mt={0.5}
-
-                            >
-
-                                <AccessTimeIcon fontSize="small"/>
-
-                                <Typography variant="body2">
-
-                                    {training.time}
-
-                                </Typography>
-
-                            </Stack>
-
-                            <Stack
-
-                                direction="row"
-
-                                spacing={1}
-
-                                alignItems="center"
-
-                                mt={0.5}
-
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                    mt: 1
+                                }}
                             >
 
                                 <PersonIcon fontSize="small"/>
@@ -175,7 +128,7 @@ function ScheduleList({
 
                                 </Typography>
 
-                            </Stack>
+                            </Box>
 
                             <Chip
 

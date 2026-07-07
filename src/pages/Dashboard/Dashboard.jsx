@@ -27,16 +27,17 @@ function Dashboard() {
     const trainings = createDummyTrainings();
     const today = dayjs().format("YYYY-MM-DD");
     const currentMonth = dayjs().format("YYYY-MM");
-    const monthlyTrainings = trainings.filter((training) => (training.date.startsWith(currentMonth)));
-    const todayTrainings = trainings.filter((training) => training.date === today);
-    const upcomingTrainings = trainings.filter((training) => training.date >= today).sort((first, second) => first.date.localeCompare(second.date));
+    
+    const monthlyTrainings = trainings.filter((training) => training.startDate.startsWith(currentMonth));
+    const todayTrainings = trainings.filter((training) => training.startDate === today);
+    const upcomingTrainings = trainings.filter(training => training.useYn === "Y" && training.startDate >= today);
 
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState("");
 
     const { isMobile } = useResponsive();
 
-    const loadRooms = async () => {
+    const loadRooms = async () => { 
 
         try {
 
@@ -209,7 +210,7 @@ function Dashboard() {
                                             >
                                                 <ListItemText
                                                     primary={training.title}
-                                                    secondary={`${dayjs(training.date).format("DD/MM/YYYY")} • ${training.time} • ${training.trainerName}`}
+                                                    secondary={`${dayjs(training.startDate).format("DD/MM/YYYY")} •  ${training.trainerName}`}
                                                     slotProps={{
                                                         primary: { fontWeight: 700 },
                                                         secondary: { mt: 0.5 }

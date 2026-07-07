@@ -1,10 +1,6 @@
-import {
-    Box,
-    IconButton,
-    MenuItem,
-    TextField,
-    Typography
-} from "@mui/material";
+import { Box, IconButton, MenuItem, TextField, Typography } from "@mui/material";
+
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -15,14 +11,8 @@ import useResponsive from "../../../hooks/useResponsive";
 
 import dayjs from "dayjs";
 
-function CalendarToolbar({
-    month,
-    MONTHS,
-    YEARS,
-    setMonth,
-    onAddTraining
-}) {
-
+function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefresh }) 
+{
     const { isMobile } = useResponsive();
 
     return (
@@ -61,13 +51,13 @@ function CalendarToolbar({
                             variant="outlined"
                             sx={{
                                 boxShadow: "none",
-                                minWidth: 120
+                                width: 220
                             }}
-                            onClick={() =>
-                                setMonth(dayjs().startOf("month"))
-                            }
+                            // onClick={() =>
+                            //     setMonth(dayjs().startOf("month"))
+                            // }
                         >
-                            Hari Ini
+                            {MONTHS[month.month()]} {month.year()}
                         </AppButton>
 
                         <IconButton
@@ -81,13 +71,23 @@ function CalendarToolbar({
                         </IconButton>
                     </Box>
 
-                    <AppButton
-                        fullWidth
-                        startIcon={<AddIcon />}
-                        onClick={onAddTraining}
+                    <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center"
+                    }}
                     >
-                        Tambah Training
-                    </AppButton>
+                        <AppButton
+                            startIcon={<AddIcon />}
+                            onClick={onAddTraining}
+                            sx={{
+                                boxShadow: "none",
+                                width: 170
+                            }}
+                        >
+                            Tambah Training
+                        </AppButton>
+                    </Box>
                 </>
 
             ) : (
@@ -181,6 +181,20 @@ function CalendarToolbar({
                     >
                         <ChevronRightIcon />
                     </IconButton>
+
+                    <AppButton
+                        variant="outlined"
+                        onClick={onRefresh}
+                        sx={{
+                            minWidth: 40,
+                            width: 40,
+                            height: 40,
+                            p: 0,
+                            boxShadow: "none"
+                        }}
+                    >
+                        <RefreshIcon />
+                    </AppButton>
 
                     <AppButton
                         startIcon={<AddIcon />}

@@ -6,7 +6,7 @@ const roomService = {
 
         return await systemApiService.execute({
 
-            apiCd: "ROOM_LIST",
+            apiCd: "COMBO_ROOM",
 
             type: "SEARCH"
 

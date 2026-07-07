@@ -12,12 +12,12 @@ import TrainingDialog from "./components/TrainingDialog";
 import TrainingDetailDialog from "./components/TrainingDetailDialog";
 import ScheduleList from "./components/ScheduleList";
 import CalendarGrid from "./components/CalendarGrid";
+import DayTrainingDialog from "./components/DayTrainingDialog";
 
 import calendarService from "../../services/calendarService";
 import trainerService from "../../services/trainerService";
 import roomService from "../../services/roomService";
-
-import { createDummyTrainings } from "../../constants/scheduleData";
+import trainingService from "../../services/trainingService";
 
 import useResponsive from "../../hooks/useResponsive";
 
@@ -33,18 +33,22 @@ const YEARS = Array.from(
 );
 
 const initialForm = {
+
     title: "",
-    date: dayjs().format("YYYY-MM-DD"),
-    time: "08:00",
+    startDate: dayjs().format("YYYY-MM-DD"),
+    endDate: dayjs().format("YYYY-MM-DD"),
     room: "TR01",
     trainerId: "",
-    trainerName: ""
+    trainerName: "",
+    memo: "",
+    useYn: "Y"
+
 };
 
 function Schedule() {
 
     const [month, setMonth] = useState(dayjs().startOf("month"));
-    const [trainings, setTrainings] = useState(createDummyTrainings);
+    const [trainings, setTrainings] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedTraining, setSelectedTraining] = useState(null);
     const [editingId, setEditingId] = useState(null);
@@ -52,6 +56,15 @@ function Schedule() {
     const [trainerError, setTrainerError] = useState("");
     const [holidays, setHolidays] = useState([]);
     const [rooms, setRooms] = useState([]);
+    const [saving, setSaving] = useState(false);
+
+    const [dayDialog, setDayDialog] = useState({
+
+        open: false,
+        date: "",
+        trainings: []
+
+    });
 
     const { isMobile } = useResponsive();
 
@@ -91,7 +104,9 @@ function Schedule() {
 
         trainings.filter(training =>
 
-            dayjs(training.date).format("YYYY-MM") ===
+            training.useYn === "Y" &&
+
+            dayjs(training.startDate).format("YYYY-MM") ===
             month.format("YYYY-MM")
 
         )
@@ -125,19 +140,55 @@ function Schedule() {
 
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
+
         event.preventDefault();
 
-        setTrainings((current) => editingId
-            ? current.map((training) => (
-                training.id === editingId ? { ...training, ...form } : training
-            ))
-            : [...current, { ...form, id: Date.now() }]
-        );
-        setMonth(dayjs(form.date).startOf("month"));
-        setForm(initialForm);
-        setEditingId(null);
-        setDialogOpen(false);
+        try {
+
+            setSaving(true);
+
+            if (editingId) {
+
+                await trainingService.updateTraining(
+
+                    editingId,
+
+                    form,
+
+                    roomMap[form.room]
+
+                );
+
+            }
+            else {
+
+                await trainingService.saveTraining(
+
+                    form,
+
+                    roomMap[form.room]
+
+                );
+
+            }
+
+            await loadTraining();
+
+            closeFormDialog();
+
+        }
+        catch (err) {
+
+            console.error(err);
+
+        }
+        finally {
+
+            setSaving(false);
+
+        }
+
     };
 
     const openCreateDialog = () => {
@@ -156,12 +207,15 @@ function Schedule() {
         setEditingId(selectedTraining.id);
         setForm({
             title: selectedTraining.title,
-            date: selectedTraining.date,
-            time: selectedTraining.time,
+            startDate: selectedTraining.startDate,
+            endDate: selectedTraining.endDate,
             room: selectedTraining.room,
             trainerId: selectedTraining.trainerId ?? "",
-            trainerName: selectedTraining.trainerName ?? selectedTraining.trainer
+            trainerName: selectedTraining.trainerName ?? "",
+            memo: selectedTraining.memo ?? "",
+            useYn: selectedTraining.useYn ?? "Y"
         });
+        
         setSelectedTraining(null);
         setDialogOpen(true);
     };
@@ -271,10 +325,56 @@ function Schedule() {
 
     };
 
+    const loadTraining = async () => {
+
+        try {
+
+            const result = await trainingService.getTrainings(
+
+                month.format("YYYYMM")
+
+            );
+
+            setTrainings(
+
+                result.map(item => ({
+
+                    id: item.SCHEDULE_ID,
+
+                    title: item.SCHEDULE_NM,
+
+                    startDate: dayjs(item.SCHEDULE_START_DT, "YYYYMMDD").format("YYYY-MM-DD"),
+
+                    endDate: dayjs(item.SCHEDULE_END_DT, "YYYYMMDD").format("YYYY-MM-DD"),
+
+                    room: item.ROOM_ID,
+
+                    trainerId: item.TRAINER_EMPID,
+
+                    trainerName: item.TRAINER_EMP_NM,
+
+                    memo: item.MEMO,
+
+                    useYn: item.USE_YN
+
+                }))
+
+            );
+
+        }
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+    };
+
     useEffect(() => {
 
         loadHoliday();
         loadRoom();
+        loadTraining();
 
     }, [month]);
 
@@ -285,55 +385,69 @@ function Schedule() {
                 subtitle="Kelola jadwal dan agenda training."
             />
 
-            <AppCard
-                title={`${MONTHS[month.month()]} ${month.year()}`}
-                action={
-                    <CalendarToolbar
-                        month={month}
-                        MONTHS={MONTHS}
-                        YEARS={YEARS}
-                        setMonth={setMonth}
-                        onAddTraining={openCreateDialog}
-                    />
-                }
-                sx={{
-                    "& .MuiCardContent-root": {
-                        p: 0
-                    }
-                }}
-            >
+            {isMobile ? (
 
-                {isMobile ? (
+                <>
+                    <Box
+                        sx={{
+                            mb: 2
+                        }}
+                    >
+                        <CalendarToolbar
+                            month={month}
+                            MONTHS={MONTHS}
+                            YEARS={YEARS}
+                            setMonth={setMonth}
+                            onAddTraining={openCreateDialog}
+                            onRefresh={loadTraining}
+                        />
+                    </Box>
 
                     <ScheduleList
-
                         trainings={monthlyTrainings}
-
                         roomMap={roomMap}
-
                         onSelectTraining={setSelectedTraining}
-
                     />
+                </>
 
-                ) : (
+            ) : (
 
+                <AppCard
+                    title=' '
+                    action={
+                        <CalendarToolbar
+                            month={month}
+                            MONTHS={MONTHS}
+                            YEARS={YEARS}
+                            setMonth={setMonth}
+                            onAddTraining={openCreateDialog}
+                            onRefresh={loadTraining}
+                        />
+                    }
+                    sx={{
+                        "& .MuiCardContent-root": {
+                            p: 0
+                        }
+                    }}
+                >
                     <CalendarGrid
-
                         month={month}
-
                         calendarDays={calendarDays}
-
                         trainings={trainings}
-
                         holidaySet={holidaySet}
-
                         onSelectTraining={setSelectedTraining}
+                        onShowMore={(date, trainings) =>
+                            setDayDialog({
 
+                                open: true,
+                                date,
+                                trainings
+                            })
+                        }
                     />
+                </AppCard>
 
-                )}
-
-            </AppCard>
+            )}
 
             <TrainingDialog
                 open={dialogOpen}
@@ -347,13 +461,39 @@ function Schedule() {
                 onSubmit={handleSubmit}
                 trainerError={trainerError}
             />
-            
+
             <TrainingDetailDialog
                 training={selectedTraining}
                 rooms={rooms}
                 open={Boolean(selectedTraining)}
                 onClose={() => setSelectedTraining(null)}
                 onEdit={openEditDialog}
+            />
+
+            <DayTrainingDialog
+
+                open={dayDialog.open}
+
+                date={dayDialog.date}
+
+                trainings={dayDialog.trainings}
+
+                onClose={() =>
+
+                    setDayDialog({
+
+                        open: false,
+
+                        date: "",
+
+                        trainings: []
+
+                    })
+
+                }
+
+                onSelectTraining={setSelectedTraining}
+
             />
         </>
     );

@@ -69,10 +69,10 @@ function Header({
                     )}
 
                     <Typography
-                        variant="h6"
+                        variant={isMobile ? "h6" : "h4"}
                         fontWeight={700}
                     >
-                        CSG Training
+                        CSG Training Scheduler
                     </Typography>
 
                 </Box>

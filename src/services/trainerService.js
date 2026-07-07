@@ -6,7 +6,7 @@ const trainerService = {
 
         const result = await systemApiService.execute({
 
-            apiCd: "TRAINER_LIST",
+            apiCd: "COMBO_TRAINER",
 
             type: "SEARCH",
 

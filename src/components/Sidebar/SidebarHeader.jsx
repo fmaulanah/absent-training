@@ -2,7 +2,11 @@ import { Box, Typography } from "@mui/material";
 
 import Logo from "../../assets/logo/logo.png";
 
+import { useAuth } from "../../context/AuthContext";
+
 function SidebarHeader() {
+    
+    const { user } = useAuth();
 
     return (
 
@@ -26,12 +30,12 @@ function SidebarHeader() {
             />
 
             <Typography
-                variant="h4"
+                variant="h5"
                 fontWeight="bold"
                 color="primary"
             >
 
-                CSG
+                {user?.EMP_NAME}
 
             </Typography>
 
@@ -40,7 +44,7 @@ function SidebarHeader() {
                 color="text.secondary"
             >
 
-                Training Scheduler
+                {user?.EMPID}
 
             </Typography>
 
