@@ -10,6 +10,7 @@ import AppButton from "../../../components/common/Button/AppButton";
 import useResponsive from "../../../hooks/useResponsive";
 
 import dayjs from "dayjs";
+import AppCard from "../../../components/common/Card/AppCard";
 
 function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefresh }) 
 {
@@ -28,67 +29,95 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
 
             {isMobile ? (
 
-                <>
+                <AppCard>
                     <Box
                         sx={{
                             display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
+                            justifyContent: "left",
+                            alignItems: "left",
                             gap: 1
                         }}
                     >
-                        <IconButton
-                            onClick={() =>
+                        <TextField
+                            select
+                            size="small"
+                            label="Bulan"
+                            value={month.month()}
+                            onChange={(event) =>
                                 setMonth(current =>
-                                    current.subtract(1, "month")
+                                    current
+                                        .month(Number(event.target.value))
+                                        .startOf("month")
                                 )
                             }
+                            sx={{ minWidth: 100 }}
                         >
-                            <ChevronLeftIcon />
-                        </IconButton>
+                            {MONTHS.map((monthName, index) => (
+                                <MenuItem
+                                    key={monthName}
+                                    value={index}
+                                >
+                                    {monthName}
+                                </MenuItem>
+                            ))}
+                        </TextField>
 
-                        <AppButton
-                            variant="outlined"
-                            sx={{
-                                boxShadow: "none",
-                                width: 220
+                        <TextField
+                            select
+                            size="small"
+                            label="Tahun"
+                            value={month.year()}
+                            onChange={(event) =>
+                                setMonth(current =>
+                                    current
+                                        .year(Number(event.target.value))
+                                        .startOf("month")
+                                )
+                            }
+                            sx={{ 
+                                minWidth: 100, 
+                                maxWidth: 100
                             }}
-                            // onClick={() =>
-                            //     setMonth(dayjs().startOf("month"))
-                            // }
                         >
-                            {MONTHS[month.month()]} {month.year()}
-                        </AppButton>
+                            {YEARS.map((year) => (
+                                <MenuItem
+                                    key={year}
+                                    value={year}
+                                >
+                                    {year}
+                                </MenuItem>
+                            ))}
+                        </TextField>
 
-                        <IconButton
-                            onClick={() =>
-                                setMonth(current =>
-                                    current.add(1, "month")
-                                )
-                            }
+                        {/* <AppButton
+                            variant="outlined"
+                            onClick={onRefresh}
+                            sx={{
+                                minWidth: 40,
+                                width: 40,
+                                height: 40,
+                                p: 0,
+                                boxShadow: "none"
+                            }}
                         >
-                            <ChevronRightIcon />
-                        </IconButton>
-                    </Box>
+                            <RefreshIcon />
+                        </AppButton> */}
 
-                    <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center"
-                    }}
-                    >
                         <AppButton
-                            startIcon={<AddIcon />}
                             onClick={onAddTraining}
                             sx={{
-                                boxShadow: "none",
-                                width: 170
+                                minWidth: 40,
+                                width: 40,
+                                height: 40,
+                                p: 0,
+                                boxShadow: "none"
                             }}
                         >
-                            Tambah Training
+                            <AddIcon />
                         </AppButton>
+
                     </Box>
-                </>
+                </AppCard>
 
             ) : (
 
@@ -149,38 +178,6 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                             </MenuItem>
                         ))}
                     </TextField>
-
-                    <IconButton
-                        onClick={() =>
-                            setMonth(current =>
-                                current.subtract(1, "month")
-                            )
-                        }
-                    >
-                        <ChevronLeftIcon />
-                    </IconButton>
-
-                    <AppButton
-                        variant="outlined"
-                        sx={{
-                            boxShadow: "none"
-                        }}
-                        onClick={() =>
-                            setMonth(dayjs().startOf("month"))
-                        }
-                    >
-                        Hari Ini
-                    </AppButton>
-
-                    <IconButton
-                        onClick={() =>
-                            setMonth(current =>
-                                current.add(1, "month")
-                            )
-                        }
-                    >
-                        <ChevronRightIcon />
-                    </IconButton>
 
                     <AppButton
                         variant="outlined"

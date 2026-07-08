@@ -1,20 +1,7 @@
-import {
-    ListItemButton,
-    ListItemIcon,
-    ListItemText
-} from "@mui/material";
+import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
-function SidebarItem({
-
-    title,
-
-    icon: Icon,
-
-    selected,
-
-    onClick
-
-}){
+function SidebarItem({ title, icon: Icon, selected, onClick })
+{
 
     return(
 

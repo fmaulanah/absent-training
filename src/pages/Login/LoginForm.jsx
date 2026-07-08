@@ -12,6 +12,8 @@ import authService from "../../services/authService";
 import AppButton from "../../components/common/Button/AppButton";
 import Logo from "../../assets/logo/logo.png";
 
+import useSnackbar from "../../hooks/useSnackbar";
+
 function LoginForm() {
 
     const navigate = useNavigate();
@@ -21,12 +23,21 @@ function LoginForm() {
     const [loading, setLoading] = useState(false);
     
     const { login } = useAuth();
+    const { showSnackbar } = useSnackbar();
 
     const handleLogin = async () => {
 
         if (!userId || !password) {
 
-            alert("User ID dan Password harus diisi.");
+            //alert("User ID dan Password harus diisi.");
+
+            showSnackbar(
+
+                    "User ID dan Password harus diisi.",
+
+                    "warning"
+
+                );
 
             return;
 
@@ -38,17 +49,25 @@ function LoginForm() {
 
             const user = await authService.login(userId, password);
 
-            delete user.PASSWORD;
+            if (user == null) {
 
-            if (!user) {
+                //alert("User ID atau Password salah.");
+                
+                showSnackbar(
 
-                alert("User ID atau Password salah.");
+                    "User ID atau Password salah.",
+
+                    "warning"
+
+                );
 
                 return;
 
             }
 
             console.log(user);
+
+            delete user.PASSWORD;
 
             login(user);
 
@@ -57,8 +76,6 @@ function LoginForm() {
         } catch (err) {
 
             console.error(err);
-
-            alert("Terjadi kesalahan.");
 
         } finally {
 
@@ -86,7 +103,8 @@ function LoginForm() {
                     src={Logo}
                     alt="CSG Logo"
                     sx={{
-                        width: 90,
+
+                        width: 80,
                         height: "auto",
                         display: "block",
                     }}
@@ -143,6 +161,18 @@ function LoginForm() {
                 {loading ? "Signing In..." : "Login"}
 
             </AppButton>
+
+            <Typography
+                variant="body1"
+                sx={{
+                    color: "text.secondary",
+                    textAlign:"center",
+                    mt: 3
+                }}
+            >
+                v{import.meta.env.VITE_APP_VERSION} (Build {import.meta.env.VITE_APP_BUILD})
+
+            </Typography>
 
         </Box>
 

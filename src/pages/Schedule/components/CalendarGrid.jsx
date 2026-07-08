@@ -4,20 +4,13 @@ import dayjs from "dayjs";
 function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTraining, onShowMore }) 
 {
 
-    const WEEKDAYS = [
-        "Min",
-        "Sen",
-        "Sel",
-        "Rab",
-        "Kam",
-        "Jum",
-        "Sab"
-    ];
+    const WEEKDAYS = [ "Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab" ];
 
     return (
 
         <Box
             sx={{
+                p:2,
                 display: "grid",
                 gridTemplateColumns: "repeat(7, minmax(0, 1fr))"
             }}
@@ -71,18 +64,10 @@ function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTrai
                                 md: 125
                             },
                             p: 1,
-                            borderRight:
-                                (index + 1) % 7 === 0
-                                    ? 0
-                                    : 1,
+                            borderRight: (index + 1) % 7 === 0 ? 0 : 1,
                             borderBottom: 1,
                             borderColor: "divider",
-                            bgcolor:
-                                !day
-                                    ? "grey.50"
-                                    : isHoliday
-                                        ? "#FFF5F5"
-                                        : "background.paper"
+                            bgcolor: !day ? "grey.50" : isHoliday ? "#FFF5F5" : "background.paper"
                         }}
                     >
 
@@ -99,31 +84,15 @@ function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTrai
                                         alignItems: "center",
                                         justifyContent: "center",
                                         borderRadius: "50%",
-                                        bgcolor: isToday
-                                            ? "primary.main"
-                                            : "transparent",
-                                        color: isToday
-                                            ? "white"
-                                            : isHoliday
-                                                ? "error.main"
-                                                : "text.primary"
+                                        bgcolor: isToday ? "primary.main" : "transparent",
+                                        color: isToday ? "white" : isHoliday ? "error.main" : "text.primary"
                                     }}
                                 >
 
                                     <Typography
                                         variant="body2"
-                                        fontWeight={
-                                            isToday || isHoliday
-                                                ? 700
-                                                : 400
-                                        }
-                                        color={
-                                            isToday
-                                                ? "white"
-                                                : isHoliday
-                                                    ? "error.main"
-                                                    : "text.primary"
-                                        }
+                                        fontWeight={ isToday || isHoliday ? 700 : 400 }
+                                        color={ isToday ? "white" : isHoliday ? "error.main" : "text.primary" }
                                     >
 
                                         {day}
@@ -133,18 +102,18 @@ function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTrai
                                 </Box>
 
                                 {visibleTrainings.map(training => (
-<Box
+                                    <Box
                                         key={training.id}
                                         onClick={() => onSelectTraining(training)}
                                         sx={{
                                             mb: 0.5,
                                             p: 0.75,
                                             borderRadius: 1,
-                                            bgcolor: "primary.main",
+                                            bgcolor: training.useYn === "Y" ? "primary.main" : "grey.500",
                                             color: "white",
                                             cursor: "pointer",
                                             "&:hover": {
-                                                bgcolor: "primary.dark"
+                                                bgcolor: training.useYn === "Y" ? "primary.dark" : "grey.600"
                                             }
                                         }}
                                     >

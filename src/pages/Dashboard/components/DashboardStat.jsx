@@ -2,6 +2,7 @@ import { Typography, Box } from "@mui/material";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AppCard from "../../../components/common/Card/AppCard";
+
 import useResponsive from "../../../hooks/useResponsive";
 
 function DashboardStat({
@@ -44,6 +45,9 @@ function DashboardStat({
 
                 <Typography
                     variant={isMobile ? "caption" : "body2"}
+                    sx={{
+                        fontSize: isMobile? 20 : 30
+                    }}
                 >
                     {title}
                 </Typography>

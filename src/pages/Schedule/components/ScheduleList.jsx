@@ -1,16 +1,37 @@
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { Box, Chip, Stack, Typography, Pagination, IconButton } from "@mui/material";
 
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import PersonIcon from "@mui/icons-material/Person";
+
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import AppCard from "../../../components/common/Card/AppCard";
 
-function ScheduleList({ trainings, roomMap, onSelectTraining }) 
-{
+const PAGE_SIZE = 2;
+
+function ScheduleList({ trainings, roomMap, onSelectTraining }) {
+
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+
+        setPage(1);
+
+    }, [trainings]);
+
+    const totalPages = Math.ceil(trainings.length / PAGE_SIZE);
+
+    const pagedTrainings = trainings.slice(
+
+        (page - 1) * PAGE_SIZE,
+
+        page * PAGE_SIZE
+
+    );
 
     if (!trainings.length) {
 
@@ -18,8 +39,8 @@ function ScheduleList({ trainings, roomMap, onSelectTraining })
 
             <Box
                 sx={{
-                    p:4,
-                    textAlign:"center"
+                    p: 4,
+                    textAlign: "center"
                 }}
             >
 
@@ -37,138 +58,225 @@ function ScheduleList({ trainings, roomMap, onSelectTraining })
 
     return (
 
-        <Stack
-            spacing={2}
-            sx={{
-                width: "100%"
-            }}
-        >
+        <>
 
-            {trainings.map(training => (
+            <Stack
+                spacing={2}
+                sx={{
+                    width: "100%"
+                }}
+            >
 
-                <AppCard
-                    key={training.id}
-                    sx={{
-                        width:"100%",
-                        cursor:"pointer",
-                        "&:hover": {
+                {pagedTrainings.map(training => (
 
-                            boxShadow: 6
-                        }
-                    }}
-                >
-
-                    <Box
-
-                        onClick={()=>onSelectTraining(training)}
-
+                    <AppCard
+                        key={training.id}
                         sx={{
-
-                            display:"flex",
-
-                            justifyContent:"space-between",
-
-                            alignItems:"flex-start"
-
+                            width: "100%",
+                            cursor: "pointer",
+                            bgcolor:
+                                training.useYn === "Y"
+                                    ? "background.paper"
+                                    : "grey.300",
+                            "&:hover": {
+                                boxShadow: 6
+                            }
                         }}
-
                     >
 
-                        <Box 
+                        <Box
+                            onClick={() => onSelectTraining(training)}
                             sx={{
-                                flex:1
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start"
                             }}
                         >
 
-                            <Typography
+                            <Box sx={{ flex: 1 }}>
 
-                                variant="subtitle1"
+                                <Typography
+                                    variant="subtitle1"
+                                    fontWeight={700}
+                                    color={
+                                        training.useYn === "Y"
+                                            ? "text.primary"
+                                            : "text.disabled"
+                                    }
+                                >
 
-                                fontWeight={700}
-
-                            >
-
-                                {training.title}
-
-                            </Typography>
-
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 1,
-                                    mt: 1
-                                }}
-                            >
-
-                                <CalendarMonthIcon fontSize="small"/>
-
-                                <Typography variant="body2">
-
-                                    {dayjs(training.startDate).format("DD MMM YYYY")}
+                                    {training.title}
 
                                 </Typography>
 
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
+                                        mt: 1
+                                    }}
+                                >
+
+                                    <CalendarMonthIcon fontSize="small" />
+
+                                    <Typography variant="body2">
+
+                                        {dayjs(training.startDate).format("DD MMM YYYY")}
+
+                                    </Typography>
+
+                                </Box>
+
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
+                                        mt: 1
+                                    }}
+                                >
+
+                                    <PersonIcon fontSize="small" />
+
+                                    <Typography
+                                        variant="body2"
+                                        color={
+                                            training.useYn === "Y"
+                                                ? "text.primary"
+                                                : "text.secondary"
+                                        }
+                                    >
+
+                                        {training.trainerName}
+
+                                    </Typography>
+
+                                </Box>
+
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        gap: 1,
+                                        mt: 2,
+                                        flexWrap: "wrap"
+                                    }}
+                                >
+
+                                    <Chip
+                                        label={
+                                            roomMap[training.room] ??
+                                            training.room
+                                        }
+                                        size="small"
+                                        color="primary"
+                                        variant="outlined"
+                                    />
+
+                                    <Chip
+                                        label={
+                                            training.useYn === "Y"
+                                                ? "Aktif"
+                                                : "Non Aktif"
+                                        }
+                                        color={
+                                            training.useYn === "Y"
+                                                ? "success"
+                                                : "default"
+                                        }
+                                        size="small"
+                                    />
+
+                                </Box>
+
                             </Box>
 
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 1,
-                                    mt: 1
-                                }}
-                            >
-
-                                <PersonIcon fontSize="small"/>
-
-                                <Typography variant="body2">
-
-                                    {training.trainerName}
-
-                                </Typography>
-
-                            </Box>
-
-                            <Chip
-
-                                label={
-
-                                    roomMap[training.room] ??
-
-                                    training.room
-
-                                }
-
-                                size="small"
-
-                                color="primary"
-
-                                variant="outlined"
-
-                                sx={{
-
-                                    mt:2
-
-                                }}
-
-                            />
+                            <ChevronRightIcon color="action" />
 
                         </Box>
 
-                        <ChevronRightIcon
+                    </AppCard>
 
-                            color="action"
+                ))}
 
-                        />
+            </Stack>
 
-                    </Box>
+            {totalPages > 1 && (
 
-                </AppCard>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        mt: "auto"
+                    }}
+                >
 
-            ))}
+                    {totalPages > 1 && (
 
-        </Stack>
+                        <Box
+                            sx={{
+                                mt: 3,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 2
+                            }}
+                        >
+
+                            <IconButton
+
+                                disabled={page === 1}
+
+                                onClick={() =>
+
+                                    setPage(current => current - 1)
+
+                                }
+
+                            >
+
+                                <ChevronLeftIcon />
+
+                            </IconButton>
+
+                            <Typography
+                                variant="body2"
+                                fontWeight={700}
+                                sx={{
+                                    // minWidth: 60,
+                                    textAlign: "center"
+                                }}
+                            >
+
+                                {page} / {totalPages}
+
+                            </Typography>
+
+                            <IconButton
+
+                                disabled={page === totalPages}
+
+                                onClick={() =>
+
+                                    setPage(current => current + 1)
+
+                                }
+
+                            >
+
+                                <ChevronRightIcon />
+
+                            </IconButton>
+
+                        </Box>
+
+                    )}
+
+                </Box>
+
+            )}
+
+        </>
 
     );
 

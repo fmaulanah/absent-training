@@ -1,4 +1,4 @@
-import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 function SidebarFooter(){
     
+    const version = import.meta.env.VITE_APP_VERSION;
+
     const navigate = useNavigate();
 
     const { user } = useAuth();
@@ -33,40 +35,36 @@ function SidebarFooter(){
 
         <Box
             sx={{
-                mt:"auto"
-            }}
+            mt: "auto",
+            p: 2,
+            borderTop: 1,
+            borderColor: "divider",
+            textAlign:"center"
+        }}
         >
-
-            <Divider/>
 
             <List>
 
-                {/* <ListItemButton
-                    sx={{
-                        borderRadius:2,
-                        mx:1,
-                        mb:1
-                    }}
-                >
-
-                    <ListItemIcon>
-
-                        <PersonIcon/>
-
-                    </ListItemIcon>
-
-                    <ListItemText
-                        primary={user?.EMP_NAME}
-                        secondary={user?.ROLE_ID}
-                    />
-
-                </ListItemButton> */}
-
                 <ListItemButton
                     sx={{
-                        borderRadius:2,
+
                         mx:1,
-                        color:"error.main"
+                        my:.5,
+                        borderRadius:2,
+                        "&:hover":{
+
+                            bgcolor:"primary.light",
+
+                            color:"white",
+
+                            "& .MuiListItemIcon-root":{
+
+                                color:"white"
+
+                            }
+
+                        }
+
                     }}
                     onClick={handleLogout}
                 >
@@ -84,6 +82,21 @@ function SidebarFooter(){
                 </ListItemButton >
 
             </List>
+
+            <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{
+                    mt: "auto",
+                    py: 2,
+                    textAlign:"center",
+                    opacity:"30%"
+                }}
+            >
+
+                v{import.meta.env.VITE_APP_VERSION} (Build {import.meta.env.VITE_APP_BUILD})
+
+            </Typography>
 
         </Box>
 

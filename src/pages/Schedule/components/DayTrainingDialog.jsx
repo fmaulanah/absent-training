@@ -14,14 +14,8 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close";
 
-function DayTrainingDialog({
-    open,
-    date,
-    trainings,
-    onClose,
-    onSelectTraining
-}) {
-
+function DayTrainingDialog({ open, date, trainings, onClose, onSelectTraining}) 
+{
     return (
 
         <Dialog
@@ -35,22 +29,14 @@ function DayTrainingDialog({
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center"
+                    alignItems: "center",
+                    fontWeight: 700
                 }}
             >
 
-                <Typography
-                    variant="h6"
-                    fontWeight={700}
-                >
+                {dayjs(date).format("DD MMMM YYYY")}
 
-                    {dayjs(date).format("DD MMMM YYYY")}
-
-                </Typography>
-
-                <IconButton
-                    onClick={onClose}
-                >
+                <IconButton onClick={onClose}>
 
                     <CloseIcon />
 
@@ -75,8 +61,15 @@ function DayTrainingDialog({
                                 onClick={() => {
 
                                     onClose();
-
                                     onSelectTraining(training);
+
+                                }}
+                                sx={{
+
+                                    bgcolor: training.useYn === "N" ? "grey.100" : "background.paper",
+                                    "&:hover": {
+                                        bgcolor: training.useYn === "N" ? "grey.200" : "action.hover"
+                                    }
 
                                 }}
                             >
@@ -84,7 +77,6 @@ function DayTrainingDialog({
                                 <ListItemText
 
                                     primary={training.title}
-
                                     secondary={
                                         <>
                                             <Typography

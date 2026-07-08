@@ -30,7 +30,7 @@ function Sidebar({ isMobile, onClose }) {
             sx={{
                 display:"flex",
                 flexDirection:"column",
-                height:"100%"
+                height:"100vh"
             }}
         >
 

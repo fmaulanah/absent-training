@@ -1,11 +1,15 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextField, FormControlLabel, Checkbox } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, MenuItem,
+         TextField, FormControlLabel, Checkbox, Switch, Typography, IconButton  } from "@mui/material";
 
 import CircularProgress from "@mui/material/CircularProgress";
+import CloseIcon from "@mui/icons-material/Close";
+
 import AppButton from "../../../components/common/Button/AppButton";
 import LoadingOverlay from "../../../components/common/Loading/LoadingOverlay";
 
 function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
-                          onChange, onSearchTrainer, onTrainerKeyDown, onClose, onSubmit }) 
+                          onChange, onSearchTrainer, onTrainerKeyDown, onClose, 
+                          onSubmit, onUseYnChange, }) 
 {
     return (
 
@@ -18,9 +22,26 @@ function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
             onSubmit={onSubmit}
         >
 
-            <DialogTitle>
+            <DialogTitle
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    fontWeight:600,
+                    variant:"h6"
+                }}
+            >
 
-                {editingId ? "Edit Training" : "Tambah Training"}
+                Detail Training
+
+                <IconButton
+                    onClick={onClose}
+                    size="small"
+                >
+
+                    <CloseIcon />
+
+                </IconButton>
 
             </DialogTitle>
 
@@ -61,6 +82,9 @@ function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
                             shrink: true
                         }
                     }}
+                    inputprops={{
+                        min: form.startDate
+                    }}
                 />
 
                 <TextField
@@ -75,6 +99,9 @@ function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
                         inputLabel: {
                             shrink: true
                         }
+                    }}
+                    inputprops={{
+                        max: form.endDate
                     }}
                 />
 
@@ -147,20 +174,34 @@ function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
                 />
 
                 <FormControlLabel
+
+                    sx={{
+                        gridColumn: "1 / -1"
+                    }}
+
                     control={
-                        <Checkbox
+
+                        <Switch
+
                             checked={form.useYn === "Y"}
-                            onChange={(event) =>
-                                onChange({
-                                    target: {
-                                        name: "useYn",
-                                        value: event.target.checked ? "Y" : "N"
-                                    }
-                                })
-                            }
+                            onChange={onUseYnChange}
+                            disabled={!editingId}
+
                         />
+
                     }
-                    label="Training Aktif"
+
+                    label={
+                        <Typography
+                            fontWeight={600}
+                            color={
+                                form.useYn === "Y" ? "success.main" : "text.secondary"
+                            }
+                        >
+                            {form.useYn === "Y" ? "Training Aktif" : "Training Non Aktif"}
+                        </Typography>
+                    }
+
                 />
 
             </DialogContent>
@@ -171,19 +212,6 @@ function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
                     pb: 3
                 }}
             >
-
-                <AppButton
-                    variant="outlined"
-                    onClick={onClose}
-                    sx={{
-                        boxShadow: "none"
-                    }}
-                >
-
-                    Batal
-
-                </AppButton>
-
                 <AppButton
                     type="submit"
                     disabled={saving}

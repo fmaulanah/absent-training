@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthContext";
+import SnackbarProvider from "./context/SnackbarContext";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme/theme";
@@ -11,17 +12,23 @@ import App from "./App.jsx";
 createRoot(document.getElementById("root")).render(
     <StrictMode>
         <BrowserRouter>
+
             <ThemeProvider theme={theme}>
 
                 <CssBaseline />
-
+                
                 <AuthProvider>
 
-                    <App />
+                    <SnackbarProvider>
+
+                        <App />
+                        
+                    </SnackbarProvider>
 
                 </AuthProvider>
 
             </ThemeProvider>
+
         </BrowserRouter>
     </StrictMode>
 );

@@ -20,6 +20,7 @@ import roomService from "../../services/roomService";
 import trainingService from "../../services/trainingService";
 
 import useResponsive from "../../hooks/useResponsive";
+import useSnackbar from "../../hooks/useSnackbar";
 
 
 const MONTHS = [
@@ -57,6 +58,7 @@ function Schedule() {
     const [holidays, setHolidays] = useState([]);
     const [rooms, setRooms] = useState([]);
     const [saving, setSaving] = useState(false);
+    const [page, setPage] = useState(1);
 
     const [dayDialog, setDayDialog] = useState({
 
@@ -67,6 +69,7 @@ function Schedule() {
     });
 
     const { isMobile } = useResponsive();
+    const { showSnackbar } = useSnackbar();
 
     const calendarDays = useMemo(() => {
         const leadingDays = month.day();
@@ -104,8 +107,6 @@ function Schedule() {
 
         trainings.filter(training =>
 
-            training.useYn === "Y" &&
-
             dayjs(training.startDate).format("YYYY-MM") ===
             month.format("YYYY-MM")
 
@@ -119,22 +120,44 @@ function Schedule() {
 
         setForm((current) => {
 
+            const next = {
+                ...current,
+                [name]: value
+            };
+
+            // Khusus Trainer
             if (name === "trainerId") {
 
                 setTrainerError("");
 
-                return {
-                    ...current,
-                    trainerId: value,
-                    trainerName: ""
-                };
+                next.trainerId = value;
+                next.trainerName = "";
 
             }
 
-            return {
-                ...current,
-                [name]: value
-            };
+            // Jika Start Date lebih besar dari End Date
+            if (
+                name === "startDate" &&
+                next.endDate &&
+                value > next.endDate
+            ) {
+
+                next.endDate = value;
+
+            }
+
+            // Jika End Date lebih kecil dari Start Date
+            if (
+                name === "endDate" &&
+                next.startDate &&
+                value < next.startDate
+            ) {
+
+                next.startDate = value;
+
+            }
+
+            return next;
 
         });
 
@@ -177,10 +200,27 @@ function Schedule() {
 
             closeFormDialog();
 
+            showSnackbar(
+
+                editingId
+                    ? "Training berhasil diperbarui."
+                    : "Training berhasil disimpan.",
+
+                "success"
+
+            );
+
         }
         catch (err) {
 
             console.error(err);
+
+            showSnackbar(
+                
+                "Gagal menyimpan training.",
+                "error"
+
+            );
 
         }
         finally {
@@ -188,6 +228,84 @@ function Schedule() {
             setSaving(false);
 
         }
+
+    };
+
+    const handleSearchTrainer = async () => {
+
+        if (!form.trainerId.trim()) {
+
+            setForm(current => ({
+                ...current,
+                trainerName: ""
+            }));
+
+            return;
+        }
+
+        try {
+
+            const result = await trainerService.getTrainer(form.trainerId);
+
+            if (!result || result.length === 0) {
+
+                setTrainerError("Trainer tidak ditemukan.");
+
+                showSnackbar(
+
+                    "Trainer tidak ditemukan.",
+                    "warning"
+
+                );
+
+                setForm(current => ({
+                    ...current,
+                    trainerName: ""
+                }));
+
+                return;
+
+            }
+
+            setTrainerError("");
+
+            setForm(current => ({
+                ...current,
+                trainerName: result[0].EMP_NAME
+            }));
+
+        }
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+    };
+
+    const handleTrainerKeyDown = async (event) => {
+
+        if (event.key !== "Enter") {
+
+            return;
+
+        }
+
+        event.preventDefault();
+
+        await handleSearchTrainer();
+
+    };
+
+    const handleUseYnChange = (event) => {
+
+        setForm(current => ({
+
+            ...current,
+
+            useYn: event.target.checked ? "Y" : "N"
+
+        }));
 
     };
 
@@ -234,65 +352,6 @@ function Schedule() {
             console.error(err);
 
         }
-
-    };
-
-    const handleSearchTrainer = async () => {
-
-        if (!form.trainerId.trim()) {
-
-            setForm(current => ({
-                ...current,
-                trainerName: ""
-            }));
-
-            return;
-        }
-
-        try {
-
-            const result = await trainerService.getTrainer(form.trainerId);
-
-            if (!result || result.length === 0) {
-
-                setTrainerError("Trainer tidak ditemukan.");
-
-                setForm(current => ({
-                    ...current,
-                    trainerName: ""
-                }));
-
-                return;
-
-            }
-
-            setTrainerError("");
-
-            setForm(current => ({
-                ...current,
-                trainerName: result[0].EMP_NAME
-            }));
-
-        }
-        catch (err) {
-
-            console.error(err);
-
-        }
-
-    };
-
-    const handleTrainerKeyDown = async (event) => {
-
-        if (event.key !== "Enter") {
-
-            return;
-
-        }
-
-        event.preventDefault();
-
-        await handleSearchTrainer();
 
     };
 
@@ -454,12 +513,13 @@ function Schedule() {
                 editingId={editingId}
                 form={form}
                 rooms={rooms}
+                trainerError={trainerError}
                 onChange={handleChange}
                 onSearchTrainer={handleSearchTrainer}
                 onTrainerKeyDown={handleTrainerKeyDown}
-                onClose={closeFormDialog}
                 onSubmit={handleSubmit}
-                trainerError={trainerError}
+                onUseYnChange={handleUseYnChange}
+                onClose={closeFormDialog}
             />
 
             <TrainingDetailDialog
