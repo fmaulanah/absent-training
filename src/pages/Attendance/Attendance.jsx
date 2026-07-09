@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useMemo,  useEffect} from "react";
 import dayjs from "dayjs";
 
 import { Typography, Box } from "@mui/material";
@@ -14,6 +13,8 @@ import AttendanceDialog from "./components/AttendanceDialog";
 
 import attendanceService from "../../services/attendanceService";
 
+import attendanceQueue from "../../utils/attendanceQueue";
+
 function Attendance() {
 
     const [month, setMonth] = useState(dayjs());
@@ -21,6 +22,44 @@ function Attendance() {
     const [trainings, setTrainings] = useState([]);
     const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [scanType, setScanType] = useState("IN");
+    const [queueVersion, setQueueVersion] = useState(0);
+
+    const scanInCount = useMemo(() =>
+
+        selectedTraining
+
+            ? attendanceQueue.countQueue({
+
+                scheduleId: selectedTraining.id,
+
+                scanType: "IN"
+
+            })
+
+            : 0,
+
+        [selectedTraining, queueVersion]
+
+    );
+
+    const scanOutCount = useMemo(() =>
+
+        selectedTraining
+
+            ? attendanceQueue.countQueue({
+
+                scheduleId: selectedTraining.id,
+
+                scanType: "OUT"
+
+            })
+
+            : 0,
+
+        [selectedTraining, queueVersion]
+
+    );
 
     const loadTraining = async () => {
 
@@ -71,6 +110,7 @@ function Attendance() {
             }));
 
             setTrainings(data);
+            setSelectedTraining(null);
 
         }
         finally {
@@ -81,6 +121,25 @@ function Attendance() {
 
     };
 
+    const handleMonthChange = (event) => {
+
+        setMonth(current =>
+
+            current.month(Number(event.target.value) - 1)
+
+        );
+
+    };
+
+    const handleYearChange = (event) => {
+
+        setMonth(current =>
+
+            current.year(Number(event.target.value))
+
+        );
+
+    };
     useEffect(() => {
 
         loadTraining();
@@ -106,8 +165,8 @@ function Attendance() {
                     item => item.useYn === "Y"
 
                 )}
-                onMonthChange={() => {}}
-                onYearChange={() => {}}
+                onMonthChange={handleMonthChange}
+                onYearChange={handleYearChange}
                 onTrainingChange={(event) => {
 
                     const training = trainings.find(
@@ -119,6 +178,7 @@ function Attendance() {
                     setSelectedTraining(training);
 
                 }}
+
                 //onRefresh={loadTraining}
 
             />
@@ -126,36 +186,36 @@ function Attendance() {
             <AttendanceInfo
 
                 training={selectedTraining}
+                scanInCount={scanInCount}
+                scanOutCount={scanOutCount}
+                onScanIn={() => {
+
+                    setScanType("IN");
+
+                    setDialogOpen(true);
+
+                }}
+                onScanOut={() => {
+
+                    setScanType("OUT");
+
+                    setDialogOpen(true);
+
+                }}
 
             />
-
-            <Box
-                sx={{
-                    mt: 3,
-                    display: "flex",
-                    justifyContent: "flex-end"
-                }}
-            >
-
-                <AppButton
-                    startIcon={<PlayArrowIcon />}
-                    disabled={!selectedTraining}
-                    onClick={() => setDialogOpen(true)}
-                >
-
-                    Mulai Absen
-
-                </AppButton>
-
-            </Box>
 
             <AttendanceDialog
 
                 open={dialogOpen}
-
                 training={selectedTraining}
-
+                scanType={scanType}
                 onClose={() => setDialogOpen(false)}
+                onQueueChanged={() =>
+
+                    setQueueVersion(current => current + 1)
+
+                }
 
             />
 

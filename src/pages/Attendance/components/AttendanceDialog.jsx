@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
     Dialog,
@@ -8,26 +8,162 @@ import {
     Grid,
     IconButton,
     TextField,
-    Typography
+    Typography,
+    Box,
+    ToggleButton,
+    ToggleButtonGroup
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
+import SensorsIcon from "@mui/icons-material/Sensors";
 
 import AppButton from "../../../components/common/Button/AppButton";
 
-function AttendanceDialog({
+import attendanceQueue from "../../../utils/attendanceQueue";
 
-    open,
+import employeeService from "../../../services/employeeService"
 
-    training,
+import useSnackbar from "../../../hooks/useSnackbar";
+import useResponsive from "../../../hooks/useResponsive";
 
-    onClose
-
-}) {
+function AttendanceDialog({ open, training, scanType, onClose, onQueueChanged }) 
+{
 
     const [rfid, setRfid] = useState("");
 
-    if (!training) return null;
+    const [manualYn, setManualYn] = useState("N");
+
+    const inputRef = useRef(null);
+
+    const scanningRef = useRef(false);
+
+    const { showSnackbar } = useSnackbar();
+    const { isMobile } = useResponsive();
+
+    useEffect(() => {
+
+        if (!open) {
+
+            return;
+
+        }
+
+        setManualYn("N");
+
+        setRfid("");
+
+        setTimeout(() => {
+
+            inputRef.current?.focus();
+
+        }, 150);
+
+    }, [open]);
+
+    const handleScan = async (event) => {
+
+        if (event.key !== "Enter") {
+
+            return;
+
+        }
+
+        event.preventDefault();
+
+        if (scanningRef.current) {
+
+            return;
+
+        }
+
+        const value = rfid.trim();
+
+        if (!value) {
+
+            return;
+
+        }
+
+        scanningRef.current = true;
+
+        try {
+
+            const employee =
+                manualYn === "N"
+                    ? employeeService.findEmployeeByRFID(value)
+                    : employeeService.findEmployeeByEmpId(value);
+
+            if (!employee) {
+
+                showSnackbar("Employee tidak ditemukan.", "error");
+
+                return;
+
+            }
+
+            const queue = attendanceQueue.createQueue({
+
+                employee,
+
+                training,
+
+                scanType,
+
+                manualYn
+
+            });
+
+            const result = attendanceQueue.addQueue(queue);
+
+            if (!result.success) {
+
+                showSnackbar(result.message, "warning");
+
+                return;
+
+            }
+
+            onQueueChanged?.();
+
+            showSnackbar(
+
+                `${employee.EMP_NAME} berhasil scan.`,
+
+                "success"
+
+            );
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+        }
+        finally {
+
+            setRfid("");
+
+            requestAnimationFrame(() => {
+
+                inputRef.current?.focus();
+
+            });
+
+            setTimeout(() => {
+
+                scanningRef.current = false;
+
+            }, 300);
+
+        }
+
+    };
+
+    if (!training) {
+
+        return null;
+
+    }
 
     return (
 
@@ -36,6 +172,12 @@ function AttendanceDialog({
             onClose={onClose}
             fullWidth
             maxWidth="sm"
+            paperprops={{
+                sx: {
+                    borderRadius: 3,
+                    mx: 2
+                }
+            }}
         >
 
             <DialogTitle
@@ -46,13 +188,7 @@ function AttendanceDialog({
                 }}
             >
 
-                Attendance
-
-                <IconButton onClick={onClose}>
-
-                    <CloseIcon />
-
-                </IconButton>
+                Scan Attendance
 
             </DialogTitle>
 
@@ -65,47 +201,33 @@ function AttendanceDialog({
 
                     <Grid size={12}>
 
-                        <Typography variant="caption">
-
-                            Training
-
-                        </Typography>
-
-                        <Typography fontWeight={700}>
+                        <Typography
+                            variant="h6"
+                            fontWeight={700}
+                        >
 
                             {training.title}
 
                         </Typography>
 
-                    </Grid>
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                                mt: 0.5
+                            }}
+                        >
 
-                    <Grid size={6}>
-
-                        <Typography variant="caption">
-
-                            Trainer
-
-                        </Typography>
-
-                        <Typography>
-
-                            {training.trainerName}
+                            👤 {training.trainerName}
 
                         </Typography>
 
-                    </Grid>
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                        >
 
-                    <Grid size={6}>
-
-                        <Typography variant="caption">
-
-                            Ruangan
-
-                        </Typography>
-
-                        <Typography>
-
-                            {training.roomName}
+                            🏠 {training.roomName}
 
                         </Typography>
 
@@ -113,16 +235,115 @@ function AttendanceDialog({
 
                     <Grid size={12}>
 
-                        <TextField
-                            autoFocus
+                        <Typography
+                            variant="caption"
+                            sx={{
+                                display: "block",
+                                mb: 1
+                            }}
+                        >
+                            Mode Input
+                        </Typography>
+
+                        <ToggleButtonGroup
+                            exclusive
                             fullWidth
-                            label="RFID / NIK"
-                            placeholder="Scan RFID atau masukkan NIK..."
-                            value={rfid}
-                            onChange={(event) =>
-                                setRfid(event.target.value)
+                            value={manualYn}
+                            onChange={(event, value) => {
+
+                                if (!value) {
+
+                                    return;
+
+                                }
+
+                                setManualYn(value);
+
+                                setRfid("");
+
+                                requestAnimationFrame(() => {
+
+                                    inputRef.current?.focus();
+
+                                });
+
+                            }}
+                        >
+
+                            <ToggleButton value="N">
+
+                                Scan RFID
+
+                            </ToggleButton>
+
+                            <ToggleButton value="Y">
+
+                                Manual
+
+                            </ToggleButton>
+
+                        </ToggleButtonGroup>
+
+                    </Grid>
+
+                    <Grid size={12}>
+
+                        <Box
+                            sx={{
+
+                                mt: 1,
+
+                                p: 3,
+
+                                borderRadius: 2,
+
+                                bgcolor: "grey.100",
+
+                                textAlign: "center"
+
+                            }}
+                        >
+
+                            {manualYn == "N" ?
+                                <SensorsIcon
+                                    color="primary"
+                                    sx={{
+                                        fontSize: 48
+                                    }}
+                                />
+                                :
+                                null
                             }
-                        />
+
+                            <Typography
+                                sx={{
+                                    mt: 1,
+                                    mb: 2,
+                                    fontWeight: 600
+                                }}
+                            >
+
+                                {manualYn == "N" ? "Tempelkan RFID" : "Masukan NIK"}
+
+                            </Typography>
+
+                            <TextField
+                                inputRef={inputRef}
+                                fullWidth
+                                autoComplete="off"
+                                autoFocus
+                                value={rfid}
+                                label={ manualYn === "N" ? "RFID" : "NIK" }
+                                placeholder={ manualYn === "N" ? "Tempelkan RFID..." : "Masukkan NIK..."}
+                                onChange={(event) => {
+
+                                    setRfid(event.target.value);
+
+                                }}
+                                onKeyDown={handleScan}
+                            />
+
+                        </Box>
 
                     </Grid>
 
@@ -134,6 +355,7 @@ function AttendanceDialog({
 
                 <AppButton
                     variant="outlined"
+                    fullWidth
                     onClick={onClose}
                 >
 

@@ -446,12 +446,20 @@ function Schedule() {
 
             {isMobile ? (
 
-                <>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        minHeight: "calc(100vh - 180px)"
+                    }}
+                >
+
                     <Box
                         sx={{
                             mb: 2
                         }}
                     >
+
                         <CalendarToolbar
                             month={month}
                             MONTHS={MONTHS}
@@ -460,14 +468,25 @@ function Schedule() {
                             onAddTraining={openCreateDialog}
                             onRefresh={loadTraining}
                         />
+
                     </Box>
 
-                    <ScheduleList
-                        trainings={monthlyTrainings}
-                        roomMap={roomMap}
-                        onSelectTraining={setSelectedTraining}
-                    />
-                </>
+                    <Box
+                        sx={{
+                            flex: 1,
+                            display: "flex"
+                        }}
+                    >
+
+                        <ScheduleList
+                            trainings={monthlyTrainings}
+                            roomMap={roomMap}
+                            onSelectTraining={setSelectedTraining}
+                        />
+
+                    </Box>
+
+                </Box>
 
             ) : (
 

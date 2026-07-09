@@ -106,7 +106,9 @@ function AttendanceFilter({
 
                 </Grid>
 
-                <Grid size={{ xs:12, md:5 }}>
+                <Grid 
+                     size={{ xs:12, md:5 }}
+                >
 
                     <TextField
                         select
@@ -132,23 +134,6 @@ function AttendanceFilter({
                     </TextField>
 
                 </Grid>
-
-                {/* <Grid size={{ xs:12, md:2}}>
-
-                    <AppButton
-                        fullWidth
-                        startIcon={<RefreshIcon />}
-                        onClick={onRefresh}
-                        sx={{
-                            mt:1
-                        }}
-                    >
-
-                        Refresh
-
-                    </AppButton>
-
-                </Grid> */}
 
             </Grid>
 

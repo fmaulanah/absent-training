@@ -36,7 +36,7 @@ function SidebarFooter(){
         <Box
             sx={{
             mt: "auto",
-            p: 2,
+            // p: 2,
             borderTop: 1,
             borderColor: "divider",
             textAlign:"center"

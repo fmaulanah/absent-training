@@ -35,7 +35,7 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                             display: "flex",
                             justifyContent: "left",
                             alignItems: "left",
-                            gap: 1
+                            gap: 2
                         }}
                     >
                         <TextField
@@ -50,7 +50,9 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                                         .startOf("month")
                                 )
                             }
-                            sx={{ minWidth: 100 }}
+                            sx={{ minWidth: 100, 
+                                  maxWidth: 100
+                            }}
                         >
                             {MONTHS.map((monthName, index) => (
                                 <MenuItem
@@ -89,20 +91,6 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                             ))}
                         </TextField>
 
-                        {/* <AppButton
-                            variant="outlined"
-                            onClick={onRefresh}
-                            sx={{
-                                minWidth: 40,
-                                width: 40,
-                                height: 40,
-                                p: 0,
-                                boxShadow: "none"
-                            }}
-                        >
-                            <RefreshIcon />
-                        </AppButton> */}
-
                         <AppButton
                             onClick={onAddTraining}
                             sx={{
@@ -114,6 +102,7 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                             }}
                         >
                             <AddIcon />
+
                         </AppButton>
 
                     </Box>

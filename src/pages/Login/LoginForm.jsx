@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 import authService from "../../services/authService";
+import employeeService from "../../services/employeeService";
+
 import AppButton from "../../components/common/Button/AppButton";
 import Logo from "../../assets/logo/logo.png";
 
@@ -28,8 +30,6 @@ function LoginForm() {
     const handleLogin = async () => {
 
         if (!userId || !password) {
-
-            //alert("User ID dan Password harus diisi.");
 
             showSnackbar(
 
@@ -71,6 +71,8 @@ function LoginForm() {
 
             login(user);
 
+            await employeeService.refreshEmployees();
+            
             navigate("/dashboard");
 
         } catch (err) {

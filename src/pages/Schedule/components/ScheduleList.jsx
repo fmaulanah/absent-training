@@ -58,12 +58,19 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
     return (
 
-        <>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                height: "100%"
+            }}
+        >
 
             <Stack
                 spacing={2}
                 sx={{
-                    width: "100%"
+                    flex: 1
                 }}
             >
 
@@ -89,7 +96,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                             sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                alignItems: "flex-start"
+                                alignitems: "flex-start"
                             }}
                         >
 
@@ -112,7 +119,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                                 <Box
                                     sx={{
                                         display: "flex",
-                                        alignItems: "center",
+                                        alignitems: "center",
                                         gap: 1,
                                         mt: 1
                                     }}
@@ -131,7 +138,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                                 <Box
                                     sx={{
                                         display: "flex",
-                                        alignItems: "center",
+                                        alignitems: "center",
                                         gap: 1,
                                         mt: 1
                                     }}
@@ -205,9 +212,10 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
                 <Box
                     sx={{
+                        mt: "auto",
+                        pt: 2,
                         display: "flex",
-                        justifyContent: "center",
-                        mt: "auto"
+                        justifyContent: "center"
                     }}
                 >
 
@@ -217,7 +225,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                             sx={{
                                 mt: 3,
                                 display: "flex",
-                                alignItems: "center",
+                                alignitems: "center",
                                 justifyContent: "center",
                                 gap: 2
                             }}
@@ -276,7 +284,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
             )}
 
-        </>
+        </Box>
 
     );
 
