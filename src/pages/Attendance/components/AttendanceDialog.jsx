@@ -19,6 +19,7 @@ import SensorsIcon from "@mui/icons-material/Sensors";
 
 import AppButton from "../../../components/common/Button/AppButton";
 
+import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import attendanceQueue from "../../../utils/attendanceQueue";
 
 import employeeService from "../../../services/employeeService"
@@ -26,17 +27,15 @@ import employeeService from "../../../services/employeeService"
 import useSnackbar from "../../../hooks/useSnackbar";
 import useResponsive from "../../../hooks/useResponsive";
 
-function AttendanceDialog({ open, training, scanType, onClose, onQueueChanged }) 
+function AttendanceDialog({ open, training, scanType, onClose, onDiscardQueue, onQueueChanged }) 
 {
 
     const [rfid, setRfid] = useState("");
-
     const [manualYn, setManualYn] = useState("N");
 
     const inputRef = useRef(null);
-
     const scanningRef = useRef(false);
-
+    
     const { showSnackbar } = useSnackbar();
     const { isMobile } = useResponsive();
 
@@ -88,10 +87,7 @@ function AttendanceDialog({ open, training, scanType, onClose, onQueueChanged })
 
         try {
 
-            const employee =
-                manualYn === "N"
-                    ? employeeService.findEmployeeByRFID(value)
-                    : employeeService.findEmployeeByEmpId(value);
+            const employee = manualYn === "N" ? employeeService.findEmployeeByRFID(value) : employeeService.findEmployeeByEmpId(value);
 
             if (!employee) {
 
@@ -104,11 +100,8 @@ function AttendanceDialog({ open, training, scanType, onClose, onQueueChanged })
             const queue = attendanceQueue.createQueue({
 
                 employee,
-
                 training,
-
                 scanType,
-
                 manualYn
 
             });

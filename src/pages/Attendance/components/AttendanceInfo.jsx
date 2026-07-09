@@ -7,6 +7,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -22,7 +23,9 @@ function AttendanceInfo({
     scanInCount,
     scanOutCount,
     onScanIn,
-    onScanOut
+    onScanOut,
+    onUpload,
+    uploading
 
 }) {
 
@@ -33,14 +36,14 @@ function AttendanceInfo({
         return (
 
             <AppCard
-                title="Informasi Training"
+                title=" "
                 sx={{ mt: 3 }}
                 action={
 
                     <Stack
                         direction="row"
                         spacing={1}
-                        flexwrap="wrap"
+                        // flexwrap="wrap"
                     >
 
                         <AppButton
@@ -63,6 +66,25 @@ function AttendanceInfo({
                         >
 
                             {isMobile ? "OUT" : "Scan Out"}
+
+                        </AppButton>
+
+                        <AppButton
+
+                            size="small"
+                            color="secondary"
+                            disabled={!training}
+                            onClick={onUpload}
+                            sx={{
+                                minWidth: 40,
+                                width: 40,
+                                height: 40,
+                                p: 0,
+                                boxShadow: "none"
+                            }}
+                        >
+
+                            <CloudUploadIcon />
 
                         </AppButton>
 
@@ -89,7 +111,7 @@ function AttendanceInfo({
     return (
 
         <AppCard
-            title="Informasi Training"
+            title=" "
             sx={{ mt: 3 }}
             action={
 
@@ -122,6 +144,24 @@ function AttendanceInfo({
 
                     </AppButton>
 
+                    <AppButton
+
+                        size="small"
+                        color="secondary"
+                        onClick={onUpload}
+                        sx={{
+                            minWidth: 40,
+                            width: 40,
+                            height: 40,
+                            p: 0,
+                            boxShadow: "none"
+                        }}
+                    >
+
+                        <CloudUploadIcon />
+
+                    </AppButton>
+
                 </Stack>
 
             }
@@ -131,7 +171,7 @@ function AttendanceInfo({
 
                 <Grid 
                     container 
-                    spacing={2}
+                    spacing={1}
                     sx={{}}
                 >
 
@@ -175,9 +215,9 @@ function AttendanceInfo({
 
                     </Grid>
 
-                    {!isMobile && (
+                    {/* {!isMobile && (
 
-                        <>
+                        <> */}
 
                             <Grid size={{ xs: 6 }}>
 
@@ -199,9 +239,9 @@ function AttendanceInfo({
 
                             </Grid>
 
-                        </>
+                        {/* </>
 
-                    )}
+                    )} */}
 
                 </Grid>
 

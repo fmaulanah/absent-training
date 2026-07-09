@@ -103,6 +103,12 @@ const attendanceQueue = {
 
     },
 
+    getCount() {
+
+        return this.getQueue().length;
+
+    },
+
     clearQueue() {
 
         removeStorage(
@@ -150,6 +156,18 @@ const attendanceQueue = {
             MEMO: memo
 
         };
+
+    },
+
+    replaceQueue(queue) {
+
+        setStorage(
+
+            STORAGE_KEYS.ATTENDANCE_QUEUE,
+
+            queue
+
+        );
 
     },
 

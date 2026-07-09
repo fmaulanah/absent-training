@@ -5,17 +5,33 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 
 import AppButton from "../../../components/common/Button/AppButton";
+import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import LoadingOverlay from "../../../components/common/Loading/LoadingOverlay";
 
 function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
+                          confirmOpen, setConfirmOpen, isDirty, setIsDirty,
                           onChange, onSearchTrainer, onTrainerKeyDown, onClose, 
                           onSubmit, onUseYnChange, }) 
 {
+    const handleClose = () => {
+
+        if (!isDirty) {
+
+            onClose();
+
+            return;
+
+        }
+
+        setConfirmOpen(true);
+
+    };
+
     return (
 
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={handleClose}
             fullWidth
             maxWidth="sm"
             component="form"
@@ -35,7 +51,7 @@ function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
                 Detail Training
 
                 <IconButton
-                    onClick={onClose}
+                    onClick={handleClose}
                     size="small"
                 >
 
@@ -222,6 +238,36 @@ function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
                 </AppButton>
 
             </DialogActions>
+
+            <ConfirmDialog
+
+                open={confirmOpen}
+
+                title="Perubahan Belum Disimpan"
+
+                message="Perubahan yang sudah Anda lakukan akan hilang. Tetap keluar?"
+
+                confirmText="Keluar"
+
+                cancelText="Kembali"
+
+                onConfirm={() => {
+
+                    setConfirmOpen(false);
+
+                    setIsDirty(false);
+
+                    onClose();
+
+                }}
+
+                onCancel={() =>
+
+                    setConfirmOpen(false)
+
+                }
+
+            />
 
         </Dialog>
 

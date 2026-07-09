@@ -50,8 +50,8 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                                         .startOf("month")
                                 )
                             }
-                            sx={{ minWidth: 100, 
-                                  maxWidth: 100
+                            sx={{ minWidth: 130, 
+                                  maxWidth: 130
                             }}
                         >
                             {MONTHS.map((monthName, index) => (

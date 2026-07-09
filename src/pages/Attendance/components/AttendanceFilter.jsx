@@ -24,8 +24,6 @@ function AttendanceFilter({
 
 }) {
 
-    console.log(trainings);
-
     const months = [
 
         "Januari",
@@ -52,7 +50,7 @@ function AttendanceFilter({
                 spacing={2}
             >
 
-                <Grid size={{ xs:6, md:3 }}>
+                <Grid size={{ xs:8, md:3 }}>
 
                     <TextField
                         select
@@ -79,7 +77,7 @@ function AttendanceFilter({
 
                 </Grid>
 
-                <Grid size={{ xs:6, md:2 }}>
+                <Grid size={{ xs:4, md:3 }}>
 
                     <TextField
                         fullWidth
@@ -107,7 +105,7 @@ function AttendanceFilter({
                 </Grid>
 
                 <Grid 
-                     size={{ xs:12, md:5 }}
+                     size={{ xs:12, md:6 }}
                 >
 
                     <TextField

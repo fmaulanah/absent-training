@@ -60,6 +60,12 @@ function Schedule() {
     const [saving, setSaving] = useState(false);
     const [page, setPage] = useState(1);
 
+    const [isDirty, setIsDirty] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+
+    const { isMobile } = useResponsive();
+    const { showSnackbar } = useSnackbar();
+
     const [dayDialog, setDayDialog] = useState({
 
         open: false,
@@ -67,9 +73,6 @@ function Schedule() {
         trainings: []
 
     });
-
-    const { isMobile } = useResponsive();
-    const { showSnackbar } = useSnackbar();
 
     const calendarDays = useMemo(() => {
         const leadingDays = month.day();
@@ -115,6 +118,8 @@ function Schedule() {
     ), [trainings, month]);
 
     const handleChange = (event) => {
+
+        setIsDirty(true);
 
         const { name, value } = event.target;
 
@@ -209,6 +214,8 @@ function Schedule() {
                 "success"
 
             );
+
+            setIsDirty(false);
 
         }
         catch (err) {
@@ -533,6 +540,10 @@ function Schedule() {
                 form={form}
                 rooms={rooms}
                 trainerError={trainerError}
+                confirmOpen={confirmOpen}
+                setConfirmOpen={setConfirmOpen}
+                isDirty={isDirty}
+                setIsDirty={setIsDirty}
                 onChange={handleChange}
                 onSearchTrainer={handleSearchTrainer}
                 onTrainerKeyDown={handleTrainerKeyDown}

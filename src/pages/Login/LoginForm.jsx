@@ -65,8 +65,6 @@ function LoginForm() {
 
             }
 
-            console.log(user);
-
             delete user.PASSWORD;
 
             login(user);
