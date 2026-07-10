@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo  } from "react";
 
 import {
     Dialog,
@@ -27,7 +27,7 @@ import employeeService from "../../../services/employeeService"
 import useSnackbar from "../../../hooks/useSnackbar";
 import useResponsive from "../../../hooks/useResponsive";
 
-function AttendanceDialog({ open, training, scanType, confirmOpen, onClose, onQueueChanged }) 
+function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQueueChanged, onRequestFinish }) 
 {
 
     const [rfid, setRfid] = useState("");
@@ -38,26 +38,6 @@ function AttendanceDialog({ open, training, scanType, confirmOpen, onClose, onQu
     
     const { showSnackbar } = useSnackbar();
     const { isMobile } = useResponsive();
-
-    useEffect(() => {
-
-        if (!open) {
-
-            return;
-
-        }
-
-        setManualYn("N");
-
-        setRfid("");
-
-        setTimeout(() => {
-
-            inputRef.current?.focus();
-
-        }, 150);
-
-    }, [open]);
 
     const handleScan = async (event) => {
 
@@ -152,6 +132,55 @@ function AttendanceDialog({ open, training, scanType, confirmOpen, onClose, onQu
 
     };
 
+    const progress = useMemo(() => {
+
+        if (!training) {
+
+            return {
+
+                uploaded: 0,
+
+                scanned: 0
+
+            };
+
+        }
+
+        return attendanceQueue.getProgress({
+
+                scheduleId: training.id,
+                scanType
+
+            });
+
+        }, [
+
+            training,
+            scanType,
+            queueVersion
+
+    ]);
+
+    useEffect(() => {
+
+        if (!open) {
+
+            return;
+
+        }
+
+        setManualYn("N");
+
+        setRfid("");
+
+        setTimeout(() => {
+
+            inputRef.current?.focus();
+
+        }, 150);
+
+    }, [open]);
+
     if (!training) {
 
         return null;
@@ -184,6 +213,43 @@ function AttendanceDialog({ open, training, scanType, confirmOpen, onClose, onQu
                 Scan Attendance
 
             </DialogTitle>
+
+            <Box
+                sx={{
+                    px: 3,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}
+            >
+
+                <Typography
+                    fontWeight={700}
+                    color={
+                        scanType === "IN"
+                            ? "success.dark"
+                            : "warning.dark"
+                    }
+                >
+
+                    {scanType === "IN"
+
+                        ? "🟢 SCAN IN"
+
+                        : "🟠 SCAN OUT"}
+
+                </Typography>
+
+                <Typography
+                    fontWeight={700}
+                    variant="body"
+                >
+
+                     {progress.uploaded} / {progress.scanned}
+
+                </Typography>
+
+            </Box>
 
             <DialogContent dividers>
 
@@ -347,7 +413,17 @@ function AttendanceDialog({ open, training, scanType, confirmOpen, onClose, onQu
             <DialogActions>
 
                 <AppButton
-                    variant="outlined"
+                    fullWidth
+                    disabled={progress.scanned === 0}
+                    onClick={onRequestFinish}
+                >
+
+                    {scanType === "IN" ? "Selesai Scan IN" : "Selesai Scan OUT"}
+
+                </AppButton>
+
+                <AppButton
+                    
                     fullWidth
                     onClick={onClose}
                 >

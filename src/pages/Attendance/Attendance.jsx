@@ -17,6 +17,7 @@ import attendanceService from "../../services/attendanceService";
 import attendanceQueue from "../../utils/attendanceQueue";
 
 import useBeforeUnloadGuard from "../../hooks/useBeforeUnloadGuard";
+import useSnackbar from "../../hooks/useSnackbar";
 
 function Attendance() {
 
@@ -29,11 +30,15 @@ function Attendance() {
     const [queueVersion, setQueueVersion] = useState(0);
     const [uploading, setUploading] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [confirmOpenStat, setConfirmOpenStat] = useState(false);
     const [pendingTraining, setPendingTraining] = useState(null);
+    const [pendingStatus, setPendingStatus] = useState(null);
+
+    const { showSnackbar } = useSnackbar();
 
     useBeforeUnloadGuard(
 
-        attendanceQueue.getCount() > 0
+        attendanceQueue.hasPendingUpload()
 
     );
 
@@ -96,12 +101,24 @@ function Attendance() {
                 trainerId: item.TRAINER_EMPID,
                 trainerName: item.TRAINER_EMP_NM,
                 memo: item.MEMO,
-                useYn: item.USE_YN
+                useYn: item.USE_YN,
+                absentStatus: item.ABSENT_STATUS
 
             }));
 
             setTrainings(data);
-            setSelectedTraining(null);
+
+            if (selectedTraining) {
+
+                const updatedTraining = data.find(
+
+                    item => item.id === selectedTraining.id
+
+                );
+
+                setSelectedTraining(updatedTraining ?? null);
+
+            }
 
         }
         finally {
@@ -114,7 +131,7 @@ function Attendance() {
 
     const handleMonthChange = (event) => {
 
-        if (attendanceQueue.getCount() > 0) {
+        if (attendanceQueue.hasPendingUpload()) {
 
             setConfirmOpen(true);
             return;
@@ -131,7 +148,7 @@ function Attendance() {
 
     const handleYearChange = (event) => {
 
-        if (attendanceQueue.getCount() > 0) {
+        if (attendanceQueue.hasPendingUpload()) {
 
             setConfirmOpen(true);
             return;
@@ -156,16 +173,16 @@ function Attendance() {
 
     const handleUpload = async () => {
 
-        const queue = attendanceQueue.getQueue();
-        const failedQueue = [];
+        const queue = attendanceQueue.getNotUploadedQueue();
+
+        const uploadedQueue = [];
 
         if (!queue.length) {
 
             showSnackbar(
 
-                "Tidak ada data yang akan diupload.",
-
-                "warning"
+                "Semua attendance sudah diupload.",
+                "info"
 
             );
 
@@ -179,30 +196,37 @@ function Attendance() {
 
             for (const scan of queue) {
 
-                try 
-                {
+                try {
 
                     await attendanceService.saveScan(scan);
+                    uploadedQueue.push(scan);
 
                 }
-                catch {
+                catch (error) {
 
-                    console.error("Upload gagal :", scan, error);
-                    failedQueue.push(scan);
+                    console.error(
+
+                        "Upload gagal :",
+                        scan,
+                        error
+
+                    );
 
                 }
 
             }
 
-            if (failedQueue.length === 0) {
+            attendanceQueue.markUploaded(uploadedQueue);
 
-                attendanceQueue.clearQueue();
+            setQueueVersion(current => current + 1);
 
-                setQueueVersion(current => current + 1);
+            const failedCount = queue.length - uploadedQueue.length;
+
+            if (failedCount === 0) {
 
                 showSnackbar(
 
-                    `${queue.length} attendance berhasil diupload.`,
+                    `${uploadedQueue.length} attendance berhasil diupload.`,
 
                     "success"
 
@@ -211,13 +235,9 @@ function Attendance() {
             }
             else {
 
-                attendanceQueue.replaceQueue(failedQueue);
-
-                setQueueVersion(current => current + 1);
-
                 showSnackbar(
 
-                    `${queue.length - failedQueue.length} berhasil, ${failedQueue.length} gagal. Silakan upload kembali.`,
+                    `${uploadedQueue.length} berhasil, ${failedCount} gagal. Silakan upload kembali.`,
 
                     "warning"
 
@@ -267,7 +287,8 @@ function Attendance() {
 
         if (
 
-            queueInfo && queueInfo.scheduleId !== training.id
+            attendanceQueue.hasPendingUpload() &&
+            queueInfo?.scheduleId !== training.id
 
         ) {
 
@@ -278,6 +299,94 @@ function Attendance() {
         }
 
         setSelectedTraining(training);
+
+    };
+
+    const handleRequestFinish = () => {
+
+        const progress = attendanceQueue.getProgress({
+
+            scheduleId: selectedTraining.id,
+            scanType
+
+        });
+
+        if (progress.uploaded !== progress.scanned) {
+
+            showSnackbar(
+
+                "Masih ada attendance yang belum diupload.",
+                "warning"
+
+            );
+
+            return;
+
+        }
+
+        setPendingStatus(
+
+            scanType === "IN" ? "O" : "F"
+
+        );
+
+        setConfirmOpenStat(true);
+
+    };
+
+    const handleFinishScan = async () => {
+
+        try {
+
+            console.log("training :", selectedTraining.id);
+            console.log("status :", pendingStatus);
+
+            await attendanceService.setAbsentStatus(
+
+                selectedTraining.id,
+                pendingStatus
+
+            );
+
+            await loadTraining();
+
+            setConfirmOpenStat(false);
+
+            setDialogOpen(false);
+
+            if (pendingStatus === "F") {
+
+                attendanceQueue.clearQueue();
+                setQueueVersion(current => current + 1);
+
+            }
+
+            showSnackbar(
+
+                pendingStatus === "O"
+
+                    ? "Scan IN berhasil diselesaikan."
+
+                    : "Attendance berhasil diselesaikan.",
+
+                "success"
+
+            );
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+            showSnackbar(
+
+                "Gagal mengubah status attendance.",
+
+                "error"
+
+            );
+
+        }
 
     };
     
@@ -340,13 +449,14 @@ function Attendance() {
                 open={dialogOpen}
                 training={selectedTraining}
                 scanType={scanType}
-                cfmOpen={confirmOpen}
+                queueVersion={queueVersion}
                 onClose={() => setDialogOpen(false)}
                 onQueueChanged={() =>
 
                     setQueueVersion(current => current + 1)
 
                 }
+                onRequestFinish={handleRequestFinish}
 
             />
 
@@ -366,13 +476,46 @@ function Attendance() {
                     setConfirmOpen(false);
 
                 }}
-
                 onCancel={() => {
 
                     setPendingTraining(null);
                     setConfirmOpen(false);
 
                 }}
+
+            />
+
+            <ConfirmDialog
+
+                open={confirmOpenStat}
+
+                title={
+
+                    pendingStatus === "O"
+
+                        ? "Selesaikan Scan Masuk"
+
+                        : "Selesaikan Attendance"
+
+                }
+
+                message={
+
+                    pendingStatus === "O"
+
+                        ? "Attendance akan berpindah ke Scan Out."
+
+                        : "Attendance akan diselesaikan."
+
+                }
+
+                confirmText="Lanjutkan"
+
+                cancelText="Batal"
+
+                onCancel={() => setConfirmOpenStat(false)}
+
+                onConfirm={handleFinishScan}
 
             />
 

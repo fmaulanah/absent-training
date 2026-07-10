@@ -31,6 +31,14 @@ function AttendanceInfo({
 
     const { isMobile } = useResponsive();
 
+    const status = training?.absentStatus;
+
+    console.log("Status =", status);
+
+    const canScanIn = !status || status === "I";
+    const canScanOut = status === "O";
+    const isFinished = status === "F";
+
     if (!training) {
 
         return (
@@ -49,8 +57,8 @@ function AttendanceInfo({
                         <AppButton
                             size="small"
                             startIcon={<PlayArrowIcon />}
-                            disabled={!training}
                             onClick={onScanIn}
+                            disabled={true}
                         >
 
                             {isMobile ? "IN" : "Scan In"}
@@ -61,8 +69,8 @@ function AttendanceInfo({
                             size="small"
                             color="success"
                             startIcon={<PlayArrowIcon />}
-                            disabled={!training}
                             onClick={onScanOut}
+                            disabled={true}
                         >
 
                             {isMobile ? "OUT" : "Scan Out"}
@@ -73,7 +81,7 @@ function AttendanceInfo({
 
                             size="small"
                             color="secondary"
-                            disabled={!training}
+                            disabled={true}
                             onClick={onUpload}
                             sx={{
                                 minWidth: 40,
@@ -124,8 +132,8 @@ function AttendanceInfo({
                     <AppButton
                         size="small"
                         startIcon={<PlayArrowIcon />}
-                        disabled={!training}
                         onClick={onScanIn}
+                        disabled={!canScanIn}
                     >
 
                         {isMobile ? "IN" : "Scan In"}
@@ -136,8 +144,8 @@ function AttendanceInfo({
                         size="small"
                         color="success"
                         startIcon={<PlayArrowIcon />}
-                        disabled={!training}
                         onClick={onScanOut}
+                        disabled={!canScanOut}
                     >
 
                         {isMobile ? "OUT" : "Scan Out"}

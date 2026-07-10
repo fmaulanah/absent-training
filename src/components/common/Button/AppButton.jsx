@@ -33,39 +33,23 @@ function AppButton({
         <Button
 
             variant={variant}
-
             color={color}
-
             size={size}
-
             fullWidth={fullWidth}
-
             startIcon={startIcon}
-
             endIcon={endIcon}
-
             onClick={onClick}
-
             type={type}
-
             disabled={disabled}
-
             sx={{
 
-                borderRadius:2,
-
+                borderRadius:3,
                 textTransform:"none",
-
                 fontWeight:600,
-
                 px:3,
-
                 py:1,
-
-                boxShadow:2,
-
+                boxShadow:3,
                 ...sx
-
             }}
 
             {...props}

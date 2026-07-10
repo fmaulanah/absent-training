@@ -37,12 +37,26 @@ const attendanceQueue = {
 
     getQueueInfo() {
 
-        return getStorage(
+        const storage = getStorage(
 
             STORAGE_KEYS.ATTENDANCE_QUEUE,
+
             null
 
         );
+
+        if (!storage) {
+
+            return null;
+
+        }
+        
+        storage.scheduleId ??= null;
+        storage.scheduleName ??= "";
+        storage.status ??= "SCAN_IN";
+        storage.items ??= [];
+
+        return storage;
 
     },
 
@@ -61,6 +75,96 @@ const attendanceQueue = {
     getCount() {
 
         return this.getQueue().length;
+
+    },
+
+    getStatus() {
+
+        return this.getQueueInfo()?.status ?? "SCAN_IN";
+
+    },
+
+    getNotUploadedQueue() {
+
+        return this.getQueue().filter(
+
+            item => item.UPLOADED_YN === "N"
+
+        );
+
+    },
+
+    getProgress({
+
+        scheduleId,
+
+        scanType
+
+    }) {
+
+        const queue = this.getQueue().filter(item =>
+
+            item.SCHEDULE_ID === scheduleId &&
+            item.SCAN_TYPE === scanType
+
+        );
+
+        return {
+
+            uploaded: queue.filter(item => item.UPLOADED_YN === "Y").length,
+
+            scanned: queue.length
+
+        };
+
+    },
+
+    markUploaded(uploadedQueue) {
+
+        const queue = this.getQueue();
+
+        uploadedQueue.forEach(uploaded => {
+
+            const item = queue.find(scan =>
+
+                scan.SCHEDULE_ID === uploaded.SCHEDULE_ID &&
+                scan.SCAN_EMPID === uploaded.SCAN_EMPID &&
+                scan.SCAN_TYPE === uploaded.SCAN_TYPE &&
+                scan.SCAN_DTTM === uploaded.SCAN_DTTM
+
+            );
+
+            if (item) {
+
+                item.UPLOADED_YN = "Y";
+
+            }
+
+        });
+
+        this.replaceQueue(queue);
+
+    },
+
+    setStatus(status) {
+
+        const storage = this.getQueueInfo();
+
+        if (!storage) {
+
+            return;
+
+        }
+
+        storage.status = status;
+
+        setStorage(
+
+            STORAGE_KEYS.ATTENDANCE_QUEUE,
+
+            storage
+
+        );
 
     },
 
@@ -95,6 +199,7 @@ const attendanceQueue = {
 
                 scheduleId: queue.SCHEDULE_ID,
                 scheduleName: queue.SCHEDULE_NM,
+                status: "SCAN_IN",
                 items: []
 
             };
@@ -134,19 +239,11 @@ const attendanceQueue = {
 
         const queue = this.getQueue().filter(
 
-            item => item.EMPID !== empId
+            item => item.SCAN_EMPID  !== empId
 
         );
 
-        setStorage(
-
-            STORAGE_KEYS.ATTENDANCE_QUEUE,
-
-            queue
-
-        );
-
-        return queue;
+        this.replaceQueue(queue);
 
     },
 
@@ -158,6 +255,16 @@ const attendanceQueue = {
             item.SCAN_EMPID === empId &&
             item.SCHEDULE_ID === scheduleId &&
             item.SCAN_TYPE === scanType
+
+        );
+
+    },
+
+    hasPendingUpload() {
+
+        return this.getQueue().some(
+
+            item => item.UPLOADED_YN === "N"
 
         );
 
@@ -192,7 +299,8 @@ const attendanceQueue = {
             TRAINER_EMPID: training.trainerId,
             TRAINER_EMP_NM: training.trainerName,
             MANUAL_YN: manualYn,
-            MEMO: memo
+            MEMO: memo,
+            UPLOADED_YN: "N"
 
         };
 
@@ -207,10 +315,16 @@ const attendanceQueue = {
 
         }
 
+        const oldStorage = this.getQueueInfo();
+
         const storage = {
 
             scheduleId: queue[0].SCHEDULE_ID,
-            scheduleName: queue[0].SCHEDULE_NM,
+
+            scheduleName: oldStorage?.scheduleName ?? queue[0].SCHEDULE_NM,
+
+            status: oldStorage?.status ?? "SCAN_IN",
+
             items: queue
 
         };
@@ -224,13 +338,18 @@ const attendanceQueue = {
 
     },
 
-    countQueue({ scheduleId, scanType}) 
+    countQueue({ scheduleId, scanType, uploadedYn}) 
     {
 
         return this.getQueue().filter(item =>
 
             item.SCHEDULE_ID === scheduleId &&
-            item.SCAN_TYPE === scanType
+            item.SCAN_TYPE === scanType &&
+            (
+
+                !uploadedYn ||  item.UPLOADED_YN === uploadedYn
+
+            )
 
         ).length;
 
