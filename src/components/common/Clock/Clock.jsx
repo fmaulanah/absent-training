@@ -21,7 +21,7 @@ function Clock() {
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "flex-end"
+                alignitems: "flex-end"
             }}
         >
 

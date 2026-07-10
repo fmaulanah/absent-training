@@ -92,7 +92,7 @@ function LoginForm() {
             <Box
                 sx={{
                     display: "flex",
-                    alignItems: "center",
+                    alignitems: "center",
                     justifyContent: "center",
                     gap: 3,
                     mb: 4,

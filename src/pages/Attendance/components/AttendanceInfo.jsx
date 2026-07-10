@@ -260,7 +260,7 @@ function BoxItem({ icon, title, value }) {
         <Stack
             direction="row"
             spacing={1.25}
-            alignItems="center"
+            alignitems="center"
             sx={{
                 p: 1.5,
                 border: 1,

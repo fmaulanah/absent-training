@@ -455,15 +455,17 @@ function Schedule() {
 
                 <Box
                     sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        minHeight: "calc(100vh - 180px)"
+                        // display: "flex",
+                        // flexDirection: "column",
+                        // minHeight: "calc(100vh - 180px)"
                     }}
                 >
 
                     <Box
                         sx={{
-                            mb: 2
+                            // mb: 2
+                            // flex: 1,
+                            // display: "flex"
                         }}
                     >
 
@@ -480,8 +482,8 @@ function Schedule() {
 
                     <Box
                         sx={{
-                            flex: 1,
-                            display: "flex"
+                            // flex: 1,
+                            // display: "flex"
                         }}
                     >
 

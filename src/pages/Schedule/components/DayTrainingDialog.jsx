@@ -29,7 +29,7 @@ function DayTrainingDialog({ open, date, trainings, onClose, onSelectTraining})
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center",
+                    alignitems: "center",
                     fontWeight: 700
                 }}
             >

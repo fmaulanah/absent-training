@@ -27,7 +27,7 @@ import employeeService from "../../../services/employeeService"
 import useSnackbar from "../../../hooks/useSnackbar";
 import useResponsive from "../../../hooks/useResponsive";
 
-function AttendanceDialog({ open, training, scanType, onClose, onDiscardQueue, onQueueChanged }) 
+function AttendanceDialog({ open, training, scanType, confirmOpen, onClose, onQueueChanged }) 
 {
 
     const [rfid, setRfid] = useState("");

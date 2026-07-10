@@ -10,10 +10,13 @@ import AppButton from "../../components/common/Button/AppButton";
 import AttendanceFilter from "./components/AttendanceFilter";
 import AttendanceInfo from "./components/AttendanceInfo";
 import AttendanceDialog from "./components/AttendanceDialog";
+import ConfirmDialog from "../../components/common/ConfirmDialog";
 
 import attendanceService from "../../services/attendanceService";
 
 import attendanceQueue from "../../utils/attendanceQueue";
+
+import useBeforeUnloadGuard from "../../hooks/useBeforeUnloadGuard";
 
 function Attendance() {
 
@@ -25,6 +28,14 @@ function Attendance() {
     const [scanType, setScanType] = useState("IN");
     const [queueVersion, setQueueVersion] = useState(0);
     const [uploading, setUploading] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [pendingTraining, setPendingTraining] = useState(null);
+
+    useBeforeUnloadGuard(
+
+        attendanceQueue.getCount() > 0
+
+    );
 
     const scanInCount = useMemo(() =>
 
@@ -103,6 +114,13 @@ function Attendance() {
 
     const handleMonthChange = (event) => {
 
+        if (attendanceQueue.getCount() > 0) {
+
+            setConfirmOpen(true);
+            return;
+
+        }
+
         setMonth(current =>
 
             current.month(Number(event.target.value) - 1)
@@ -113,6 +131,13 @@ function Attendance() {
 
     const handleYearChange = (event) => {
 
+        if (attendanceQueue.getCount() > 0) {
+
+            setConfirmOpen(true);
+            return;
+
+        }
+        
         setMonth(current =>
 
             current.year(Number(event.target.value))
@@ -221,6 +246,40 @@ function Attendance() {
         }
 
     };
+
+    const handleTrainingChange = (event) => {
+
+        console.log("CHANGE", event.target.value);
+
+        const training = trainings.find(
+
+            item => item.id === event.target.value
+
+        );
+
+        if (!training) {
+
+            return;
+
+        }
+
+        const queueInfo = attendanceQueue.getQueueInfo();
+
+        if (
+
+            queueInfo && queueInfo.scheduleId !== training.id
+
+        ) {
+
+            setPendingTraining(training);
+            setConfirmOpen(true);
+            return;
+
+        }
+
+        setSelectedTraining(training);
+
+    };
     
     useEffect(() => {
 
@@ -249,17 +308,7 @@ function Attendance() {
                 )}
                 onMonthChange={handleMonthChange}
                 onYearChange={handleYearChange}
-                onTrainingChange={(event) => {
-
-                    const training = trainings.find(
-
-                        item => item.id === event.target.value
-
-                    );
-
-                    setSelectedTraining(training);
-
-                }}
+                onTrainingChange={handleTrainingChange}
 
             />
 
@@ -291,12 +340,39 @@ function Attendance() {
                 open={dialogOpen}
                 training={selectedTraining}
                 scanType={scanType}
+                cfmOpen={confirmOpen}
                 onClose={() => setDialogOpen(false)}
                 onQueueChanged={() =>
 
                     setQueueVersion(current => current + 1)
 
                 }
+
+            />
+
+            <ConfirmDialog
+
+                open={confirmOpen}
+                title="Attendance Belum Diupload"
+                message={`Masih ada attendance "${attendanceQueue.getScheduleName()}" yang belum diupload.`}
+                confirmText="Hapus"
+                cancelText="Batal"
+                onConfirm={() => {
+
+                    attendanceQueue.clearQueue();
+                    setQueueVersion(current => current + 1);
+                    setSelectedTraining(pendingTraining);
+                    setPendingTraining(null);
+                    setConfirmOpen(false);
+
+                }}
+
+                onCancel={() => {
+
+                    setPendingTraining(null);
+                    setConfirmOpen(false);
+
+                }}
 
             />
 

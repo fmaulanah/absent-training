@@ -46,13 +46,13 @@ function Header({
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center"
+                    alignitems: "center"
                 }}
             >
                 <Box
                     sx={{
                         display: "flex",
-                        alignItems: "center",
+                        alignitems: "center",
                         gap: 1
                     }}
                 >
@@ -83,7 +83,7 @@ function Header({
                             xs: "none",
                             md: "flex"
                         },
-                        alignItems: "center",
+                        alignitems: "center",
                         gap: 4
                     }}
                 >

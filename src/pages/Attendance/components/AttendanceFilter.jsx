@@ -24,6 +24,13 @@ function AttendanceFilter({
 
 }) {
 
+    const CURRENT_YEAR = dayjs().year();
+
+    const years = Array.from(
+        { length: CURRENT_YEAR + 10 - 2000 + 1 },
+        (_, index) => 2000 + index
+    );
+
     const months = [
 
         "Januari",
@@ -87,7 +94,7 @@ function AttendanceFilter({
                         onChange={onYearChange}
                     >
 
-                        {[2025,2026,2027].map(item=>(
+                        {years.map(item=>(
 
                             <MenuItem
                                 key={item}

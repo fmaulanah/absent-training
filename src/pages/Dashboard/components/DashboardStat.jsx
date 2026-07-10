@@ -35,7 +35,7 @@ function DashboardStat({
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center",
+                    alignitems: "center",
                     mb: {
                         xs: 1,
                         md: 2

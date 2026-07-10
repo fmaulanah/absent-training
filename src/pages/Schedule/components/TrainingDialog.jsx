@@ -42,7 +42,7 @@ function TrainingDialog({ open, editingId, form, rooms, trainerError, saving,
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center",
+                    alignitems: "center",
                     fontWeight:600,
                     variant:"h6"
                 }}

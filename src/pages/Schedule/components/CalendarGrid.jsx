@@ -21,7 +21,7 @@ function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTrai
                 <Box
                     key={day}
                     sx={{
-                        py: 1.5,
+                        // py: 1.5,
                         textAlign: "center",
                         bgcolor: "grey.50",
                         borderBottom: 1,
@@ -61,7 +61,7 @@ function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTrai
                         sx={{
                             minHeight: {
                                 xs: 90,
-                                md: 125
+                                // md: 125
                             },
                             p: 1,
                             borderRight: (index + 1) % 7 === 0 ? 0 : 1,
@@ -81,7 +81,7 @@ function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTrai
                                         height: 30,
                                         mb: .5,
                                         display: "flex",
-                                        alignItems: "center",
+                                        alignitems: "center",
                                         justifyContent: "center",
                                         borderRadius: "50%",
                                         bgcolor: isToday ? "primary.main" : "transparent",

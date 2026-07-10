@@ -1,15 +1,20 @@
 import dayjs from "dayjs";
 
 import systemApiService from "./systemApiService";
-import trainingService from "./trainingService";
 
 const attendanceService = {
 
     async getTrainings(month) {
 
-        return await trainingService.getTrainings(month);
+        return await systemApiService.execute({
 
-    },
+            apiCd: "COMBO_TRAINING",
+            type: "SEARCH",
+            param01: month
+
+        });
+
+    }, 
 
     async saveScan(scan) {
 

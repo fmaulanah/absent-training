@@ -15,7 +15,7 @@ function UserProfile() {
         <Box
             sx={{
                 display: "flex",
-                alignItems: "center",
+                alignitems: "center",
                 gap: 2
             }}
         >

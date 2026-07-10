@@ -10,7 +10,7 @@ function Login() {
                 minHeight: "100vh",
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center",
+                alignitems: "center",
                 background:
                     "linear-gradient(135deg,#0F005F 0%,#24126A 100%)"
             }}

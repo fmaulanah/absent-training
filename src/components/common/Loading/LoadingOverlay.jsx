@@ -19,7 +19,7 @@ function LoadingOverlay({
                 sx={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
+                    alignitems: "center",
                     gap: 2,
                     px: 5,
                     py: 4,

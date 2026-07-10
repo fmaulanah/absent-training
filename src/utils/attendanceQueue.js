@@ -12,13 +12,55 @@ const attendanceQueue = {
 
     getQueue() {
 
+        const storage = getStorage(
+
+            STORAGE_KEYS.ATTENDANCE_QUEUE,
+            null
+
+        );
+
+        if (!storage) {
+
+            return [];
+
+        }
+
+        if (Array.isArray(storage)) {
+
+            return storage;
+
+        }
+
+        return storage.items ?? [];
+
+    },
+
+    getQueueInfo() {
+
         return getStorage(
 
             STORAGE_KEYS.ATTENDANCE_QUEUE,
-
-            []
+            null
 
         );
+
+    },
+
+    getScheduleId() {
+
+        return this.getQueueInfo()?.scheduleId ?? null;
+
+    },
+
+    getScheduleName() {
+
+        return this.getQueueInfo()?.scheduleName ?? "";
+
+    },
+
+    getCount() {
+
+        return this.getQueue().length;
 
     },
 
@@ -29,9 +71,7 @@ const attendanceQueue = {
             this.hasQueue({
 
                 empId: queue.SCAN_EMPID,
-
                 scheduleId: queue.SCHEDULE_ID,
-
                 scanType: queue.SCAN_TYPE
 
             })
@@ -41,30 +81,50 @@ const attendanceQueue = {
             return {
 
                 success: false,
-
                 message: "Peserta sudah melakukan scan."
 
             };
 
         }
 
-        const queues = this.getQueue();
+        let storage = this.getQueueInfo();
 
-        queues.push(queue);
+        if (!storage) {
+
+            storage = {
+
+                scheduleId: queue.SCHEDULE_ID,
+                scheduleName: queue.SCHEDULE_NM,
+                items: []
+
+            };
+
+        }
+
+        if (storage.scheduleId !== queue.SCHEDULE_ID) {
+
+            return {
+
+                success: false,
+                message: `Masih ada attendance "${storage.scheduleName}" yang belum diupload.`
+
+            };
+
+        }
+
+        storage.items.push(queue);
 
         setStorage(
 
             STORAGE_KEYS.ATTENDANCE_QUEUE,
-
-            queues
+            storage
 
         );
 
         return {
 
             success: true,
-
-            data: queues
+            data: storage.items
 
         };
 
@@ -103,12 +163,6 @@ const attendanceQueue = {
 
     },
 
-    getCount() {
-
-        return this.getQueue().length;
-
-    },
-
     clearQueue() {
 
         removeStorage(
@@ -124,35 +178,20 @@ const attendanceQueue = {
         return {
 
             SCAN_DATE: dayjs().format("YYYYMMDD"),
-
             SCAN_DTTM: dayjs().toISOString(),
-
             SCAN_TYPE: scanType,
-
             SCAN_RF_ID: employee.RF_ID,
-
             SCAN_EMPID: employee.EMPID,
-
             SCAN_EMP_NM: employee.EMP_NAME,
-
             SCAN_POSITION: employee.POSITION,
-
             SCAN_DEPT_NM: employee.DEPT_NAME,
-
             SCHEDULE_ID: training.id,
-
             SCHEDULE_NM: training.title,
-
             ROOM_ID: training.room,
-
             ROOM_NAME: training.roomName,
-
             TRAINER_EMPID: training.trainerId,
-
             TRAINER_EMP_NM: training.trainerName,
-
             MANUAL_YN: manualYn,
-
             MEMO: memo
 
         };
@@ -161,11 +200,25 @@ const attendanceQueue = {
 
     replaceQueue(queue) {
 
+        if (!queue.length) {
+
+            this.clearQueue();
+            return;
+
+        }
+
+        const storage = {
+
+            scheduleId: queue[0].SCHEDULE_ID,
+            scheduleName: queue[0].SCHEDULE_NM,
+            items: queue
+
+        };
+
         setStorage(
 
             STORAGE_KEYS.ATTENDANCE_QUEUE,
-
-            queue
+            storage
 
         );
 

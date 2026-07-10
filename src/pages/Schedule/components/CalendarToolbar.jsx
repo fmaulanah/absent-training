@@ -34,7 +34,7 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                         sx={{
                             display: "flex",
                             justifyContent: "left",
-                            alignItems: "left",
+                            alignitems: "left",
                             gap: 2
                         }}
                     >
@@ -114,7 +114,7 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                     sx={{
                         display: "flex",
                         justifyContent: "flex-end",
-                        alignItems: "center",
+                        alignitems: "center",
                         flexWrap: "wrap",
                         gap: 1
                     }}

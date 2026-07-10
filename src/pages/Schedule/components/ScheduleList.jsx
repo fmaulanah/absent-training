@@ -62,86 +62,78 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                width: "100%",
-                height: "100%"
+                width: "100%"
             }}
         >
-            {/* {totalPages > 1 && ( */}
+
+            <Box
+                sx={{
+                    mt: "auto",
+                    // pt: 2,
+                    display: "flex",
+                    justifyContent: "right"
+                }}
+            >
 
                 <Box
                     sx={{
-                        mt: "auto",
-                        // pt: 2,
+                        // mt: 3,
                         display: "flex",
-                        justifyContent: "right"
+                        alignitems: "right",
+                        justifyContent: "flex-start",
+                        // gap: 1
                     }}
                 >
 
-                    {/* {totalPages > 1 && ( */}
+                    <IconButton
 
-                        <Box
-                            sx={{
-                                // mt: 3,
-                                display: "flex",
-                                alignitems: "right",
-                                justifyContent: "flex-start",
-                                // gap: 1
-                            }}
-                        >
+                        disabled={page === 1}
 
-                            <IconButton
+                        onClick={() =>
 
-                                disabled={page === 1}
+                            setPage(current => current - 1)
 
-                                onClick={() =>
+                        }
 
-                                    setPage(current => current - 1)
+                    >
 
-                                }
+                        <ChevronLeftIcon />
 
-                            >
+                    </IconButton>
 
-                                <ChevronLeftIcon />
+                    <Typography
+                        variant="body2"
+                        fontWeight={700}
+                        sx={{
+                            mt:1,
+                            // minWidth: 60,
+                            textAlign: "center"
+                        }}
+                    >
 
-                            </IconButton>
+                        {page} / {totalPages}
 
-                            <Typography
-                                variant="body2"
-                                fontWeight={700}
-                                sx={{
-                                    mt:1,
-                                    // minWidth: 60,
-                                    textAlign: "center"
-                                }}
-                            >
+                    </Typography>
 
-                                {page} / {totalPages}
+                    <IconButton
 
-                            </Typography>
+                        disabled={page === totalPages}
 
-                            <IconButton
+                        onClick={() =>
 
-                                disabled={page === totalPages}
+                            setPage(current => current + 1)
 
-                                onClick={() =>
+                        }
 
-                                    setPage(current => current + 1)
+                    >
 
-                                }
+                        <ChevronRightIcon />
 
-                            >
-
-                                <ChevronRightIcon />
-
-                            </IconButton>
-
-                        </Box>
-
-                    {/* )} */}
+                    </IconButton>
 
                 </Box>
 
-            {/* )} */}
+            </Box>
 
             <Stack
                 spacing={2}

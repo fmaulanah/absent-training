@@ -22,7 +22,7 @@ function PageHeader({
 
                 justifyContent:"space-between",
 
-                alignItems:"center",
+                alignitems:"center",
 
                 mb:4
 
