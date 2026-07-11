@@ -6,7 +6,9 @@ const STORAGE_KEYS = {
 
     ATTENDANCE_QUEUE: "attendance_queue",
 
-    HOLIDAY: "holiday"
+    HOLIDAY: "holiday",
+
+    USER_LAST_SYNC: "USER_LAST_SYNC",
 
 };
 

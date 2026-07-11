@@ -418,7 +418,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
                     onClick={onRequestFinish}
                 >
 
-                    {scanType === "IN" ? "Selesai Scan IN" : "Selesai Scan OUT"}
+                    Selesai Scan
 
                 </AppButton>
 

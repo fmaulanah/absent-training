@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Box, IconButton, MenuItem, TextField, Typography } from "@mui/material";
 
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -9,7 +10,6 @@ import AddIcon from "@mui/icons-material/Add";
 import AppButton from "../../../components/common/Button/AppButton";
 import useResponsive from "../../../hooks/useResponsive";
 
-import dayjs from "dayjs";
 import AppCard from "../../../components/common/Card/AppCard";
 
 function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefresh }) 
@@ -35,7 +35,8 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                             display: "flex",
                             justifyContent: "left",
                             alignitems: "left",
-                            gap: 2
+                            gap: 1,
+                            p:0
                         }}
                     >
                         <TextField
@@ -116,7 +117,7 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                         justifyContent: "flex-end",
                         alignitems: "center",
                         flexWrap: "wrap",
-                        gap: 1
+                        gap: 2
                     }}
                 >
 

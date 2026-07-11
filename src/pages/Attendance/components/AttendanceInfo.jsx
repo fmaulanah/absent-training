@@ -274,14 +274,14 @@ function BoxItem({ icon, title, value }) {
                 border: 1,
                 borderColor: "divider",
                 borderRadius: 2,
-                height: "100%"
+                height: "100%",
+                width: "100%"
             }}
         >
 
             {icon}
 
             <Stack
-                spacing={0.2}
                 sx={{
                     minWidth: 0,
                     flex: 1
@@ -290,6 +290,7 @@ function BoxItem({ icon, title, value }) {
 
                 <Typography
                     variant="caption"
+                    fontWeight={800}
                     color="text.secondary"
                 >
 
@@ -300,7 +301,7 @@ function BoxItem({ icon, title, value }) {
                 <Typography
                     variant="body2"
                     fontWeight={700}
-                    noWrap
+                    wrap
                     title={value}
                 >
 

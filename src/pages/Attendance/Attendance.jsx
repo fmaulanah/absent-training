@@ -78,7 +78,19 @@ function Attendance() {
 
     );
 
-    const loadTraining = async () => {
+    const loadTraining = async (showLoading = true) => {
+
+        if (dialogOpen) {
+
+            return;
+
+        }
+        
+        if (showLoading) {
+
+            setLoading(true);
+
+        }
 
         try {
 
@@ -123,7 +135,11 @@ function Attendance() {
         }
         finally {
 
-            setLoading(false);
+            if (showLoading) {
+
+                setLoading(false);
+
+            }
 
         }
 
@@ -393,6 +409,14 @@ function Attendance() {
     useEffect(() => {
 
         loadTraining();
+
+        const timer = setInterval(() => {
+
+            loadTraining(false);
+
+        }, 30000);
+
+        return () => clearInterval(timer);
 
     }, [month]);
 

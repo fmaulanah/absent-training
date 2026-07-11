@@ -25,7 +25,7 @@ function LoadingOverlay({
                     py: 4,
                     bgcolor: "background.paper",
                     borderRadius: 3,
-                    minWidth: 260,
+                    // minWidth: 260,
                     boxShadow: 10
                 }}
             >

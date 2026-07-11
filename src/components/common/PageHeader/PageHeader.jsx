@@ -6,9 +6,7 @@ import {
 function PageHeader({
 
     title,
-
     subtitle,
-
     action
 
 }) {
@@ -17,15 +15,18 @@ function PageHeader({
 
         <Box
             sx={{
-
-                display:"flex",
-
-                justifyContent:"space-between",
-
-                alignitems:"center",
-
-                mb:4
-
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: {
+                    xs: "flex-start",
+                    sm: "center"
+                },
+                flexDirection: {
+                    xs: "column",
+                    sm: "row"
+                },
+                gap: 2,
+                mb: 4
             }}
         >
 
@@ -33,7 +34,13 @@ function PageHeader({
 
                 <Typography
                     variant="h4"
-                    fontWeight={700}
+                    sx={{
+                        typography: {
+                            xs: "h5",
+                            sm: "h4"
+                        },
+                        fontWeight: 700
+                    }}
                 >
 
                     {title}
@@ -44,7 +51,13 @@ function PageHeader({
 
                     <Typography
                         color="text.secondary"
-                        mt={1}
+                        sx={{
+                            mt: 0.5,
+                            fontSize: {
+                                xs: "0.875rem",
+                                sm: "1rem"
+                            }
+                        }}
                     >
 
                         {subtitle}
@@ -55,7 +68,22 @@ function PageHeader({
 
             </Box>
 
-            {action}
+            {action && (
+
+                <Box
+                    sx={{
+                        width: {
+                            xs: "100%",
+                            sm: "auto"
+                        }
+                    }}
+                >
+
+                    {action}
+
+                </Box>
+
+            )}
 
         </Box>
 

@@ -72,7 +72,7 @@ function Header({
                         variant={isMobile ? "h6" : "h4"}
                         fontWeight={700}
                     >
-                        CSG Training Scheduler
+                        HRD Training Scheduler
                     </Typography>
 
                 </Box>

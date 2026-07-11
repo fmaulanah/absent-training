@@ -6,6 +6,8 @@ import Login from "../pages/Login/Login";
 import Dashboard from "../pages/dashboard/dashboard";
 import Schedule from "../pages/Schedule/Schedule";
 import Attendt from "../pages/Attendance/Attendance";
+import AttendanceHist from "../pages/AttendanceHistory/AttendanceHistory"
+import System from "../pages/System/System";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
@@ -54,6 +56,16 @@ function AppRoutes() {
                 <Route
                     path="/attendant"
                     element={<Attendt />}
+                />
+
+                <Route
+                    path="/attendancehistory"
+                    element={<AttendanceHist />}
+                />
+
+                <Route
+                    path="/system"
+                    element={<System />}
                 />
 
             </Route>

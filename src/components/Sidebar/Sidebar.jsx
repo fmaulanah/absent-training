@@ -57,6 +57,7 @@ function Sidebar({ isMobile, onClose }) {
 
         <Box
             sx={{
+                mt:"auto",
                 display:"flex",
                 flexDirection:"column",
                 height:"100%"

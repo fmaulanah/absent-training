@@ -65,7 +65,7 @@ function ConfirmDialog({
                 </AppButton>
 
                 <AppButton
-                    color={confirmColor}
+                    // color={confirmColor}
                     onClick={onConfirm}
                 >
 

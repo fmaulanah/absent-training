@@ -168,15 +168,15 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                             }}
                         >
 
-                            <Box sx={{ flex: 1 }}>
+                            <Box sx={{ 
+                                flex: 1 
+                            }}>
 
                                 <Typography
                                     variant="subtitle1"
                                     fontWeight={700}
                                     color={
-                                        training.useYn === "Y"
-                                            ? "text.primary"
-                                            : "text.disabled"
+                                        training.useYn === "Y" ? "text.primary" : "text.disabled"
                                     }
                                 >
 
@@ -216,6 +216,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
                                     <Typography
                                         variant="body2"
+                                        wrap
                                         color={
                                             training.useYn === "Y"
                                                 ? "text.primary"
