@@ -10,19 +10,18 @@ function Login() {
                 minHeight: "100vh",
                 display: "flex",
                 justifyContent: "center",
-                alignitems: "center",
-                background:
-                    "linear-gradient(135deg,#0F005F 0%,#24126A 100%)"
+                alignItems: "center",
+                // background: "linear-gradient(135deg,#0F005F 0%,#24126A 100%)"
             }}
         >
 
             <Container maxWidth="sm">
 
                 <Paper
-                    elevation={8}
+                    elevation={5}
                     sx={{
                         p: 5,
-                        borderRadius: 4
+                        borderRadius: 5
                     }}
                 >
 

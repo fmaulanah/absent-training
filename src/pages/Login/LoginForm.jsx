@@ -15,6 +15,7 @@ import AppButton from "../../components/common/Button/AppButton";
 import Logo from "../../assets/logo/logo.png";
 
 import useSnackbar from "../../hooks/useSnackbar";
+import useResponsive from "../../hooks/useResponsive";
 
 function LoginForm() {
 
@@ -26,6 +27,7 @@ function LoginForm() {
     
     const { login } = useAuth();
     const { showSnackbar } = useSnackbar();
+    const { isMobile} = useResponsive();
 
     const handleLogin = async () => {
 
@@ -92,7 +94,7 @@ function LoginForm() {
             <Box
                 sx={{
                     display: "flex",
-                    alignitems: "center",
+                    alignItems: "center",
                     justifyContent: "center",
                     gap: 3,
                     mb: 4,
@@ -104,7 +106,7 @@ function LoginForm() {
                     alt="CSG Logo"
                     sx={{
 
-                        width: 80,
+                        width: 60,
                         height: "auto",
                         display: "block",
                     }}
@@ -112,7 +114,7 @@ function LoginForm() {
 
                 <Box>
                     <Typography
-                        variant="h4"
+                        variant= {isMobile? "h5" : "h4"}
                         sx={{
                             fontWeight: 700,
                             mb: 0.5,

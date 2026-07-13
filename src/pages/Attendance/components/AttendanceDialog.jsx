@@ -18,6 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SensorsIcon from "@mui/icons-material/Sensors";
 
 import AppButton from "../../../components/common/Button/AppButton";
+import AppCard from "../../../components/common/Card/AppCard";
 
 import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import attendanceQueue from "../../../utils/attendanceQueue";
@@ -32,6 +33,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
     const [rfid, setRfid] = useState("");
     const [manualYn, setManualYn] = useState("N");
+    const [lastEmployee, setLastEmployee] = useState(null);
 
     const inputRef = useRef(null);
     const scanningRef = useRef(false);
@@ -105,6 +107,14 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
                 "success"
 
             );
+
+            setLastEmployee({
+
+                empId: employee.EMPID,
+
+                empName: employee.EMP_NAME
+
+            });
 
         }
         catch (error) {
@@ -403,6 +413,52 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
                             />
 
                         </Box>
+
+                        {lastEmployee && (
+
+                            <Stack
+                                direction="row"
+                                spacing={2}
+                                alignItems="center"
+                            >
+
+                                <Avatar
+                                    sx={{
+                                        bgcolor: "primary.main"
+                                    }}
+                                >
+
+                                    <PersonIcon />
+
+                                </Avatar>
+
+                                <Box>
+
+                                    <Typography
+                                        variant="caption"
+                                        color="text.secondary"
+                                    >
+                                        Employee
+                                    </Typography>
+
+                                    <Typography
+                                        fontWeight={700}
+                                    >
+                                        {lastEmployee.empName}
+                                    </Typography>
+
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                    >
+                                        {lastEmployee.empId}
+                                    </Typography>
+
+                                </Box>
+
+                            </Stack>
+
+                        )}
 
                     </Grid>
 
