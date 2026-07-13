@@ -12,23 +12,9 @@ import {
     PolarAngleAxis
 } from "recharts";
 
-function DashboardTrainingGauge({
-
-    total,
-
-    running,
-
-    isMobile
-
-}) {
-
-    const percent =
-
-        total === 0
-
-            ? 0
-
-            : Math.round((running / total) * 100);
+function DashboardTrainingGauge({ total, running, isMobile}) 
+{
+    const percent = total === 0 ? 0 : Math.round((running / total) * 100);
 
     const data = [
 

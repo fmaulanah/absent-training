@@ -18,6 +18,7 @@ import DashboardUpcomingTable from "./components/DashboardUpcomingTable";
 
 import roomService from "../../services/roomService";
 import trainingService from "../../services/trainingService";
+import dashboardService from "../../services/dashboardService";
 
 import useResponsive from "../../hooks/useResponsive";
 
@@ -25,35 +26,85 @@ function Dashboard() {
 
     const navigate = useNavigate();
 
+    const today = dayjs().format("YYYY-MM-DD");
+    const currentMonth = dayjs().format("YYYYMM");
+
     const [rooms, setRooms] = useState([]);
     const [trainings, setTrainings] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState("");
+    const [chartData, setChartData] = useState([]);
+    const [summary, setSummary] = useState({
 
-    const today = dayjs().format("YYYY-MM-DD");
-    const currentMonth = dayjs().format("YYYYMM");
-    
-    const monthlyTrainings = trainings.filter(
-        training =>
-            training.useYn === "Y" &&
-            training.startDate.startsWith(dayjs().format("YYYY-MM"))
-    );
+        thisMonth: 0,
+        today: 0,
+        upcoming: 0,
+        running: 0
 
-    const todayTrainings = trainings.filter(
-        training =>
-            training.useYn === "Y" &&
-            training.startDate === today
-    );
+    });
 
-    const upcomingTrainings = trainings
-        .filter(
-            training =>
-                training.useYn === "Y" &&
-                training.startDate >= today
-        )
+    const { isMobile } = useResponsive();
+
+    const upcomingTrainings = trainings .filter(training => training.useYn === "Y" &&
+                                                            training.startDate >= today)
         .sort((a, b) => a.startDate.localeCompare(b.startDate)
     );
-        
-    const { isMobile } = useResponsive();
+
+    const loadMonthlyChart = async () => {
+
+        try {
+
+            const result = await dashboardService.getMonthlyChart(
+
+                dayjs().format("YYYY")
+
+            );
+
+            setChartData(
+
+                result.map(item => ({
+
+                    month: item.MONTH,
+
+                    total: Number(item.TOTAL)
+
+                }))
+
+            );
+
+        }
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+    };
+
+    const loadSummary = async () => {
+
+        try {
+
+            const result = await dashboardService.getSummary();
+
+            const summary = result?.[0] ?? {};
+
+            setSummary({
+
+                thisMonth: Number(summary.THIS_MONTH ?? 0),
+                today: Number(summary.TODAY ?? 0),
+                upcoming: Number(summary.UPCOMING ?? 0),
+                running: Number(summary.RUNNING ?? 0)
+
+            });
+
+        }
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+    };
 
     const loadRooms = async () => { 
 
@@ -128,39 +179,12 @@ function Dashboard() {
 
     });
 
-    const chartData = [
-
-        {
-            month: "Jan",
-            total: 5
-        },
-        {
-            month: "Feb",
-            total: 8
-        },
-        {
-            month: "Mar",
-            total: 12
-        },
-        {
-            month: "Apr",
-            total: 10
-        },
-        {
-            month: "May",
-            total: 7
-        },
-        {
-            month: "Jun",
-            total: 15
-        }
-
-    ];
-
     useEffect(() => {
 
         loadRooms();
         loadTraining();
+        loadMonthlyChart();
+        loadSummary();
 
     }, []);
 
@@ -181,7 +205,7 @@ function Dashboard() {
                 <Grid size={{ xs: 12, md: 4 }}>
                     <DashboardStat
                         title="Schedule Bulan Ini"
-                        value={monthlyTrainings.length}
+                        value={summary.thisMonth}
                         //icon={<CalendarMonthIcon fontSize="large" />}
                     />
                 </Grid>
@@ -189,7 +213,7 @@ function Dashboard() {
                 <Grid size={{ xs: 12, md: 4 }}>
                     <DashboardStat
                         title="Training Hari Ini"
-                        value={todayTrainings.length}
+                        value={summary.today}
                         //icon={<CalendarTodayIcon fontSize="large" />}
                         color="info.main"
                     />
@@ -198,7 +222,7 @@ function Dashboard() {
                 <Grid size={{ xs: 12, md: 4 }}>
                     <DashboardStat
                         title="Training Mendatang"
-                        value={upcomingTrainings.length}
+                        value={summary.upcoming}
                         //icon={<EventAvailableIcon fontSize="large" />}
                         color="success.main"
                     />
@@ -238,17 +262,15 @@ function Dashboard() {
 
                     <Grid
                         size={{
-                            xs: 6,
+                            xs: 12,
                             xl: 2
                         }}
                     >
 
                         <DashboardTrainingGauge
 
-                            total={6}
-
-                            running={4}
-
+                            total={summary.today}
+                            running={summary.running}
                             isMobile={isMobile}
 
                         />
