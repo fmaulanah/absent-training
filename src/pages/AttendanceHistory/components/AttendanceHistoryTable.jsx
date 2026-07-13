@@ -6,11 +6,20 @@ import {
     IconButton
 } from "@mui/material";
 
+import {
+
+    formatCompletion,
+    formatStatus,
+    formatTrainingDate,
+    displayValue
+
+} from "../../../utils/formatter/attendanceHistoryFormatter";
+
 import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
-function AttendanceHistoryTable({ rows, loading}) {
+function AttendanceHistoryTable({ rows, loading, onDetail }) {
 
     
     const columns = [
@@ -25,19 +34,22 @@ function AttendanceHistoryTable({ rows, loading}) {
             field: "TRAINING_NAME",
             headerName: "Training",
             minWidth: 250,
-            flex: 1
+            flex: 1,
+            valueGetter: (_, row) => displayValue(row.TRAINING_NAME)
         },
 
         {
             field: "TRAINER_NAME",
             headerName: "Trainer",
-            width: 180
+            width: 180,
+            valueGetter: (_, row) => displayValue(row.TRAINER_NAME)
         },
 
         {
             field: "ROOM_NAME",
             headerName: "Room",
-            width: 150
+            width: 150,
+            valueGetter: (_, row) => displayValue(row.ROOM_NAME)
         },
 
         {
@@ -45,19 +57,23 @@ function AttendanceHistoryTable({ rows, loading}) {
             headerName: "Status",
             width: 130,
 
-            renderCell: ({ value }) => (
+            renderCell: ({ row }) => {
 
-                <Chip
+                const status = formatStatus( row.ABSENT_STATUS );
 
-                    label={value ?? "-"}
+                return (
 
-                    color="default"
+                    <Chip
 
-                    size="small"
+                        label={status.label}
+                        color={status.color}
+                        size="small"
 
-                />
+                    />
 
-            )
+                );
+
+            }
 
         },
 
@@ -96,7 +112,17 @@ function AttendanceHistoryTable({ rows, loading}) {
 
             align: "center",
 
-            headerAlign: "center"
+            headerAlign: "center",
+
+            valueGetter: (_, row) =>
+
+                formatCompletion(
+
+                    row.SCAN_IN,
+
+                    row.SCAN_OUT
+
+                )
 
         },
 
@@ -115,14 +141,16 @@ function AttendanceHistoryTable({ rows, loading}) {
 
             align: "center",
 
-            renderCell: () => (
+            renderCell: (params) => (
 
                 <IconButton
 
                     size="small"
+                    onClick={() =>
 
-                    disabled
+                        onDetail(params.row)
 
+                    }
                 >
 
                     <VisibilityOutlinedIcon />

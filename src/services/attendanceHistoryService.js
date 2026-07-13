@@ -18,6 +18,18 @@ const attendanceHistory = {
 
         });
 
+    },
+
+    async getHistoryDetail(scheduleId) {
+
+        return await systemApiService.execute({
+
+            apiCd: "GET_ATTENDANCE_HISTORY_DETAIL",
+            type: "SEARCH",
+            param01: scheduleId
+
+        });
+
     }
 
 };

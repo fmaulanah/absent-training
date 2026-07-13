@@ -54,9 +54,9 @@ function AttendanceHistoryToolbar({
                         sm: "row"
                     }}
 
-                    justifyContent="space-between"
+                    justifycontent="space-between"
 
-                    alignItems={{
+                    alignitems={{
                         xs: "stretch",
                         sm: "center"
                     }}

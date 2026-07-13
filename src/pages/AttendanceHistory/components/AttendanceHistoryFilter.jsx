@@ -27,7 +27,7 @@ function AttendanceHistoryFilter({
 
         <Card
             sx={{
-                mb: 3
+                // mb: 3
             }}
         >
 
@@ -45,7 +45,7 @@ function AttendanceHistoryFilter({
                     spacing={2}
                 >
 
-                    <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+                    <Grid size={{ xs: 6, sm: 6, lg: 2 }}>
 
                         <TextField
                             value={filter.fromDate}
@@ -55,14 +55,14 @@ function AttendanceHistoryFilter({
                             onChange={(e) =>
                                 onFilterChange("fromDate", e.target.value)
                             }
-                            InputLabelProps={{
+                            inputlabelprops={{
                                 shrink: true
                             }}
                         />
 
                     </Grid>
 
-                    <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+                    <Grid size={{ xs: 6, sm: 6, lg: 2 }}>
 
                         <TextField
                             value={filter.toDate}
@@ -72,7 +72,7 @@ function AttendanceHistoryFilter({
                             onChange={(e) =>
                                 onFilterChange("toDate", e.target.value)
                             }
-                            InputLabelProps={{
+                            inputlabelprops={{
                                 shrink: true
                             }}
 
@@ -140,8 +140,8 @@ function AttendanceHistoryFilter({
                     >
 
                         <Stack
-                            justifyContent="flex-end"
-                            alignItems={{
+                            justifycontent="flex-end"
+                            alignitems={{
                                 xs: "stretch",
                                 lg: "flex-end"
                             }}
@@ -156,7 +156,7 @@ function AttendanceHistoryFilter({
                                 sx={{
                                     width: {
                                         xs: "100%",
-                                        lg: 180
+                                        lg: 110
                                     }
                                 }}
                             >

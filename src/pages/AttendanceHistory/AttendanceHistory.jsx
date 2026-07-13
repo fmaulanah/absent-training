@@ -12,6 +12,7 @@ import AttendanceHistoryFilter from "./components/AttendanceHistoryFilter";
 import AttendanceHistoryToolbar from "./components/AttendanceHistoryToolbar.jsx";
 import AttendanceHistoryTable from "./components/AttendanceHistoryTable";
 import AttendanceHistoryList from "./components/AttendanceHistoryList";
+import AttendanceHistoryDetailDialog from "./components/AttendanceHistoryDetailDialog";
 
 import useResponsive from "../../hooks/useResponsive";
 
@@ -24,17 +25,15 @@ function AttendanceHistory() {
     const [view, setView] = useState("table");
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [detailOpen, setDetailOpen] = useState(false);
+    const [selectedTraining, setSelectedTraining] = useState(null);
 
     const [filter, setFilter] = useState({
 
         fromDate: dayjs().startOf("month").format("YYYY-MM-DD"),
-
         toDate: dayjs().format("YYYY-MM-DD"),
-
         training: "",
-
         trainer: "",
-
         status: ""
 
     });
@@ -43,7 +42,6 @@ function AttendanceHistory() {
 
         try {
 
-            console.log(filter);
             setLoading(true);
 
             const result = await attendanceHistoryService.getHistory(currentFilter);
@@ -82,6 +80,21 @@ function AttendanceHistory() {
 
     };
 
+    const handleOpenDetail = (training) => {
+
+        console.log("Handle Detail :", training);
+        setSelectedTraining(training);
+        setDetailOpen(true);
+
+    };
+
+    const handleCloseDetail = () => {
+
+        setDetailOpen(false);
+        setSelectedTraining(null);
+
+    };
+
     useEffect(() => {
 
         setView( isMobile? "list" : "table" );
@@ -101,7 +114,6 @@ function AttendanceHistory() {
             <PageHeader
 
                 title="Attendance History"
-
                 subtitle="Melihat riwayat attendance setiap training."
 
             />
@@ -109,22 +121,19 @@ function AttendanceHistory() {
             <AttendanceHistoryFilter
 
                 filter={filter}
-
                 onFilterChange={handleFilterChange}
-
                 onSearch={handleSearch}
-
                 loading={loading}
 
             />
 
-            <AttendanceHistoryToolbar
+            {/* <AttendanceHistoryToolbar
 
                 view={view}
 
                 onChange={setView}
 
-            />
+            /> */}
 
             {
 
@@ -133,20 +142,28 @@ function AttendanceHistory() {
                     ? <AttendanceHistoryTable
 
                         rows={rows}
-
                         loading={loading}
+                        onDetail={handleOpenDetail}
 
                     />
 
                     : <AttendanceHistoryList
 
                         rows={rows}
-
                         loading={loading}
+                        onDetail={handleOpenDetail}
 
                     />
 
             }
+
+            <AttendanceHistoryDetailDialog
+
+                open={detailOpen}
+                onClose={handleCloseDetail}
+                training={selectedTraining}
+                
+            />
 
         </Box>
 
