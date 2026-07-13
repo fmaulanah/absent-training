@@ -1,4 +1,4 @@
-import { useState, useMemo,  useEffect} from "react";
+import { useState, useMemo, useEffect, useRef} from "react";
 import dayjs from "dayjs";
 
 import { Typography, Box } from "@mui/material";
@@ -31,10 +31,13 @@ function Attendance() {
     const [uploading, setUploading] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [confirmOpenStat, setConfirmOpenStat] = useState(false);
+    const [confirmUploadOpen, setConfirmUploadOpen] = useState(false);
     const [pendingTraining, setPendingTraining] = useState(null);
     const [pendingStatus, setPendingStatus] = useState(null);
 
     const { showSnackbar } = useSnackbar();
+
+    const restoredRef = useRef(false);
 
     useBeforeUnloadGuard(
 
@@ -145,6 +148,47 @@ function Attendance() {
 
     };
 
+    const restoreAttendance = () => {
+
+        const queue = attendanceQueue.getQueueInfo();
+
+        if (!queue) {
+
+            return;
+
+        }
+
+        const training = trainings.find(
+
+            item=>item.id===queue.scheduleId
+
+        );
+        
+        if (!training) {
+
+            
+
+            attendanceQueue.clearQueue();
+
+            return;
+
+        }
+
+        setSelectedTraining(training);
+
+        console.log("Status :", queue.status);
+        setScanType( queue.status === "SCAN_IN" ? "IN" : "OUT" );
+        setDialogOpen(true);
+
+        showSnackbar(
+
+            "Attendance sebelumnya berhasil dipulihkan.",
+            "info"
+
+        );
+
+    };
+
     const handleMonthChange = (event) => {
 
         if (attendanceQueue.hasPendingUpload()) {
@@ -187,7 +231,31 @@ function Attendance() {
 
     };
 
+    const handleRequestUpload = () => {
+
+        const queue = attendanceQueue.getNotUploadedQueue();
+
+        if (!queue.length) {
+
+            showSnackbar(
+
+                "Semua attendance sudah diupload.",
+
+                "info"
+
+            );
+
+            return;
+
+        }
+
+        setConfirmUploadOpen(true);
+
+    };
+
     const handleUpload = async () => {
+
+        setConfirmUploadOpen(false);
 
         const queue = attendanceQueue.getNotUploadedQueue();
 
@@ -232,7 +300,7 @@ function Attendance() {
 
             }
 
-            attendanceQueue.markUploaded(uploadedQueue);
+            attendanceQueue.removeUploaded(uploadedQueue);
 
             setQueueVersion(current => current + 1);
 
@@ -420,6 +488,28 @@ function Attendance() {
 
     }, [month]);
 
+    
+
+    useEffect(() => {
+
+        if (restoredRef.current) {
+
+            return;
+
+        }
+
+        if (!trainings.length) {
+
+            return;
+
+        }
+
+        restoredRef.current = true;
+
+        restoreAttendance();
+
+    }, [trainings]);
+
     return (
 
         <>
@@ -464,7 +554,7 @@ function Attendance() {
                     setDialogOpen(true);
 
                 }}
-                onUpload={handleUpload}
+                onUpload={handleRequestUpload}
 
             />
 
@@ -511,34 +601,35 @@ function Attendance() {
 
             <ConfirmDialog
 
-                open={confirmOpenStat}
+                open={confirmUploadOpen}
+                title="Upload Attendance"
+                message={`Upload ${attendanceQueue.getNotUploadedQueue().length} attendance ke server?`}
+                confirmText="Upload"
+                cancelText="Batal"
+                onConfirm={handleUpload}
+                onCancel={() =>
 
+                    setConfirmUploadOpen(false)
+                }
+
+            />
+
+            <ConfirmDialog
+
+                open={confirmOpenStat}
                 title={
 
-                    pendingStatus === "O"
-
-                        ? "Selesaikan Scan Masuk"
-
-                        : "Selesaikan Attendance"
+                    pendingStatus === "O" ? "Selesaikan Scan Masuk" : "Selesaikan Attendance"
 
                 }
-
                 message={
 
-                    pendingStatus === "O"
-
-                        ? "Attendance akan berpindah ke Scan Out."
-
-                        : "Attendance akan diselesaikan."
+                    pendingStatus === "O" ? "Attendance akan berpindah ke Scan Out." : "Attendance akan diselesaikan."
 
                 }
-
                 confirmText="Lanjutkan"
-
                 cancelText="Batal"
-
                 onCancel={() => setConfirmOpenStat(false)}
-
                 onConfirm={handleFinishScan}
 
             />

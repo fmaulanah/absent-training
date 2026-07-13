@@ -16,6 +16,19 @@ const attendanceService = {
 
     }, 
 
+    async getProgress(scheduleId, scanType) {
+
+        return await systemApiService.execute({
+
+            apiCd: "GET_ATTENDANCE_PROGRESS",
+            type: "SEARCH",
+            param01: scheduleId,
+            param02: scanType
+
+        });
+
+    }, 
+
     async saveScan(scan) {
 
         const loginUser = JSON.parse(

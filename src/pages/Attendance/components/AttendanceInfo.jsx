@@ -33,8 +33,6 @@ function AttendanceInfo({
 
     const status = training?.absentStatus;
 
-    console.log("Status =", status);
-
     const canScanIn = !status || status === "I";
     const canScanOut = status === "O";
     const isFinished = status === "F";
@@ -301,7 +299,7 @@ function BoxItem({ icon, title, value }) {
                 <Typography
                     variant="body2"
                     fontWeight={700}
-                    wrap
+                    flexwrap="wrap"
                     title={value}
                 >
 

@@ -11,7 +11,9 @@ import {
     Typography,
     Box,
     ToggleButton,
-    ToggleButtonGroup
+    ToggleButtonGroup,
+    Stack,
+    Avatar
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -28,18 +30,59 @@ import employeeService from "../../../services/employeeService"
 import useSnackbar from "../../../hooks/useSnackbar";
 import useResponsive from "../../../hooks/useResponsive";
 
+import ScanSuccessSound from "../../../assets/sounds/beep.mp3";
+import attendanceService from "../../../services/attendanceService";
+
 function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQueueChanged, onRequestFinish }) 
 {
 
     const [rfid, setRfid] = useState("");
     const [manualYn, setManualYn] = useState("N");
     const [lastEmployee, setLastEmployee] = useState(null);
+    const [serverProgress, setServerProgress] = useState(0);
 
     const inputRef = useRef(null);
     const scanningRef = useRef(false);
     
     const { showSnackbar } = useSnackbar();
     const { isMobile } = useResponsive();
+
+    const audioRef = useRef(new Audio(ScanSuccessSound));
+
+    const loadProgress = async () => {
+
+        if (!training) {
+
+            return;
+
+        }
+
+        try {
+
+            const result = await attendanceService.getProgress(
+
+                training.id,
+
+                scanType
+
+            );
+
+            setServerProgress(
+
+                Number(result[0].UPLOADED ?? 0)
+
+            );
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+            setServerProgress(0);
+
+        }
+
+    };
 
     const handleScan = async (event) => {
 
@@ -108,6 +151,9 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
             );
 
+            audioRef.current.currentTime = 0;
+            audioRef.current.play().catch(() => {});
+
             setLastEmployee({
 
                 empId: employee.EMPID,
@@ -156,18 +202,31 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
         }
 
-        return attendanceQueue.getProgress({
+        const localProgress = attendanceQueue.getProgress({
 
-                scheduleId: training.id,
-                scanType
+            scheduleId: training.id,
 
-            });
+            scanType
 
-        }, [
+        });
 
-            training,
-            scanType,
-            queueVersion
+        return {
+
+            uploaded: serverProgress + localProgress.uploaded,
+
+            scanned: serverProgress + localProgress.scanned
+
+        };
+
+    }, [
+
+        training,
+
+        scanType,
+
+        queueVersion,
+
+        serverProgress
 
     ]);
 
@@ -180,8 +239,9 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
         }
 
         setManualYn("N");
-
         setRfid("");
+        setLastEmployee(null);
+        loadProgress();
 
         setTimeout(() => {
 
@@ -422,7 +482,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
                                 alignItems="center"
                             >
 
-                                <Avatar
+                                {/* <Avatar
                                     sx={{
                                         bgcolor: "primary.main"
                                     }}
@@ -430,7 +490,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
                                     <PersonIcon />
 
-                                </Avatar>
+                                </Avatar> */}
 
                                 <Box>
 

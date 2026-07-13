@@ -86,11 +86,7 @@ const attendanceQueue = {
 
     getNotUploadedQueue() {
 
-        return this.getQueue().filter(
-
-            item => item.UPLOADED_YN === "N"
-
-        );
+        return this.getQueue();
 
     },
 
@@ -111,7 +107,7 @@ const attendanceQueue = {
 
         return {
 
-            uploaded: queue.filter(item => item.UPLOADED_YN === "Y").length,
+            uploaded: 0,
 
             scanned: queue.length
 
@@ -119,32 +115,51 @@ const attendanceQueue = {
 
     },
 
-    markUploaded(uploadedQueue) {
+    removeUploaded(uploadedQueue) {
 
-        const queue = this.getQueue();
+        const remain = this.getQueue().filter(item =>
 
-        uploadedQueue.forEach(uploaded => {
+            !uploadedQueue.some(uploaded =>
 
-            const item = queue.find(scan =>
+                uploaded.SCHEDULE_ID === item.SCHEDULE_ID &&
+                uploaded.SCAN_EMPID === item.SCAN_EMPID &&
+                uploaded.SCAN_TYPE === item.SCAN_TYPE &&
+                uploaded.SCAN_DTTM === item.SCAN_DTTM
 
-                scan.SCHEDULE_ID === uploaded.SCHEDULE_ID &&
-                scan.SCAN_EMPID === uploaded.SCAN_EMPID &&
-                scan.SCAN_TYPE === uploaded.SCAN_TYPE &&
-                scan.SCAN_DTTM === uploaded.SCAN_DTTM
+            )
 
-            );
+        );
 
-            if (item) {
-
-                item.UPLOADED_YN = "Y";
-
-            }
-
-        });
-
-        this.replaceQueue(queue);
+        this.replaceQueue(remain);
 
     },
+
+    // markUploaded(uploadedQueue) {
+
+    //     const queue = this.getQueue();
+
+    //     uploadedQueue.forEach(uploaded => {
+
+    //         const item = queue.find(scan =>
+
+    //             scan.SCHEDULE_ID === uploaded.SCHEDULE_ID &&
+    //             scan.SCAN_EMPID === uploaded.SCAN_EMPID &&
+    //             scan.SCAN_TYPE === uploaded.SCAN_TYPE &&
+    //             scan.SCAN_DTTM === uploaded.SCAN_DTTM
+
+    //         );
+
+    //         if (item) {
+
+    //             item.UPLOADED_YN = "Y";
+
+    //         }
+
+    //     });
+
+    //     this.replaceQueue(queue);
+
+    // },
 
     setStatus(status) {
 
@@ -262,11 +277,7 @@ const attendanceQueue = {
 
     hasPendingUpload() {
 
-        return this.getQueue().some(
-
-            item => item.UPLOADED_YN === "N"
-
-        );
+        return this.getQueue().length > 0;
 
     },
 
@@ -299,8 +310,7 @@ const attendanceQueue = {
             TRAINER_EMPID: training.trainerId,
             TRAINER_EMP_NM: training.trainerName,
             MANUAL_YN: manualYn,
-            MEMO: memo,
-            UPLOADED_YN: "N"
+            MEMO: memo
 
         };
 
@@ -338,18 +348,13 @@ const attendanceQueue = {
 
     },
 
-    countQueue({ scheduleId, scanType, uploadedYn}) 
+    countQueue({ scheduleId, scanType}) 
     {
 
         return this.getQueue().filter(item =>
 
             item.SCHEDULE_ID === scheduleId &&
-            item.SCAN_TYPE === scanType &&
-            (
-
-                !uploadedYn ||  item.UPLOADED_YN === uploadedYn
-
-            )
+            item.SCAN_TYPE === scanType
 
         ).length;
 
