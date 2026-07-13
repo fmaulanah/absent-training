@@ -1,21 +1,20 @@
-import Grid from "@mui/material/Grid";
-import {Box, Chip, Divider, List, ListItem, ListItemText, Typography} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import TodayIcon from "@mui/icons-material/Today";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-
 import dayjs from "dayjs";
+
+import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import {Box, Chip, Divider, List, ListItem, ListItemText, Typography, Grid} from "@mui/material";
+
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import PageHeader from "../../components/common/PageHeader/PageHeader";
 import AppButton from "../../components/common/Button/AppButton";
 import AppCard from "../../components/common/Card/AppCard";
-import DashboardStat from "./components/DashboardStat";
 
-import { useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
-import { createDummyTrainings } from "../../constants/scheduleData";
+import DashboardStat from "./components/DashboardStat";
+import DashboardMonthlyChart from "./components/DashboardMonthlyChart";
+import DashboardTrainingGauge from "./components/DashboardTrainingGauge";
+import DashboardUpcomingTable from "./components/DashboardUpcomingTable";
 
 import roomService from "../../services/roomService";
 import trainingService from "../../services/trainingService";
@@ -129,6 +128,35 @@ function Dashboard() {
 
     });
 
+    const chartData = [
+
+        {
+            month: "Jan",
+            total: 5
+        },
+        {
+            month: "Feb",
+            total: 8
+        },
+        {
+            month: "Mar",
+            total: 12
+        },
+        {
+            month: "Apr",
+            total: 10
+        },
+        {
+            month: "May",
+            total: 7
+        },
+        {
+            month: "Jun",
+            total: 15
+        }
+
+    ];
+
     useEffect(() => {
 
         loadRooms();
@@ -154,7 +182,7 @@ function Dashboard() {
                     <DashboardStat
                         title="Schedule Bulan Ini"
                         value={monthlyTrainings.length}
-                        icon={<CalendarMonthIcon fontSize="large" />}
+                        //icon={<CalendarMonthIcon fontSize="large" />}
                     />
                 </Grid>
 
@@ -162,7 +190,7 @@ function Dashboard() {
                     <DashboardStat
                         title="Training Hari Ini"
                         value={todayTrainings.length}
-                        icon={<TodayIcon fontSize="large" />}
+                        //icon={<CalendarTodayIcon fontSize="large" />}
                         color="info.main"
                     />
                 </Grid>
@@ -171,12 +199,81 @@ function Dashboard() {
                     <DashboardStat
                         title="Training Mendatang"
                         value={upcomingTrainings.length}
-                        icon={<EventAvailableIcon fontSize="large" />}
+                        //icon={<EventAvailableIcon fontSize="large" />}
                         color="success.main"
                     />
                 </Grid>
 
             </Grid>
+
+            <Box
+                sx={{
+                    mt: {
+                        xs: 4,
+                        md: 3
+                    }
+                }}
+            >
+
+                <Grid
+                    container
+                    spacing={3}
+                >
+
+                    <Grid
+                        size={{
+                            xs: 12,
+                            xl: 6
+                        }}
+                    >
+
+                        <DashboardMonthlyChart
+
+                            data={chartData}
+                            isMobile={isMobile}
+
+                        />
+
+                    </Grid>
+
+                    <Grid
+                        size={{
+                            xs: 6,
+                            xl: 2
+                        }}
+                    >
+
+                        <DashboardTrainingGauge
+
+                            total={6}
+
+                            running={4}
+
+                            isMobile={isMobile}
+
+                        />
+
+                    </Grid>
+
+                    <Grid
+                        size={{
+                            xs: 12,
+                            xl: 4
+                        }}
+                    >
+
+                        <DashboardUpcomingTable
+
+                            rows={filteredTrainings}
+
+                        />
+
+                    </Grid>
+
+
+                </Grid>
+
+            </Box>
         </>
     );
 }
