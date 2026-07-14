@@ -18,6 +18,9 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
+
+import EmptyState from "../../../components/common/Empty/EmptyState";
 
 function AttendanceHistoryTable({ rows, loading, onDetail }) {
 
@@ -165,7 +168,11 @@ function AttendanceHistoryTable({ rows, loading, onDetail }) {
 
     return (
 
-        <Card>
+        <Card
+            sx={{
+                borderRadius:3
+            }}
+        >
 
             <CardContent
                 sx={{
@@ -176,47 +183,77 @@ function AttendanceHistoryTable({ rows, loading, onDetail }) {
                 }}
             >
 
-                <Box
-                    sx={{
-                        width: "100%",
-                        overflowX: "auto"
-                    }}
-                >
+                {
 
-                    <Box
-                        sx={{
-                            minWidth: 1250
-                        }}
-                    >
+                    rows.length === 0 && !loading
 
-                        <DataGrid
+                        ? (
 
-                            rows={rows}
-                            loading={loading}
-                            columns={columns}
-                            getRowId={(row) => row.SCHEDULE_ID}
-                            autoHeight
-                            disableRowSelectionOnClick
-                            pageSizeOptions={[10, 25, 50]}
-                            initialState={{
+                            <EmptyState
 
-                                pagination: {
+                                icon={
 
-                                    paginationModel: {
-
-                                        pageSize: 10
-
-                                    }
+                                    <TableRowsOutlinedIcon
+                                        sx={{
+                                            fontSize: 60
+                                        }}
+                                    />
 
                                 }
 
-                            }}
+                                title="Belum ada riwayat attendance"
 
-                        />
+                                subtitle="Data attendance tidak ditemukan sesuai filter yang dipilih."
 
-                    </Box>
+                                sx={{
+                                    py: 8
+                                }}
 
-                </Box>
+                            />
+
+                        )
+
+                        : (
+
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    overflowX: "auto"
+                                }}
+                            >
+
+                                <Box
+                                    sx={{
+                                        minWidth: 1250
+                                    }}
+                                >
+
+                                    <DataGrid
+
+                                        rows={rows}
+                                        loading={loading}
+                                        columns={columns}
+                                        getRowId={(row) => row.SCHEDULE_ID}
+                                        autoHeight
+                                        disableRowSelectionOnClick
+                                        pageSizeOptions={[10, 25, 50]}
+                                        initialState={{
+                                            pagination: {
+                                                paginationModel: {
+                                                    pageSize: 10
+                                                }
+                                            }
+                                        }}
+
+                                    />
+
+                                </Box>
+
+                            </Box>
+
+                        )
+
+                }
 
             </CardContent>
 

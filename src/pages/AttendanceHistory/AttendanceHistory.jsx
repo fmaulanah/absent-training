@@ -128,57 +128,53 @@ function AttendanceHistory() {
 
             />
 
-            {/* <AttendanceHistoryToolbar
+            <Box
+                sx={{
+                    mt: 3
+                }}
+            >
 
-                view={view}
+                {
 
-                onChange={setView}
+                    loading
 
-            /> */}
+                        ? (
 
-            {
+                            <SkeletonTable rows={8} />
 
-                loading
+                        )
 
-                    ? (
+                        : (
 
-                        <SkeletonTable
+                            view === "table"
 
-                            rows={8}
+                                ? (
 
-                        />
+                                    <AttendanceHistoryTable
 
-                    )
+                                        rows={rows}
+                                        onDetail={handleOpenDetail}
 
-                    : (
+                                    />
 
-                        view === "table"
+                                )
 
-                            ? (
+                                : (
 
-                                <AttendanceHistoryTable
+                                    <AttendanceHistoryList
 
-                                    rows={rows}
-                                    onDetail={handleOpenDetail}
+                                        rows={rows}
+                                        onDetail={handleOpenDetail}
 
-                                />
+                                    />
 
-                            )
+                                )
 
-                            : (
+                        )
 
-                                <AttendanceHistoryList
+                }
 
-                                    rows={rows}
-                                    onDetail={handleOpenDetail}
-
-                                />
-
-                            )
-
-                    )
-
-            }
+            </Box>
 
             <AttendanceHistoryDetailDialog
 

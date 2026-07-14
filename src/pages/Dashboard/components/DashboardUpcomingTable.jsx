@@ -1,21 +1,15 @@
-import {
-    Avatar,
-    Box,
-    Card,
-    CardContent,
-    Chip,
-    Divider,
-    List,
-    ListItem,
-    ListItemAvatar,
-    Typography
+import dayjs from "dayjs";
+
+import { Avatar, Box, Card, CardContent, Chip, Divider, 
+         List, ListItem, ListItemAvatar, Typography 
 } from "@mui/material";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import PersonIcon from "@mui/icons-material/Person";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
 
-import dayjs from "dayjs";
+import EmptyState from "../../../components/common/Empty/EmptyState";
 
 function DashboardUpcomingTable({ rows }) {
 
@@ -55,13 +49,26 @@ function DashboardUpcomingTable({ rows }) {
                                 }}
                             >
 
-                                <Typography
-                                    color="text.secondary"
-                                >
+                                <EmptyState
 
-                                    Tidak ada training mendatang.
+                                    icon={
 
-                                </Typography>
+                                        <EventBusyIcon
+
+                                            sx={{
+
+                                                fontSize:64
+
+                                            }}
+
+                                        />
+
+                                    }
+
+                                    title="Tidak ada training"
+                                    subtitle="Belum ada training mendatang pada bulan ini."
+
+                                />
 
                             </Box>
 

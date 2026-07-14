@@ -14,6 +14,10 @@ import {
     Typography
 } from "@mui/material";
 
+import BarChartIcon from "@mui/icons-material/BarChart";
+
+import EmptyState from "../../../components/common/Empty/EmptyState";
+
 function DashboardMonthlyChart({ data, isMobile })
 {
 
@@ -38,49 +42,82 @@ function DashboardMonthlyChart({ data, isMobile })
 
                 </Typography>
 
-                <ResponsiveContainer
-                    width="100%"
-                    height={isMobile ? 170 : 280}
-                >
+                {
 
-                    <BarChart
-                        data={data}
-                        margin={{
-                            top: 10,
-                            right: isMobile ? 5 : 20,
-                            left: isMobile ? -25 : 0,
-                            bottom: 0
-                        }}
-                    >
+                    data.length === 0
 
-                        <CartesianGrid
-                            strokeDasharray="3 3"
-                        />
+                        ? (
 
-                        <XAxis
-                            dataKey="month"
-                        />
+                            <EmptyState
 
-                        <YAxis
-                            allowDecimals={false}
-                            width={isMobile ? 20 : 40}
-                        />
+                                icon={
 
-                        <Tooltip
-                            wrapperStyle={{
-                                fontSize: 12
-                            }}
-                        />
+                                    <BarChartIcon
 
-                        <Bar
-                            dataKey="total"
-                            radius={[8,8,0,0]}
-                            fill="#28127C"
-                        />
+                                        sx={{
+                                            fontSize: 60
+                                        }}
 
-                    </BarChart>
+                                    />
 
-                </ResponsiveContainer>
+                                }
+
+                                title="Belum ada data"
+                                subtitle="Belum ada data training untuk ditampilkan."
+
+                            />
+
+                        )
+
+                        : (
+
+                            <ResponsiveContainer
+                                width="100%"
+                                height={isMobile ? 170 : 280}
+                            >
+
+                                <BarChart
+                                    data={data}
+                                    margin={{
+                                        top: 10,
+                                        right: isMobile ? 5 : 20,
+                                        left: isMobile ? -25 : 0,
+                                        bottom: 0
+                                    }}
+                                >
+
+                                    <CartesianGrid
+                                        strokeDasharray="3 3"
+                                    />
+
+                                    <XAxis
+                                        dataKey="month"
+                                    />
+
+                                    <YAxis
+                                        allowDecimals={false}
+                                        width={isMobile ? 20 : 40}
+                                    />
+
+                                    <Tooltip
+                                        wrapperStyle={{
+                                            fontSize: 12
+                                        }}
+                                    />
+
+                                    <Bar
+                                        dataKey="total"
+                                        radius={[8, 8, 0, 0]}
+                                        fill="#28127C"
+                                    />
+
+                                </BarChart>
+
+                            </ResponsiveContainer>
+
+                        )
+
+                }
 
             </CardContent>
 
