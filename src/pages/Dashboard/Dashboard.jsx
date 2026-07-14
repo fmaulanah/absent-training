@@ -44,10 +44,10 @@ function Dashboard() {
 
     const { isMobile } = useResponsive();
 
-    const upcomingTrainings = trainings .filter(training => training.useYn === "Y" &&
-                                                            training.startDate >= today)
-        .sort((a, b) => a.startDate.localeCompare(b.startDate)
-    );
+    const upcomingTrainings = trainings.filter(training => training.useYn === "Y" &&
+                                                           training.startDate >= today &&
+                                                           dayjs(training.startDate).format("YYYYMM") === currentMonth)
+                                                .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
     const loadMonthlyChart = async () => {
 
@@ -259,23 +259,6 @@ function Dashboard() {
                         />
 
                     </Grid>
-
-                    {/* <Grid
-                        size={{
-                            xs: 12,
-                            xl: 2
-                        }}
-                    >
-
-                        <DashboardTrainingGauge
-
-                            total={summary.today}
-                            running={summary.running}
-                            isMobile={isMobile}
-
-                        />
-
-                    </Grid> */}
 
                     <Grid
                         size={{

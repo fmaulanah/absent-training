@@ -3,25 +3,30 @@ import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Typogra
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 
+import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+import ConfirmDialog from "../common/ConfirmDialog/ConfirmDialog";
+
 function SidebarFooter(){
     
-    const version = import.meta.env.VITE_APP_VERSION;
-
     const navigate = useNavigate();
 
     const { user } = useAuth();
     const { logout } = useAuth();
 
+    const [logoutOpen, setLogoutOpen] = useState(false);
+
     const handleLogout = () => {
 
-        if (!window.confirm("Logout dari aplikasi?")) {
+        setLogoutOpen(true);
 
-            return;
+    };
 
-        }
+    const handleConfirmLogout = () => {
+
+        setLogoutOpen(false);
 
         logout();
 
@@ -36,7 +41,6 @@ function SidebarFooter(){
         <Box
             sx={{
             mt: "auto",
-            // p: 2,
             borderTop: 1,
             borderColor: "divider",
             textAlign:"center"
@@ -97,6 +101,19 @@ function SidebarFooter(){
                 v{import.meta.env.VITE_APP_VERSION} (Build {import.meta.env.VITE_APP_BUILD})
 
             </Typography>
+
+            <ConfirmDialog
+
+                open={logoutOpen}
+                title="Logout"
+                message="Apakah Anda yakin ingin keluar dari aplikasi?"
+                confirmText="Logout"
+                cancelText="Batal"
+                confirmColor="error"
+                onConfirm={handleConfirmLogout}
+                onCancel={() => setLogoutOpen(false)}
+
+            />
 
         </Box>
 

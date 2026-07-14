@@ -7,7 +7,6 @@ import UserProfile from "../common/User/UserProfile";
 function Header({
 
     isMobile,
-
     onMenuClick
 
 }) {
@@ -18,26 +17,17 @@ function Header({
             elevation={1}
             sx={{
                 position: "fixed",
-
                 top: 0,
-
                 left: {
                     xs: 0,
                     md: 260
                 },
-
                 right: 0,
-
                 zIndex: (theme) => theme.zIndex.drawer - 1,
-
                 px: 4,
-
                 py: 3,
-
                 bgcolor: "primary.main",
-
                 color: "white",
-
                 borderRadius: 0
             }}
         >
@@ -46,13 +36,13 @@ function Header({
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignitems: "center"
+                    alignItems: "center"
                 }}
             >
                 <Box
                     sx={{
                         display: "flex",
-                        alignitems: "center",
+                        alignItems: "center",
                         gap: 1
                     }}
                 >

@@ -57,7 +57,6 @@ function AttendanceInfo({
                     <Stack
                         direction="row"
                         spacing={1}
-                        // flexwrap="wrap"
                     >
 
                         <AppButton

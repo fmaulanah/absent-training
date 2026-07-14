@@ -25,15 +25,16 @@ function Attendance() {
     const [selectedTraining, setSelectedTraining] = useState(null);
     const [trainings, setTrainings] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [dialogOpen, setDialogOpen] = useState(false);
     const [scanType, setScanType] = useState("IN");
     const [queueVersion, setQueueVersion] = useState(0);
     const [uploading, setUploading] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [confirmOpenStat, setConfirmOpenStat] = useState(false);
     const [confirmUploadOpen, setConfirmUploadOpen] = useState(false);
     const [pendingTraining, setPendingTraining] = useState(null);
     const [pendingStatus, setPendingStatus] = useState(null);
+    const [attendanceSummary, setAttendanceSummary] = useState({scanIn: 0, scanOut: 0});
 
     const { showSnackbar } = useSnackbar();
 
@@ -47,49 +48,7 @@ function Attendance() {
 
     );
 
-    const scanInCount = useMemo(() =>
-
-        selectedTraining
-
-            ? attendanceQueue.countQueue({
-
-                scheduleId: selectedTraining.id,
-
-                scanType: "IN"
-
-            })
-
-            : 0,
-
-        [selectedTraining, queueVersion]
-
-    );
-
-    const scanOutCount = useMemo(() =>
-
-        selectedTraining
-
-            ? attendanceQueue.countQueue({
-
-                scheduleId: selectedTraining.id,
-
-                scanType: "OUT"
-
-            })
-
-            : 0,
-
-        [selectedTraining, queueVersion]
-
-    );
-
     const loadTraining = async (showLoading = true) => {
-
-        if (dialogOpen) {
-
-            return;
-
-        }
         
         if (showLoading) {
 
@@ -145,6 +104,43 @@ function Attendance() {
                 setLoading(false);
 
             }
+
+        }
+
+    };
+
+    const loadAttendanceSummary = async () => {
+
+        if (!selectedTraining) {
+
+            setAttendanceSummary({
+
+                scanIn: 0,
+
+                scanOut: 0
+
+            });
+
+            return;
+
+        }
+
+        try {
+            const result = await attendanceService.getAttendanceSummary(selectedTraining.id);
+
+            const summary = result?.[0] ?? {};
+
+            setAttendanceSummary({
+
+                scanIn: Number(summary.SCAN_IN ?? 0),
+                scanOut: Number(summary.SCAN_OUT ?? 0)
+
+            });
+
+        }
+        catch (err) {
+
+            console.error(err);
 
         }
 
@@ -436,11 +432,11 @@ function Attendance() {
 
             );
 
-            await loadTraining();
-
             setConfirmOpenStat(false);
-
             setDialogOpen(false);
+
+            await loadTraining();
+            await loadAttendanceSummary();
 
             if (pendingStatus === "F") {
 
@@ -484,13 +480,17 @@ function Attendance() {
 
         const timer = setInterval(() => {
 
-            loadTraining(false);
+            if (!dialogOpen) {
+
+                loadTraining(false);
+
+            }
 
         }, 30000);
 
         return () => clearInterval(timer);
 
-    }, [month]);
+    }, [month, dialogOpen]);
 
     
 
@@ -513,6 +513,12 @@ function Attendance() {
         restoreAttendance();
 
     }, [trainings]);
+
+    useEffect(() => {
+
+        loadAttendanceSummary();
+
+    }, [selectedTraining, queueVersion]);
 
     return (
 
@@ -542,8 +548,8 @@ function Attendance() {
             <AttendanceInfo
 
                 training={selectedTraining}
-                scanInCount={scanInCount}
-                scanOutCount={scanOutCount}
+                scanInCount={attendanceSummary.scanIn}
+                scanOutCount={attendanceSummary.scanOut}
                 isToday={isToday}
                 onScanIn={() => {
 

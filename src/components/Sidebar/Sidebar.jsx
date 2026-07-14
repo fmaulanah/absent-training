@@ -53,14 +53,15 @@ function Sidebar({ isMobile, onClose }) {
         onClose();
 
     };
+
     return(
 
         <Box
             sx={{
-                mt:"auto",
-                display:"flex",
-                flexDirection:"column",
-                height:"100%"
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                minHeight: 0
             }}
         >
 
@@ -68,7 +69,13 @@ function Sidebar({ isMobile, onClose }) {
 
             <Divider/>
 
-            <List>
+            <List
+                sx={{
+                    flex: 1,
+                    overflowY: "auto",
+                    minHeight: 0
+                }}
+            >
 
                 {MENUS.map((menu)=>(
 

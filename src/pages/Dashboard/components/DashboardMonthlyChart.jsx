@@ -40,11 +40,17 @@ function DashboardMonthlyChart({ data, isMobile })
 
                 <ResponsiveContainer
                     width="100%"
-                    height={isMobile ? 110 : 280}
+                    height={isMobile ? 170 : 280}
                 >
 
                     <BarChart
                         data={data}
+                        margin={{
+                            top: 10,
+                            right: isMobile ? 5 : 20,
+                            left: isMobile ? -25 : 0,
+                            bottom: 0
+                        }}
                     >
 
                         <CartesianGrid
@@ -57,9 +63,14 @@ function DashboardMonthlyChart({ data, isMobile })
 
                         <YAxis
                             allowDecimals={false}
+                            width={isMobile ? 20 : 40}
                         />
 
-                        <Tooltip />
+                        <Tooltip
+                            wrapperStyle={{
+                                fontSize: 12
+                            }}
+                        />
 
                         <Bar
                             dataKey="total"

@@ -153,7 +153,7 @@ function DashboardUpcomingTable({ rows }) {
                                                                 mt: 1.5,
                                                                 display: "flex",
                                                                 gap: 1,
-                                                                flexwrap: "wrap"
+                                                                flexWrap: "wrap"
                                                             }}
                                                         >
 
@@ -170,6 +170,12 @@ function DashboardUpcomingTable({ rows }) {
                                                                 size="small"
                                                                 color="primary"
                                                                 variant="outlined"
+                                                                sx={{
+                                                                    maxWidth: {
+                                                                        xs: 180,
+                                                                        md: "100%"
+                                                                    }
+                                                                }}
                                                             />
 
                                                         </Box>

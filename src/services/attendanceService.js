@@ -27,7 +27,19 @@ const attendanceService = {
 
         });
 
-    }, 
+    },
+    
+    async getAttendanceSummary(scheduleId) {
+
+        return await systemApiService.execute({
+
+            apiCd: "GET_ATTENDANCE_SUMMARY",
+            type: "SEARCH",
+            param01: scheduleId
+
+        });
+
+    },
 
     async saveScan(scan) {
 
