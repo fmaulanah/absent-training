@@ -7,6 +7,7 @@ import {
 
 
 import PageHeader from "../../components/common/PageHeader/PageHeader";
+import SkeletonTable from "../../components/common/Loading/SkeletonTable";
 
 import AttendanceHistoryFilter from "./components/AttendanceHistoryFilter";
 import AttendanceHistoryToolbar from "./components/AttendanceHistoryToolbar.jsx";
@@ -137,23 +138,45 @@ function AttendanceHistory() {
 
             {
 
-                view === "table"
+                loading
 
-                    ? <AttendanceHistoryTable
+                    ? (
 
-                        rows={rows}
-                        loading={loading}
-                        onDetail={handleOpenDetail}
+                        <SkeletonTable
 
-                    />
+                            rows={8}
 
-                    : <AttendanceHistoryList
+                        />
 
-                        rows={rows}
-                        loading={loading}
-                        onDetail={handleOpenDetail}
+                    )
 
-                    />
+                    : (
+
+                        view === "table"
+
+                            ? (
+
+                                <AttendanceHistoryTable
+
+                                    rows={rows}
+                                    onDetail={handleOpenDetail}
+
+                                />
+
+                            )
+
+                            : (
+
+                                <AttendanceHistoryList
+
+                                    rows={rows}
+                                    onDetail={handleOpenDetail}
+
+                                />
+
+                            )
+
+                    )
 
             }
 

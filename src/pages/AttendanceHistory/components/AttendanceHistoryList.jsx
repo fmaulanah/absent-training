@@ -68,30 +68,30 @@ function AttendanceHistoryList({ rows, loading, onDetail })
 
     }
 
-    if (!rows.length) {
+    // if (!rows.length) {
 
-        return (
+    //     return (
 
-            <Card>
+    //         <Card>
 
-                <CardContent>
+    //             <CardContent>
 
-                    <Typography
-                        align="center"
-                        color="text.secondary"
-                    >
+    //                 <Typography
+    //                     align="center"
+    //                     color="text.secondary"
+    //                 >
 
-                        No Attendance History
+    //                     No Attendance History
 
-                    </Typography>
+    //                 </Typography>
 
-                </CardContent>
+    //             </CardContent>
 
-            </Card>
+    //         </Card>
 
-        );
+    //     );
 
-    }
+    // }
 
     return (
 

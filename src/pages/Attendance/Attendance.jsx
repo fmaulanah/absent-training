@@ -6,6 +6,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 import PageHeader from "../../components/common/PageHeader/PageHeader";
 import AppButton from "../../components/common/Button/AppButton";
+import AttendanceSkeleton from "../../components/common/Loading/AttendanceSkeleton";
 
 import AttendanceFilter from "./components/AttendanceFilter";
 import AttendanceInfo from "./components/AttendanceInfo";
@@ -57,9 +58,7 @@ function Attendance() {
         }
 
         try {
-
-            setLoading(true);
-
+            
             const result = await attendanceService.getTrainings(
 
                 month.format("YYYYMM")
@@ -519,6 +518,25 @@ function Attendance() {
         loadAttendanceSummary();
 
     }, [selectedTraining, queueVersion]);
+
+    if (loading) {
+
+        return (
+
+            <>
+
+                <PageHeader
+                    title="Attendance"
+                    subtitle="Kelola absensi peserta training."
+                />
+
+                <AttendanceSkeleton />
+
+            </>
+
+        );
+
+    }
 
     return (
 

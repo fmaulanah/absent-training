@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
 
-function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTraining, onShowMore }) 
+function ScheduleCalendar({ month, calendarDays, trainings, holidaySet, onSelectTraining, onShowMore }) 
 {
 
     const WEEKDAYS = [ "Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab" ];
@@ -179,4 +179,4 @@ function CalendarGrid({ month, calendarDays, trainings, holidaySet, onSelectTrai
 
 }
 
-export default CalendarGrid;
+export default ScheduleCalendar;

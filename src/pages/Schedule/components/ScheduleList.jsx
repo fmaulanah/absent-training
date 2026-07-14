@@ -216,7 +216,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
                                     <Typography
                                         variant="body2"
-                                        wrap
+                                        wrap = "true"
                                         color={
                                             training.useYn === "Y"
                                                 ? "text.primary"

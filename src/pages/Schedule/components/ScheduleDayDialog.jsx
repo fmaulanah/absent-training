@@ -14,7 +14,7 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close";
 
-function DayTrainingDialog({ open, date, trainings, onClose, onSelectTraining}) 
+function ScheduleDayDialog({ open, date, trainings, onClose, onSelectTraining}) 
 {
     return (
 
@@ -121,4 +121,4 @@ function DayTrainingDialog({ open, date, trainings, onClose, onSelectTraining})
 
 }
 
-export default DayTrainingDialog;
+export default ScheduleDayDialog;

@@ -59,8 +59,8 @@ function Header({
                     )}
 
                     <Typography
-                        variant={isMobile ? "h6" : "h4"}
-                        fontWeight={700}
+                        variant={isMobile ? "h6" : "h3"}
+                        fontWeight={100}
                     >
                         HRD Training Scheduler
                     </Typography>

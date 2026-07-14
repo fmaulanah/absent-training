@@ -7,12 +7,14 @@ import AddIcon from "@mui/icons-material/Add";
 import PageHeader from "../../components/common/PageHeader/PageHeader";
 import AppCard from "../../components/common/Card/AppCard";
 import AppButton from "../../components/common/Button/AppButton";
-import CalendarToolbar from "./components/CalendarToolbar";
-import TrainingDialog from "./components/TrainingDialog";
-import TrainingDetailDialog from "./components/TrainingDetailDialog";
+import ScheduleSkeleton from "../../components/common/Loading/ScheduleSkeleton";
+
+import ScheduleToolbar from "./components/ScheduleToolbar";
+import ScheduleCalendar from "./components/ScheduleCalendar";
 import ScheduleList from "./components/ScheduleList";
-import CalendarGrid from "./components/CalendarGrid";
-import DayTrainingDialog from "./components/DayTrainingDialog";
+import ScheduleDayDialog from "./components/ScheduleDayDialog";
+import ScheduleTrainingDialog from "./components/ScheduleTrainingDialog";
+import ScheduleTrainingDetailDialog from "./components/ScheduleTrainingDetailDialog";
 
 import calendarService from "../../services/calendarService";
 import trainerService from "../../services/trainerService";
@@ -57,6 +59,7 @@ function Schedule() {
     const [trainerError, setTrainerError] = useState("");
     const [holidays, setHolidays] = useState([]);
     const [rooms, setRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [page, setPage] = useState(1);
 
@@ -116,6 +119,104 @@ function Schedule() {
         )
 
     ), [trainings, month]);
+
+    const loadHoliday = async () => {
+
+        try {
+
+            const result = await calendarService.getHoliday(month.year());
+
+            setHolidays(result);
+
+        }
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+    };
+
+    const loadRoom = async () => {
+
+        try {
+
+            const result = await roomService.getRooms();
+
+            setRooms(result);
+
+            if (result.length > 0) {
+
+                setForm(current => ({
+
+                    ...current,
+
+                    room: current.room || result[0].ROOM_ID
+
+                }));
+
+            }
+
+        }
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+    };
+
+    const loadTraining = async (showLoading = true) => {
+
+        if (showLoading) {
+
+            setLoading(true);
+
+        }
+
+        try {
+
+            const result = await trainingService.getTrainings(
+
+                month.format("YYYYMM")
+
+            );
+
+            setTrainings(
+
+                result.map(item => ({
+
+                    id: item.SCHEDULE_ID,
+                    title: item.SCHEDULE_NM,
+                    startDate: dayjs(item.SCHEDULE_START_DT, "YYYYMMDD").format("YYYY-MM-DD"),
+                    endDate: dayjs(item.SCHEDULE_END_DT, "YYYYMMDD").format("YYYY-MM-DD"),
+                    room: item.ROOM_ID,
+                    trainerId: item.TRAINER_EMPID,
+                    trainerName: item.TRAINER_EMP_NM,
+                    memo: item.MEMO,
+                    useYn: item.USE_YN
+
+                }))
+
+            );
+
+        }
+        catch (err) {
+
+            console.error(err);
+
+        }
+        finally {
+
+            if (showLoading) {
+
+                setLoading(false);
+
+            }
+
+        }
+
+    };
 
     const handleChange = (event) => {
 
@@ -345,104 +446,53 @@ function Schedule() {
         setDialogOpen(true);
     };
 
-    const loadHoliday = async () => {
+    useEffect(() => {
 
-        try {
+        const loadSchedule = async () => {
 
-            const result = await calendarService.getHoliday(month.year());
+            setLoading(true);
 
-            setHolidays(result);
+            try {
 
-        }
-        catch (err) {
+                await Promise.all([
 
-            console.error(err);
+                    loadHoliday(),
+                    loadRoom(),
+                    loadTraining(false)
 
-        }
+                ]);
 
-    };
+            }
+            finally {
 
-    const loadRoom = async () => {
-
-        try {
-
-            const result = await roomService.getRooms();
-
-            setRooms(result);
-
-            if (result.length > 0) {
-
-                setForm(current => ({
-
-                    ...current,
-
-                    room: current.room || result[0].ROOM_ID
-
-                }));
+                setLoading(false);
 
             }
 
-        }
-        catch (err) {
+        };
 
-            console.error(err);
-
-        }
-
-    };
-
-    const loadTraining = async () => {
-
-        try {
-
-            const result = await trainingService.getTrainings(
-
-                month.format("YYYYMM")
-
-            );
-
-            setTrainings(
-
-                result.map(item => ({
-
-                    id: item.SCHEDULE_ID,
-
-                    title: item.SCHEDULE_NM,
-
-                    startDate: dayjs(item.SCHEDULE_START_DT, "YYYYMMDD").format("YYYY-MM-DD"),
-
-                    endDate: dayjs(item.SCHEDULE_END_DT, "YYYYMMDD").format("YYYY-MM-DD"),
-
-                    room: item.ROOM_ID,
-
-                    trainerId: item.TRAINER_EMPID,
-
-                    trainerName: item.TRAINER_EMP_NM,
-
-                    memo: item.MEMO,
-
-                    useYn: item.USE_YN
-
-                }))
-
-            );
-
-        }
-        catch (err) {
-
-            console.error(err);
-
-        }
-
-    };
-
-    useEffect(() => {
-
-        loadHoliday();
-        loadRoom();
-        loadTraining();
+        loadSchedule();
 
     }, [month]);
+
+    if (loading) {
+
+        return (
+
+            <>
+
+                <PageHeader
+                    title="Training Schedule"
+                    subtitle="Kelola jadwal dan agenda training."
+                />
+
+                <ScheduleSkeleton />
+
+            </>
+
+        );
+
+    }
 
     return (
         <>
@@ -469,7 +519,7 @@ function Schedule() {
                         }}
                     >
 
-                        <CalendarToolbar
+                        <ScheduleToolbar 
                             month={month}
                             MONTHS={MONTHS}
                             YEARS={YEARS}
@@ -502,7 +552,7 @@ function Schedule() {
                 <AppCard
                     title=' '
                     action={
-                        <CalendarToolbar
+                        <ScheduleToolbar
                             month={month}
                             MONTHS={MONTHS}
                             YEARS={YEARS}
@@ -517,7 +567,7 @@ function Schedule() {
                         }
                     }}
                 >
-                    <CalendarGrid
+                    <ScheduleCalendar
                         month={month}
                         calendarDays={calendarDays}
                         trainings={trainings}
@@ -536,7 +586,7 @@ function Schedule() {
 
             )}
 
-            <TrainingDialog
+            <ScheduleTrainingDialog
                 open={dialogOpen}
                 editingId={editingId}
                 form={form}
@@ -554,7 +604,7 @@ function Schedule() {
                 onClose={closeFormDialog}
             />
 
-            <TrainingDetailDialog
+            <ScheduleTrainingDetailDialog
                 training={selectedTraining}
                 rooms={rooms}
                 open={Boolean(selectedTraining)}
@@ -562,7 +612,7 @@ function Schedule() {
                 onEdit={openEditDialog}
             />
 
-            <DayTrainingDialog
+            <ScheduleDayDialog
 
                 open={dayDialog.open}
 

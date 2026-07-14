@@ -10,6 +10,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import PageHeader from "../../components/common/PageHeader/PageHeader";
 import AppButton from "../../components/common/Button/AppButton";
 import AppCard from "../../components/common/Card/AppCard";
+import DashboardSkeleton from "../../components/common/Loading/DashboardSkeleton";
 
 import DashboardStat from "./components/DashboardStat";
 import DashboardMonthlyChart from "./components/DashboardMonthlyChart";
@@ -26,13 +27,14 @@ function Dashboard() {
 
     const navigate = useNavigate();
 
-    const today = dayjs().format("YYYY-MM-DD");
+    const today        = dayjs().format("YYYY-MM-DD");
     const currentMonth = dayjs().format("YYYYMM");
 
     const [rooms, setRooms] = useState([]);
     const [trainings, setTrainings] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState("");
     const [chartData, setChartData] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [summary, setSummary] = useState({
 
         thisMonth: 0,
@@ -181,12 +183,55 @@ function Dashboard() {
 
     useEffect(() => {
 
-        loadRooms();
-        loadTraining();
-        loadMonthlyChart();
-        loadSummary();
+        const loadDashboard = async () => {
+
+            try {
+
+                setLoading(true);
+
+                await Promise.all([
+
+                    loadRooms(),
+                    loadTraining(),
+                    loadMonthlyChart(),
+                    loadSummary()
+
+                ]);
+
+            }
+            finally {
+
+                setLoading(false);
+
+            }
+
+        };
+
+        loadDashboard();
 
     }, []);
+
+    if (loading) {
+
+        return (
+
+            <>
+
+                <PageHeader
+
+                    title="Dashboard"
+
+                    subtitle="Ringkasan jadwal training."
+
+                />
+
+                <DashboardSkeleton/>
+
+            </>
+
+        );
+
+    }
 
     return (
         <>

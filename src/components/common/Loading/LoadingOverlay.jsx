@@ -1,8 +1,15 @@
-import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
+import {
+    Backdrop,
+    CircularProgress,
+    Typography,
+    Stack
+} from "@mui/material";
 
 function LoadingOverlay({
+
     open,
-    text = "Loading..."
+    message = "Loading..."
+
 }) {
 
     return (
@@ -10,38 +17,29 @@ function LoadingOverlay({
         <Backdrop
             open={open}
             sx={{
-                zIndex: (theme) => theme.zIndex.modal + 10,
-                bgcolor: "rgba(0,0,0,.45)"
+                zIndex: theme => theme.zIndex.modal + 1,
+                bgcolor: "rgba(255,255,255,.65)",
+                backdropFilter: "blur(2px)"
             }}
         >
 
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignitems: "center",
-                    gap: 2,
-                    px: 5,
-                    py: 4,
-                    bgcolor: "background.paper",
-                    borderRadius: 3,
-                    // minWidth: 260,
-                    boxShadow: 10
-                }}
+            <Stack
+                spacing={2}
+                alignItems="center"
             >
 
-                <CircularProgress size={42} />
+                <CircularProgress />
 
                 <Typography
-                    variant="subtitle1"
                     fontWeight={600}
+                    color="text.primary"
                 >
 
-                    {text}
+                    {message}
 
                 </Typography>
 
-            </Box>
+            </Stack>
 
         </Backdrop>
 

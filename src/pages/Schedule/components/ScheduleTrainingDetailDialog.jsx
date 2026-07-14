@@ -4,7 +4,7 @@ import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Div
 
 import AppButton from "../../../components/common/Button/AppButton";
 
-function TrainingDetailDialog({ training, rooms, open, onClose, onEdit }) 
+function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }) 
 {
     const roomName = training ? rooms.find(room => room.ROOM_ID === training.room)?.ROOM_NM ?? training.room : "";
 
@@ -159,4 +159,4 @@ function TrainingDetailDialog({ training, rooms, open, onClose, onEdit })
 
 }
     
-export default TrainingDetailDialog;
+export default ScheduleTrainingDetailDialog;

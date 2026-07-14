@@ -12,7 +12,7 @@ import useResponsive from "../../../hooks/useResponsive";
 
 import AppCard from "../../../components/common/Card/AppCard";
 
-function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefresh }) 
+function ScheduleToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefresh }) 
 {
     const { isMobile } = useResponsive();
 
@@ -200,4 +200,4 @@ function CalendarToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
 
 }
 
-export default CalendarToolbar;
+export default ScheduleToolbar;
