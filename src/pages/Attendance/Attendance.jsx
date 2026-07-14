@@ -37,6 +37,8 @@ function Attendance() {
 
     const { showSnackbar } = useSnackbar();
 
+    const isToday = selectedTraining ? dayjs(selectedTraining.startDate).isSame(dayjs(), "day") : false;
+
     const restoredRef = useRef(false);
 
     useBeforeUnloadGuard(
@@ -384,6 +386,8 @@ function Attendance() {
 
         setSelectedTraining(training);
 
+        
+
     };
 
     const handleRequestFinish = () => {
@@ -540,6 +544,7 @@ function Attendance() {
                 training={selectedTraining}
                 scanInCount={scanInCount}
                 scanOutCount={scanOutCount}
+                isToday={isToday}
                 onScanIn={() => {
 
                     setScanType("IN");

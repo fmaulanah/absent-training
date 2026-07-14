@@ -161,7 +161,7 @@ function System() {
 
                                         </Typography>
 
-                                        <Typography
+                                        {/* <Typography
                                             variant="body2"
                                             color="text.secondary"
                                         >
@@ -169,7 +169,7 @@ function System() {
                                             Sinkronisasi ulang data master user dari server
                                             ke Local Storage.
 
-                                        </Typography>
+                                        </Typography> */}
 
                                     </Box>
 
@@ -272,14 +272,14 @@ function System() {
 
                                         </Typography>
 
-                                        <Typography
+                                        {/* <Typography
                                             variant="body2"
                                             color="text.secondary"
                                         >
 
                                             Informasi build aplikasi yang sedang digunakan.
 
-                                        </Typography>
+                                        </Typography> */}
 
                                     </Box>
 

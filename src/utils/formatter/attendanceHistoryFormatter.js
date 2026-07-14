@@ -43,6 +43,15 @@ export const formatStatus = (value) => {
 
             };
 
+        case "N":
+            return {
+
+                label: "Not Yet",
+
+                color: "inherit"
+
+            };
+
         default:
 
             return {

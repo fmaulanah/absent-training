@@ -260,7 +260,7 @@ function Dashboard() {
 
                     </Grid>
 
-                    <Grid
+                    {/* <Grid
                         size={{
                             xs: 12,
                             xl: 2
@@ -275,12 +275,12 @@ function Dashboard() {
 
                         />
 
-                    </Grid>
+                    </Grid> */}
 
                     <Grid
                         size={{
                             xs: 12,
-                            xl: 4
+                            xl: 6
                         }}
                     >
 

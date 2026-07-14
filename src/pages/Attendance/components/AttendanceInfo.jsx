@@ -22,6 +22,7 @@ function AttendanceInfo({
     training,
     scanInCount,
     scanOutCount,
+    isToday,
     onScanIn,
     onScanOut,
     onUpload,
@@ -36,6 +37,13 @@ function AttendanceInfo({
     const canScanIn = !status || status === "I";
     const canScanOut = status === "O";
     const isFinished = status === "F";
+
+    console.log({
+        training,
+        isToday,
+        canScanIn,
+        canScanOut
+    });
 
     if (!training) {
 
@@ -80,6 +88,7 @@ function AttendanceInfo({
                             size="small"
                             color="secondary"
                             disabled={true}
+                            loading={uploading}
                             onClick={onUpload}
                             sx={{
                                 minWidth: 40,
@@ -131,7 +140,7 @@ function AttendanceInfo({
                         size="small"
                         startIcon={<PlayArrowIcon />}
                         onClick={onScanIn}
-                        disabled={!canScanIn}
+                        disabled={!canScanIn || !isToday}
                     >
 
                         {isMobile ? "IN" : "Scan In"}
@@ -143,7 +152,7 @@ function AttendanceInfo({
                         color="success"
                         startIcon={<PlayArrowIcon />}
                         onClick={onScanOut}
-                        disabled={!canScanOut}
+                        disabled={!canScanOut  || !isToday}
                     >
 
                         {isMobile ? "OUT" : "Scan Out"}

@@ -31,7 +31,7 @@ function AttendanceHistory() {
     const [filter, setFilter] = useState({
 
         fromDate: dayjs().startOf("month").format("YYYY-MM-DD"),
-        toDate: dayjs().format("YYYY-MM-DD"),
+        toDate: dayjs().endOf("month") .format("YYYY-MM-DD"),
         training: "",
         trainer: "",
         status: ""
@@ -114,7 +114,7 @@ function AttendanceHistory() {
             <PageHeader
 
                 title="Attendance History"
-                subtitle="Melihat riwayat attendance setiap training."
+                subtitle="Riwayat attendance setiap training."
 
             />
 

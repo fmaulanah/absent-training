@@ -23,7 +23,8 @@ function DashboardUpcomingTable({ rows }) {
 
         <Card
             sx={{
-                borderRadius: 3
+                borderRadius: 3,
+                height: "100%"
             }}
         >
 
@@ -69,109 +70,131 @@ function DashboardUpcomingTable({ rows }) {
                         :
 
                         (
+                            <Box
+                                sx={{
+                                    maxHeight: 360,
+                                    overflowY: "auto",
+                                    pr: 1,
 
-                            <List disablePadding>
+                                    "&::-webkit-scrollbar": {
+                                        width: 8
+                                    },
 
-                                {
+                                    "&::-webkit-scrollbar-thumb": {
+                                        backgroundColor: "#BDBDBD",
+                                        borderRadius: 4
+                                    },
 
-                                    rows.slice(0, 5).map((row, index) => (
+                                    "&::-webkit-scrollbar-thumb:hover": {
+                                        backgroundColor: "#9E9E9E"
+                                    }
+                                }}
+                            >
 
-                                        <Box
-                                            key={row.id}
-                                        >
+                                <List disablePadding>
 
-                                            <ListItem
-                                                sx={{
-                                                    alignItems: "flex-start",
-                                                    py: 2
-                                                }}
+                                    {
+
+                                        rows.slice(0, 5).map((row, index) => (
+
+                                            <Box
+                                                key={row.id}
                                             >
 
-                                                <ListItemAvatar>
-
-                                                    <Avatar
-                                                        sx={{
-                                                            bgcolor: "primary.main"
-                                                        }}
-                                                    >
-
-                                                        <CalendarMonthIcon />
-
-                                                    </Avatar>
-
-                                                </ListItemAvatar>
-
-                                                <Box
+                                                <ListItem
                                                     sx={{
-                                                        flex: 1
+                                                        alignItems: "flex-start",
+                                                        py: 2
                                                     }}
                                                 >
 
-                                                    <Typography
-                                                        fontWeight={600}
-                                                    >
+                                                    <ListItemAvatar>
 
-                                                        {row.title}
+                                                        <Avatar
+                                                            sx={{
+                                                                bgcolor: "primary.main"
+                                                            }}
+                                                        >
 
-                                                    </Typography>
+                                                            <CalendarMonthIcon />
 
-                                                    <Typography
-                                                        variant="body2"
-                                                        color="text.secondary"
-                                                        sx={{
-                                                            mt: 0.5
-                                                        }}
-                                                    >
+                                                        </Avatar>
 
-                                                        {dayjs(row.startDate).format("DD MMM YYYY")}
-
-                                                    </Typography>
+                                                    </ListItemAvatar>
 
                                                     <Box
                                                         sx={{
-                                                            mt: 1.5,
-                                                            display: "flex",
-                                                            gap: 1,
-                                                            flexwrap: "wrap"
+                                                            flex: 1
                                                         }}
                                                     >
 
-                                                        <Chip
-                                                            icon={<MeetingRoomIcon />}
-                                                            label={row.roomName}
-                                                            size="small"
-                                                            variant="outlined"
-                                                        />
+                                                        <Typography
+                                                            fontWeight={600}
+                                                        >
 
-                                                        <Chip
-                                                            icon={<PersonIcon />}
-                                                            label={row.trainerName}
-                                                            size="small"
-                                                            color="primary"
-                                                            variant="outlined"
-                                                        />
+                                                            {row.title}
+
+                                                        </Typography>
+
+                                                        <Typography
+                                                            variant="body2"
+                                                            color="text.secondary"
+                                                            sx={{
+                                                                mt: 0.5
+                                                            }}
+                                                        >
+
+                                                            {dayjs(row.startDate).format("DD MMM YYYY")}
+
+                                                        </Typography>
+
+                                                        <Box
+                                                            sx={{
+                                                                mt: 1.5,
+                                                                display: "flex",
+                                                                gap: 1,
+                                                                flexwrap: "wrap"
+                                                            }}
+                                                        >
+
+                                                            <Chip
+                                                                icon={<MeetingRoomIcon />}
+                                                                label={row.roomName}
+                                                                size="small"
+                                                                variant="outlined"
+                                                            />
+
+                                                            <Chip
+                                                                icon={<PersonIcon />}
+                                                                label={row.trainerName}
+                                                                size="small"
+                                                                color="primary"
+                                                                variant="outlined"
+                                                            />
+
+                                                        </Box>
 
                                                     </Box>
 
-                                                </Box>
+                                                </ListItem>
 
-                                            </ListItem>
+                                                {
 
-                                            {
+                                                    index !== Math.min(rows.length, 5) - 1 &&
 
-                                                index !== Math.min(rows.length, 5) - 1 &&
+                                                    <Divider />
 
-                                                <Divider />
+                                                }
 
-                                            }
+                                            </Box>
 
-                                        </Box>
+                                        ))
 
-                                    ))
+                                    }
 
-                                }
+                                </List>
 
-                            </List>
+                            </Box>
 
                         )
 
