@@ -129,7 +129,7 @@ function LoginForm() {
                             color: "text.secondary",
                         }}
                     >
-                        CSG Training Scheduler
+                        HRD Training Scheduler
                     </Typography>
                 </Box>
             </Box>
