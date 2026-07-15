@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 
-import { Box, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack, Typography } from "@mui/material";
+import { Box, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack, Typography, Tooltip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 import { displayValue, formatStatus, formatTrainingDate, formatYesNo } from "../../../utils/formatter/attendanceHistoryFormatter";
+import { exportAttendance } from "../../../utils/export/attendanceExport";
 
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import MeetingRoomOutlinedIcon from "@mui/icons-material/MeetingRoomOutlined";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 import attendanceHistoryService from "../../../services/attendanceHistoryService";
 
@@ -39,9 +41,9 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
 
             setLoading(true);
 
-            console.log("Schedule ID :", training.SCHEDULE_ID);
-
             const result = await attendanceHistoryService.getHistoryDetail(training.SCHEDULE_ID);
+
+            console.log(result);
 
             setRows(result);
 
@@ -54,6 +56,26 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
         finally {
 
             setLoading(false);
+
+        }
+
+    };
+
+    const handleExportExcel = async () => {
+
+        try {
+
+            await exportAttendance(
+
+                training,
+                rows
+
+            );
+
+        }
+        catch (error) {
+
+            console.error(error);
 
         }
 
@@ -110,6 +132,13 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
         },
 
         {
+            field: "PHONE_NO",
+            headerName: "Phone",
+            flex: 1,
+            minWidth: 150
+        },
+
+        {
             field: "MEMO",
             headerName: "Memo",
             flex: 1,
@@ -154,14 +183,57 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
 
                     <Stack spacing={2}>
 
-                        <Typography
-                            variant="h5"
-                            fontWeight={700}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
                         >
 
-                            {displayValue(training?.TRAINING_NAME)}
+                            <Typography
+                                variant="h5"
+                                fontWeight={700}
+                            >
+                                {displayValue(training?.TRAINING_NAME)}
+                            </Typography>
 
-                        </Typography>
+                            <Tooltip
+                                title="Export Excel"
+                                arrow
+                            >
+
+                                <span>
+
+                                    <AppButton
+
+                                        color="success"
+
+                                        onClick={handleExportExcel}
+
+                                        disabled={rows.length === 0}
+
+                                        sx={{
+
+                                            minWidth: 42,
+                                            width: 42,
+                                            height: 42,
+                                            p: 0,
+                                            boxShadow: "none"
+
+                                        }}
+
+                                    >
+
+                                        <FileDownloadIcon />
+
+                                    </AppButton>
+
+                                </span>
+
+                            </Tooltip>
+
+                        </Box>
 
                         <Stack
                             direction="row"

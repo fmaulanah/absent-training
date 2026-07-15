@@ -310,7 +310,7 @@ const attendanceQueue = {
             TRAINER_EMPID: training.trainerId,
             TRAINER_EMP_NM: training.trainerName,
             MANUAL_YN: manualYn,
-            MEMO: memo
+            MEMO: employee.PHONE_NO
 
         };
 
