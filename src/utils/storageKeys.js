@@ -10,6 +10,8 @@ const STORAGE_KEYS = {
 
     USER_LAST_SYNC: "USER_LAST_SYNC",
 
+    KOREAN: "korea_data",
+
 };
 
 export default STORAGE_KEYS;

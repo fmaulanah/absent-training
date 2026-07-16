@@ -3,8 +3,6 @@ import dayjs from "dayjs";
 
 import {
     Box,
-    Card,
-    CardContent,
     Chip,
     Divider,
     Grid,
@@ -16,22 +14,35 @@ import PersonIcon from "@mui/icons-material/Person";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
+import SystemDialog from "./components/SystemDialog"
+
 import PageHeader from "../../components/common/PageHeader/PageHeader";
 import AppButton from "../../components/common/Button/AppButton";
+import AppCard from "../../components/common/Card/AppCard";
 import LoadingOverlay from "../../components/common/Loading/LoadingOverlay";
 
 import useSnackbar from "../../hooks/useSnackbar";
 
-import userService from "../../services/employeeService";
+import employeeService from "../../services/employeeService";
+import koreanService from "../../services/koreanService";
 
 import { getStorage, setStorage, removeStorage } from "../../utils/storage";
 import STORAGE_KEYS from "../../utils/storageKeys";
 
 function System() {
 
+    const [coachDialogOpen, setCoachDialogOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const { showSnackbar } = useSnackbar();
+
+    const [form, setForm] = useState({
+
+        empId: "",
+        empName: "",
+        rfid: ""
+
+    });
 
     const employees = getStorage(
 
@@ -49,13 +60,81 @@ function System() {
 
     );
 
+    const handleChange = (event) => {
+
+        const { name, value } = event.target;
+
+        setForm(current => ({
+
+            ...current,
+
+            [name]: value
+
+        }));
+
+    };
+
+    const handleSearchEmployee = () => {
+
+        if (!form.empId.trim()) {
+
+            setForm(current => ({
+
+                ...current,
+
+                empName: ""
+
+            }));
+
+            return;
+
+        }
+
+        const employee = employeeService.findEmployeeByEmpId(form.empId);
+
+        if (!employee) {
+
+            setForm(current => ({
+
+                ...current,
+
+                empName: ""
+
+            }));
+
+            return;
+
+        }
+
+        setForm(current => ({
+
+            ...current,
+
+            empName: employee.EMP_NAME
+
+        }));
+
+    };
+
+    const handleEmployeeKeyDown = (event) => {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            handleSearchEmployee();
+
+        }
+
+    };
+
     const handleRefreshUser = async () => {
 
         try {
 
             setLoading(true);
 
-            await userService.refreshEmployees();
+            await employeeService.refreshEmployees();
 
             showSnackbar(
 
@@ -95,6 +174,20 @@ function System() {
 
     };
 
+    const handleCloseCoachDialog = () => {
+
+        setCoachDialogOpen(false);
+
+        setForm({
+
+            empId: "",
+            empName: "",
+            rfid: ""
+
+        });
+
+    };
+
     return (
 
         <>
@@ -115,204 +208,219 @@ function System() {
 
                     <Grid size={{ xs: 12, md: 6 }}>
 
-                        <Card
-                            elevation={2}
+                        <AppCard
+                            title="Data User"
+                            action={
+                                <Chip
+                                    label={loading ? "Updating..." : "Ready"}
+                                    color={loading ? "warning" : "success"}
+                                    size="small"
+                                />
+                            }
                             sx={{
-                                borderRadius: 3,
                                 height: "100%"
                             }}
                         >
 
-                            <CardContent>
+                            <Stack spacing={2}>
 
-                                <Stack spacing={2}>
+                                <PersonIcon
+                                    color="primary"
+                                    sx={{
+                                        fontSize: 42
+                                    }}
+                                />
 
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                    >
+                                <Stack spacing={1}>
 
-                                        <PersonIcon
-                                            color="primary"
-                                            sx={{
-                                                fontSize: 42
-                                            }}
-                                        />
+                                    <Typography color="text.secondary">
 
-                                        <Chip
+                                        Total User : {totalUser.toLocaleString()} | Last Sync : {lastSync 
+                                                                                              ? dayjs(lastSync).format("DD MMM YYYY HH:mm")
+                                                                                              : "-"}
 
-                                            label={loading ? "Updating..." : "Ready"}
-                                            color={loading ? "warning" : "success"}
-                                            size="small"
-
-                                        />
-
-                                    </Stack>
-
-                                    <Box>
-
-                                        <Typography
-                                            variant="h6"
-                                            fontWeight={600}
-                                        >
-
-                                            Data User
-
-                                        </Typography>
-
-                                        {/* <Typography
-                                            variant="body2"
-                                            color="text.secondary"
-                                        >
-
-                                            Sinkronisasi ulang data master user dari server
-                                            ke Local Storage.
-
-                                        </Typography> */}
-
-                                    </Box>
-
-                                    <Stack spacing={1}>
-
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="space-between"
-                                        >
-
-                                            <Typography color="text.secondary">
-
-                                                Total User : {totalUser.toLocaleString()}
-
-                                            </Typography>
-
-                                        </Stack>
-
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="space-between"
-                                        >
-
-                                            <Typography color="text.secondary">
-
-                                                Last Sync : {lastSync
-                                                    ? dayjs(lastSync).format("DD MMM YYYY HH:mm")
-                                                    : "-"}
-
-                                            </Typography>
-
-                                        </Stack>
-
-                                    </Stack>
-
-                                    <Divider />
-
-                                    <AppButton
-                                        fullWidth
-                                        startIcon={<RefreshIcon />}
-                                        onClick={handleRefreshUser}
-                                        disabled={loading}
-                                    >
-
-                                        Update Data User
-
-                                    </AppButton>
+                                    </Typography>
 
                                 </Stack>
 
-                            </CardContent>
+                                <Divider />
 
-                        </Card>
+                                <AppButton
+                                    fullWidth
+                                    startIcon={<RefreshIcon />}
+                                    onClick={handleRefreshUser}
+                                    disabled={loading}
+                                >
+
+                                    Update Data User
+
+                                </AppButton>
+
+                            </Stack>
+
+                        </AppCard>
 
                     </Grid>
 
                     <Grid size={{ xs: 12, md: 6 }}>
 
-                        <Card
-                            elevation={2}
+                        <AppCard
+                            title="Input Data Korean Coach"
+                            action={
+                                <Chip
+                                    label="Master"
+                                    color="secondary"
+                                    size="small"
+                                />
+                            }
                             sx={{
-                                borderRadius: 3,
                                 height: "100%"
                             }}
                         >
 
-                            <CardContent>
+                            <Stack spacing={2}>
 
-                                <Stack spacing={2}>
+                                <PersonIcon
+                                    color="primary"
+                                    sx={{
+                                        fontSize: 42
+                                    }}
+                                />
 
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                    >
+                                <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
 
-                                        <InfoOutlinedIcon
-                                            color="primary"
-                                            sx={{
-                                                fontSize: 42
-                                            }}
-                                        />
+                                    Menambahkan data master Korean Coach.
 
-                                        <Chip
-                                            label="Development"
-                                            color="info"
-                                            size="small"
-                                        />
+                                </Typography>
 
-                                    </Stack>
+                                <Divider />
 
-                                    <Box>
+                                <AppButton
+                                    fullWidth
+                                    onClick={() => setCoachDialogOpen(true)}
+                                >
 
-                                        <Typography
-                                            variant="h6"
-                                            fontWeight={600}
-                                        >
+                                    Input Data
 
-                                            Informasi Aplikasi
+                                </AppButton>
 
-                                        </Typography>
+                            </Stack>
 
-                                        {/* <Typography
-                                            variant="body2"
-                                            color="text.secondary"
-                                        >
+                        </AppCard>
 
-                                            Informasi build aplikasi yang sedang digunakan.
+                    </Grid>
 
-                                        </Typography> */}
+                    <Grid size={{ xs: 12, md: 6 }}>
 
-                                    </Box>
+                        <AppCard
+                            title="Informasi Aplikasi"
+                            action={
+                                <Chip
+                                    label="Development"
+                                    color="info"
+                                    size="small"
+                                />
+                            }
+                            sx={{
+                                height: "100%"
+                            }}
+                        >
 
-                                    <Divider />
+                            <Stack spacing={2}>
 
-                                    <Stack spacing={1}>
+                                <InfoOutlinedIcon
+                                    color="primary"
+                                    sx={{
+                                        fontSize: 42
+                                    }}
+                                />
 
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="space-between"
-                                        >
+                                <Divider />
 
-                                            <Typography>
+                                <Typography>
 
-                                                v{import.meta.env.VITE_APP_VERSION} (Build {import.meta.env.VITE_APP_BUILD})
+                                    v{import.meta.env.VITE_APP_VERSION} | (Build {import.meta.env.VITE_APP_BUILD})
 
-                                            </Typography>
+                                </Typography>
 
-                                        </Stack>
+                            </Stack>
 
-                                    </Stack>
-
-                                </Stack>
-
-                            </CardContent>
-
-                        </Card>
+                        </AppCard>
 
                     </Grid>
 
                 </Grid>
 
             </Box>
+
+            <SystemDialog
+
+                open={coachDialogOpen}
+
+                onClose={handleCloseCoachDialog}
+
+                onSaved={() =>
+
+                    showSnackbar(
+
+                        "Data Korean Coach berhasil disimpan.",
+
+                        "success"
+
+                    )
+
+                }
+
+                onSaveError={() =>
+
+                    showSnackbar(
+
+                        "Gagal menyimpan Data Korean Coach.",
+
+                        "error"
+
+                    )
+
+                }
+
+                onDeleted={() =>
+
+                    showSnackbar(
+
+                        "Data Korean Coach berhasil dihapus.",
+
+                        "success"
+
+                    )
+
+                }
+
+                onDeleteError={() =>
+
+                    showSnackbar(
+
+                        "Gagal menghapus Data Korean Coach.",
+
+                        "error"
+
+                    )
+
+                }
+
+                form={form}
+
+                setForm={setForm}
+
+                onChange={handleChange}
+
+                onSearchEmployee={handleSearchEmployee}
+
+                onEmployeeKeyDown={handleEmployeeKeyDown}
+
+            />
 
         </>
 
