@@ -9,9 +9,9 @@ import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import LoadingOverlay from "../../../components/common/Loading/LoadingOverlay";
 
 function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, saving,
-                          confirmOpen, setConfirmOpen, isDirty, setIsDirty,
-                          onChange, onSearchTrainer, onTrainerKeyDown, onClose, 
-                          onSubmit, onUseYnChange, }) 
+                                  confirmOpen, setConfirmOpen, isDirty, setIsDirty,
+                                  onChange, onSearchTrainer, onTrainerKeyDown, onClose, 
+                                  onSubmit, onUseYnChange, }) 
 {
     const handleClose = () => {
 
@@ -123,7 +123,7 @@ function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, sa
 
                 <TextField
                     name="trainerId"
-                    label="NIK Trainer"
+                    label="NIK PIC"
                     value={form.trainerId}
                     onChange={onChange}
                     onBlur={onSearchTrainer}
@@ -136,7 +136,7 @@ function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, sa
 
                 <TextField
                     name="trainerName"
-                    label="Nama Trainer"
+                    label="Nama PIC"
                     value={form.trainerName}
                     disabled={saving}
                     slotProps={{

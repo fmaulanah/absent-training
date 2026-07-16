@@ -80,58 +80,6 @@ function AttendanceHistoryFilter({
 
                     </Grid>
 
-                    {/* <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-
-                        <TextField
-                            value={filter.training}
-                            fullWidth
-                            label="Training"
-                            disabled
-                        />
-
-                    </Grid>
-
-                    <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-
-                        <TextField
-                            value={filter.trainer}
-                            fullWidth
-                            label="Trainer"
-                            disabled
-                        />
-
-                    </Grid>
-
-                    <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-
-                        <TextField
-                            value={filter.status}
-                            fullWidth
-                            select
-                            label="Status"
-                            defaultValue=""
-                        >
-
-                            <MenuItem value="">
-                                All
-                            </MenuItem>
-
-                            <MenuItem value="I">
-                                Scan IN
-                            </MenuItem>
-
-                            <MenuItem value="O">
-                                Scan OUT
-                            </MenuItem>
-
-                            <MenuItem value="F">
-                                Finished
-                            </MenuItem>
-
-                        </TextField>
-
-                    </Grid> */}
-
                     <Grid
                         size={{ xs: 12, lg: 6 }}
                         sx={{

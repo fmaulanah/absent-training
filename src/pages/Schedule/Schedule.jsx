@@ -357,11 +357,11 @@ function Schedule() {
 
             if (!result || result.length === 0) {
 
-                setTrainerError("Trainer tidak ditemukan.");
+                setTrainerError("PIC tidak ditemukan.");
 
                 showSnackbar(
 
-                    "Trainer tidak ditemukan.",
+                    "PIC tidak ditemukan.",
                     "warning"
 
                 );

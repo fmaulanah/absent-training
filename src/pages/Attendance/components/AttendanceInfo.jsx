@@ -203,7 +203,7 @@ function AttendanceInfo({
 
                         <BoxItem
                             icon={<PersonIcon color="primary" />}
-                            title="Trainer"
+                            title="PIC"
                             value={training.trainerName}
                         />
 

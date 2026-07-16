@@ -43,7 +43,7 @@ function AttendanceHistoryTable({ rows, loading, onDetail }) {
 
         {
             field: "TRAINER_NAME",
-            headerName: "Trainer",
+            headerName: "PIC",
             width: 180,
             valueGetter: (_, row) => displayValue(row.TRAINER_NAME)
         },

@@ -98,7 +98,7 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
                     />
 
                     <DetailItem
-                        label="Nama Trainer"
+                        label="Nama PIC"
                         value={training.trainerName}
                     />
 

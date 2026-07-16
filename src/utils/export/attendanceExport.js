@@ -26,8 +26,8 @@ export async function exportAttendance(training, details) {
         { width: 40 },  // Department
         { width: 18 },  // Position
         { width: 18 },  // Phone
-        { width: 12 },  // Paraf
-        { width: 20 }   // Keterangan
+        { width: 12 },  // Scan In
+        { width: 12 }   // Scan Out
 
     ];
 
@@ -156,8 +156,8 @@ export async function exportAttendance(training, details) {
         "Department",
         "Posisi",
         "No HP",
-        "Paraf",
-        "Keterangan"
+        "Scan In",
+        "Scan Out"
 
     ]);
 
@@ -205,20 +205,17 @@ export async function exportAttendance(training, details) {
         const row = worksheet.addRow([
 
             index + 1,
-
             item.EMPID,
-
             item.EMP_NAME,
-
             item.DEPARTMENT,
-
             item.POSITION,
-
             item.PHONE_NO ?? "",
-
-            "",
-
-            ""
+            item.SCAN_IN_TIME
+                ? item.SCAN_IN_TIME.substring(11, 19)
+                : "",
+            item.SCAN_OUT_TIME
+                ? item.SCAN_OUT_TIME.substring(11, 19)
+                : ""
 
         ]);
 
@@ -277,6 +274,16 @@ export async function exportAttendance(training, details) {
             };
 
         });
+
+        row.getCell(7).alignment = {
+            horizontal: "center",
+            vertical: "middle"
+        };
+
+        row.getCell(8).alignment = {
+            horizontal: "center",
+            vertical: "middle"
+        };
 
     }
 

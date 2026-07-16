@@ -282,7 +282,7 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
                                         color="text.secondary"
                                     >
 
-                                        Trainer
+                                        PIC
 
                                     </Typography>
 
