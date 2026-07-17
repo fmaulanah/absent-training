@@ -30,6 +30,7 @@ function SystemDialog({
     open,
     onClose,
     onSaved,
+    onSaveError,
     onDeleted,
     onDeleteError,
 
@@ -38,16 +39,19 @@ function SystemDialog({
 
     onSearchEmployee,
     onEmployeeKeyDown,
-    onChange,
 }) {
 
-    const [saving, setSaving] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [editingCoach, setEditingCoach] = useState(null);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [selectedCoach, setSelectedCoach] = useState(null);
+    const [deleteCoach, setDeleteCoach] = useState(null);
     const [rows, setRows] = useState([]);
     const [loadingTable, setLoadingTable] = useState(false);
+    const [rowChangeConfirmOpen, setRowChangeConfirmOpen] = useState(false);
+    const [pendingRow, setPendingRow] = useState(null);
 
     const loadCoach = async () => {
 
@@ -103,15 +107,64 @@ function SystemDialog({
 
     };
 
+    const handleCancel = () => {
+
+        setIsEdit(false);
+
+        setEditingCoach(null);
+
+        setIsDirty(false);
+
+        setForm({
+
+            empId: "",
+            empName: "",
+            rfid: ""
+
+        });
+
+    };
+
     const handleSubmit = async (event) => {
 
         event.preventDefault();
 
         try {
 
+            if (form.empId.trim().length !== 9) {
+
+                onSaveError?.(
+                    "NIK Korean harus terdiri dari 9 digit."
+                );
+
+                return;
+
+            }
+
+            const isDuplicate = rows.some(row => row.EMPID === form.empId.trim());
+
+            if (isDuplicate && !isEdit) {
+
+                onSaveError?.(
+                    "NIK Korean sudah terdaftar."
+                );
+
+                return;
+
+            }
+
             setSaving(true);
 
-            await koreanService.saveCoach(form);
+            if (isEdit) {
+
+                await koreanService.updateCoach(form);
+
+            }
+            else {
+
+                await koreanService.saveCoach(form);
+
+            }
 
             await loadCoach();
 
@@ -124,6 +177,8 @@ function SystemDialog({
             });
 
             setIsDirty(false);
+            setIsEdit(false);
+            setEditingCoach(null);
 
             onSaved?.();
             
@@ -132,7 +187,7 @@ function SystemDialog({
         catch (err) {
 
             console.error(err);
-            onSaveError?.();
+            onSaveError?.("Simpan data gagal.");
 
         }
         finally {
@@ -145,7 +200,7 @@ function SystemDialog({
 
     const handleDelete = (row) => {
 
-        setSelectedCoach(row);
+        setDeleteCoach(row);
 
         setDeleteOpen(true);
 
@@ -153,7 +208,7 @@ function SystemDialog({
 
     const handleConfirmDelete = async () => {
 
-        if (!selectedCoach) {
+        if (!deleteCoach) {
 
             return;
 
@@ -165,7 +220,7 @@ function SystemDialog({
 
             await koreanService.deleteCoach(
 
-                selectedCoach.EMPID
+                deleteCoach.EMPID
 
             );
 
@@ -187,9 +242,45 @@ function SystemDialog({
 
             setDeleteOpen(false);
 
-            setSelectedCoach(null);
+            setDeleteCoach(null);
 
         }
+
+    };
+
+    const handleRowClick = (params) => {
+
+        const row = params.row;
+
+        if (isDirty) {
+
+            setPendingRow(row);
+
+            setRowChangeConfirmOpen(true);
+
+            return;
+
+        }
+
+        selectRow(row);
+
+    };
+
+    const selectRow = (row) => {
+
+        setEditingCoach(row);
+
+        setIsEdit(true);
+
+        setIsDirty(false);
+
+        setForm({
+
+            empId: row.EMPID,
+            empName: row.EMP_NAME,
+            rfid: row.RF_ID
+
+        });
 
     };
 
@@ -263,7 +354,7 @@ function SystemDialog({
                 maxWidth="md"
                 component="form"
                 onSubmit={handleSubmit}
-                PaperProps={{
+                paperprops={{
                     sx: {
                         minHeight: "82vh"
                     }
@@ -279,8 +370,10 @@ function SystemDialog({
                     }}
                 >
 
-                    Input Data Korean Coach
-
+                    {isEdit ? "Update Data Korean Coach " 
+                            : "Input Data Korean Coach"
+                    }
+                    
                     <IconButton
                         onClick={handleClose}
                         size="small"
@@ -305,23 +398,23 @@ function SystemDialog({
                             spacing={2}
                         >
 
-                            <Grid size={{ xs: 12, md: 6 }}>
+                            <Grid size={{ xs: 12, md: 4 }}>
 
                                 <TextField
                                     fullWidth
                                     label="NIK"
                                     name="empId"
                                     value={form.empId}
-                                    onChange={onChange}
-                                    onBlur={onSearchEmployee}
-                                    onKeyDown={onEmployeeKeyDown}
+                                    onChange={handleChange}
+                                    onBlur={!isEdit ? onSearchEmployee : undefined}
+                                    onKeyDown={!isEdit ? onEmployeeKeyDown : undefined}
                                     required
-                                    disabled={saving}
+                                    disabled={saving || isEdit}
                                 />
 
                             </Grid>
 
-                            <Grid size={{ xs: 12, md: 6 }}>
+                            <Grid size={{ xs: 12, md: 4 }}>
 
                                 <TextField
                                     fullWidth
@@ -343,7 +436,7 @@ function SystemDialog({
 
                             </Grid>
 
-                            <Grid size={{ xs: 12 }}>
+                            <Grid size={{ xs: 12, md: 4 }}>
 
                                 <TextField
                                     fullWidth
@@ -360,8 +453,11 @@ function SystemDialog({
                         </Grid>
 
                         <Box
-                            display="flex"
-                            justifycontent="flex-end"
+                            sx={{
+                                display: "flex",
+                                justifyContent: "flex-end",
+                                gap: 2
+                            }}
                         >
 
                             <AppButton
@@ -374,9 +470,25 @@ function SystemDialog({
                                 }
                             >
 
-                                {saving ? "Menyimpan..." : "Simpan"}
+                                {
+                                    saving
+                                        ? (isEdit ? "Mengupdate..." : "Menyimpan...")
+                                        : (isEdit ? "Update" : "Simpan")
+                                }
 
                             </AppButton>
+
+                            {isEdit && (
+
+                                <AppButton
+                                    type="button"
+                                    onClick={handleCancel}
+                                    disabled={saving}
+                                >
+                                    Cancel
+                                </AppButton>
+
+                            )}
 
                         </Box>
 
@@ -404,6 +516,7 @@ function SystemDialog({
                                 getRowId={(row) => row.EMPID}
                                 disableRowSelectionOnClick
                                 pageSizeOptions={[5, 10]}
+                                onRowClick={handleRowClick}
                                 initialState={{
                                     pagination: {
                                         paginationModel: {
@@ -424,13 +537,9 @@ function SystemDialog({
             <ConfirmDialog
 
                 open={confirmOpen}
-
                 title="Perubahan Belum Disimpan"
-
                 message="Perubahan yang sudah Anda lakukan akan hilang. Tetap keluar?"
-
                 confirmText="Keluar"
-
                 cancelText="Kembali"
 
                 onConfirm={() => {
@@ -454,13 +563,9 @@ function SystemDialog({
             <ConfirmDialog
 
                 open={deleteOpen}
-
                 title="Hapus Korean Coach"
-
-                message={`Yakin ingin menghapus ${selectedCoach?.EMP_NAME ?? ""}?`}
-
+                message={`Yakin ingin menghapus ${deleteCoach?.EMP_NAME ?? ""}?`}
                 confirmText="Hapus"
-
                 cancelText="Batal"
 
                 onConfirm={handleConfirmDelete}
@@ -469,7 +574,39 @@ function SystemDialog({
 
                     setDeleteOpen(false);
 
-                    setSelectedCoach(null);
+                    setDeleteCoach(null);
+
+                }}
+
+            />
+
+            <ConfirmDialog
+
+                open={rowChangeConfirmOpen}
+                title="Perubahan Belum Disimpan"
+                message="Perubahan yang sudah Anda lakukan akan hilang. Tetap pindah ke data lain?"
+                confirmText="Pindah"
+                cancelText="Tetap"
+
+                onConfirm={() => {
+
+                    if (pendingRow) {
+
+                        selectRow(pendingRow);
+
+                    }
+
+                    setPendingRow(null);
+
+                    setRowChangeConfirmOpen(false);
+
+                }}
+
+                onCancel={() => {
+
+                    setPendingRow(null);
+
+                    setRowChangeConfirmOpen(false);
 
                 }}
 

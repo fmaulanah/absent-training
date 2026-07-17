@@ -1,4 +1,5 @@
 import systemApiService from "./systemApiService";
+import koreanService from "./koreanService";
 
 import { getStorage, setStorage, removeStorage } from "../utils/storage";
 
@@ -42,11 +43,33 @@ const employeeService = {
 
     findEmployeeByRFID(rfid) {
 
-        return this.getEmployees().find(
-
+        const employee = this.getEmployees().find(
             item => item.RF_ID === rfid
+        );
 
-        ) ?? null;
+        console.log("Employee :", employee);
+
+        if (employee) {
+
+            console.log("Ketemu employee");
+
+            return employee;
+
+        }
+
+        const korean = koreanService.findByRFID(rfid);
+
+        console.log("Korean :", korean);
+
+        if (!korean) {
+
+            console.log("Korean tidak ketemu");
+
+            return null;
+
+        }
+
+        return korean;
 
     },
 

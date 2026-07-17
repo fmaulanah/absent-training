@@ -274,6 +274,7 @@ function Attendance() {
         try {
 
             setUploading(true);
+            console.log("Queue :", queue);
 
             for (const scan of queue) {
 

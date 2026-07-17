@@ -59,7 +59,7 @@ const koreanService = {
 
         return this.getKoreans().find(
 
-            item => item.RFID === rfid
+            item => item.RF_ID === rfid
 
         ) ?? null;
 
@@ -71,6 +71,21 @@ const koreanService = {
 
             apiCd: "SAVE_KOREAN",
             type: "SAVE",
+            param01: data.empId,
+            param02: data.empName,
+            param03: data.rfid
+
+        });
+
+    },
+
+    async updateCoach(data) {
+
+        return await systemApiService.execute({
+
+            apiCd: "UPDATE_KOREAN",
+            type: "SAVE",
+
             param01: data.empId,
             param02: data.empName,
             param03: data.rfid

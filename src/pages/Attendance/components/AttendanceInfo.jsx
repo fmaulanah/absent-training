@@ -38,13 +38,6 @@ function AttendanceInfo({
     const canScanOut = status === "O";
     const isFinished = status === "F";
 
-    console.log({
-        training,
-        isToday,
-        canScanIn,
-        canScanOut
-    });
-
     if (!training) {
 
         return (

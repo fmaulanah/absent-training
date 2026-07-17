@@ -76,6 +76,18 @@ function System() {
 
     const handleSearchEmployee = () => {
 
+        if (form.empId.trim().length !== 9) {
+
+            showSnackbar(
+                "NIK Korean coach harus terdiri dari 9 digit.",
+                "warning"
+            );
+
+            return;
+
+            
+        }
+
         if (!form.empId.trim()) {
 
             setForm(current => ({
@@ -101,6 +113,11 @@ function System() {
                 empName: ""
 
             }));
+
+            showSnackbar(
+                "Data Korean coach tidak ditemukan.",
+                "warning"
+            );
 
             return;
 
@@ -135,6 +152,7 @@ function System() {
             setLoading(true);
 
             await employeeService.refreshEmployees();
+            await koreanService.refreshKoreans();
 
             showSnackbar(
 
@@ -359,7 +377,6 @@ function System() {
             <SystemDialog
 
                 open={coachDialogOpen}
-
                 onClose={handleCloseCoachDialog}
 
                 onSaved={() =>
@@ -374,16 +391,11 @@ function System() {
 
                 }
 
-                onSaveError={() =>
-
+                onSaveError={(message) =>
                     showSnackbar(
-
-                        "Gagal menyimpan Data Korean Coach.",
-
-                        "error"
-
+                        message,
+                        "warning"
                     )
-
                 }
 
                 onDeleted={() =>
@@ -411,13 +423,9 @@ function System() {
                 }
 
                 form={form}
-
                 setForm={setForm}
-
                 onChange={handleChange}
-
                 onSearchEmployee={handleSearchEmployee}
-
                 onEmployeeKeyDown={handleEmployeeKeyDown}
 
             />

@@ -10,6 +10,7 @@ import { useAuth } from "../../context/AuthContext";
 
 import authService from "../../services/authService";
 import employeeService from "../../services/employeeService";
+import koreanService from "../../services/koreanService";
 
 import AppButton from "../../components/common/Button/AppButton";
 import Logo from "../../assets/logo/logo.png";
@@ -72,6 +73,7 @@ function LoginForm() {
             login(user);
 
             await employeeService.refreshEmployees();
+            await koreanService.refreshKoreans();
             
             navigate("/dashboard");
 
