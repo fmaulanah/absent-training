@@ -221,7 +221,7 @@ function Dashboard() {
 
                     title="Dashboard"
 
-                    subtitle="Ringkasan jadwal training."
+                    subtitle="Ringkasan agenda."
 
                 />
 
@@ -237,7 +237,7 @@ function Dashboard() {
         <>
             <PageHeader
                 title="Dashboard"
-                subtitle="Ringkasan jadwal training."
+                subtitle="Ringkasan agenda."
             />
 
             <Grid
@@ -257,7 +257,7 @@ function Dashboard() {
 
                 <Grid size={{ xs: 12, md: 4 }}>
                     <DashboardStat
-                        title="Training Hari Ini"
+                        title="Agenda Hari Ini"
                         value={summary.today}
                         //icon={<CalendarTodayIcon fontSize="large" />}
                         color="info.main"
@@ -266,7 +266,7 @@ function Dashboard() {
 
                 <Grid size={{ xs: 12, md: 4 }}>
                     <DashboardStat
-                        title="Training Mendatang"
+                        title="Agenda Mendatang"
                         value={summary.upcoming}
                         //icon={<EventAvailableIcon fontSize="large" />}
                         color="success.main"

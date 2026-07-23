@@ -115,7 +115,7 @@ function AttendanceHistory() {
             <PageHeader
 
                 title="Attendance History"
-                subtitle="Riwayat attendance setiap training."
+                subtitle="Riwayat attendance agenda."
 
             />
 

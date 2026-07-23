@@ -59,10 +59,10 @@ function Header({
                     )}
 
                     <Typography
-                        variant={isMobile ? "h6" : "h3"}
-                        fontWeight={100}
+                        variant={isMobile ? "h5" : "h4"}
+                        fontWeight={300}
                     >
-                        HRD Training Scheduler
+                        CSG Agenda Scheduler
                     </Typography>
 
                 </Box>

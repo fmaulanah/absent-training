@@ -187,7 +187,7 @@ function ScheduleToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                         startIcon={<AddIcon />}
                         onClick={onAddTraining}
                     >
-                        Tambah Training
+                        Tambah Agenda
                     </AppButton>
 
                 </Box>

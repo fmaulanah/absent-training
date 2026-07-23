@@ -13,6 +13,8 @@ import {
 import PersonIcon from "@mui/icons-material/Person";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import SupportAgentOutlinedIcon from "@mui/icons-material/SupportAgentOutlined";
+import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 
 import SystemDialog from "./components/SystemDialog"
 
@@ -331,7 +333,7 @@ function System() {
 
                     </Grid>
 
-                    <Grid size={{ xs: 12, md: 6 }}>
+                    <Grid size={{ xs: 12, md: 12 }}>
 
                         <AppCard
                             title="Informasi Aplikasi"
@@ -349,20 +351,185 @@ function System() {
 
                             <Stack spacing={2}>
 
-                                <InfoOutlinedIcon
+                                {/* <InfoOutlinedIcon
                                     color="primary"
                                     sx={{
                                         fontSize: 42
                                     }}
                                 />
 
-                                <Divider />
+                                <Divider /> */}
 
                                 <Typography>
 
                                     v{import.meta.env.VITE_APP_VERSION} | (Build {import.meta.env.VITE_APP_BUILD})
 
                                 </Typography>
+
+                                <Divider />
+
+                                <Stack spacing={2}>
+
+                                    <Typography
+                                        variant="Caption"
+                                        fontWeight={500}
+                                        color="text.secondary"
+                                    >
+                                        IT Contact
+                                    </Typography>
+
+                                    <Grid
+                                        container
+                                        spacing={2}
+                                    >
+
+                                        <Grid size={{ xs: 12, md: 6 }}>
+
+                                            <Stack
+                                                direction="row"
+                                                spacing={1.5}
+                                                alignitems="center"
+                                            >
+
+                                                <SupportAgentOutlinedIcon color="primary" />
+
+                                                <Box>
+
+                                                    <Typography fontWeight={600}>
+                                                        IT. Karjono
+                                                    </Typography>
+
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
+                                                        Back Task & Operation Technology
+                                                    </Typography>
+
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
+                                                        Ext. 294
+                                                    </Typography>
+
+                                                </Box>
+
+                                            </Stack>
+
+                                        </Grid>
+
+                                        <Grid size={{ xs: 12, md: 6 }}>
+
+                                            <Stack
+                                                direction="row"
+                                                spacing={1.5}
+                                                alignitems="center"
+                                            >
+
+                                                <SupportAgentOutlinedIcon color="primary" />
+
+                                                <Box>
+
+                                                    <Typography fontWeight={600}>
+                                                        IT. Irfan
+                                                    </Typography>
+
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
+                                                        IT - Back Task & Operation Technology
+                                                    </Typography>
+
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
+                                                        Ext. 297
+                                                    </Typography>
+
+                                                </Box>
+
+                                            </Stack>
+
+                                        </Grid>
+
+                                        <Grid size={{ xs: 12, md: 6 }}>
+
+                                            <Stack
+                                                direction="row"
+                                                spacing={1.5}
+                                                alignitems="center"
+                                            >
+
+                                                <SupportAgentOutlinedIcon color="primary" />
+
+                                                <Box>
+
+                                                    <Typography fontWeight={600}>
+                                                        IT. Deny
+                                                    </Typography>
+
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
+                                                        IT - Back Task & Operation Technology
+                                                    </Typography>
+
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
+                                                        Ext. 294
+                                                    </Typography>
+
+                                                </Box>
+
+                                            </Stack>
+
+                                        </Grid>
+
+                                        <Grid size={{ xs: 12, md: 6 }}>
+
+                                            <Stack
+                                                direction="row"
+                                                spacing={1.5}
+                                                alignitems="center"
+                                            >
+
+                                                <SupportAgentOutlinedIcon color="primary" />
+
+                                                <Box>
+
+                                                    <Typography fontWeight={600}>
+                                                        IT. Fikri
+                                                    </Typography>
+
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
+                                                        IT - Back Task & Operation Technology
+                                                    </Typography>
+
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
+                                                        Ext. 297
+                                                    </Typography>
+
+                                                </Box>
+
+                                            </Stack>
+
+                                        </Grid>
+
+                                    </Grid>
+
+                                </Stack>
 
                             </Stack>
 

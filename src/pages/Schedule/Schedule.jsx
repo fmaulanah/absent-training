@@ -482,8 +482,8 @@ function Schedule() {
             <>
 
                 <PageHeader
-                    title="Training Schedule"
-                    subtitle="Kelola jadwal dan agenda training."
+                    title="Agenda Schedule"
+                    subtitle="Kelola jadwal dan agenda."
                 />
 
                 <ScheduleSkeleton />
@@ -497,8 +497,8 @@ function Schedule() {
     return (
         <>
             <PageHeader
-                title="Training Schedule"
-                subtitle="Kelola jadwal dan agenda training."
+                title="Agenda Schedule"
+                subtitle="Kelola jadwal dan agenda."
             />
 
             {isMobile ? (

@@ -48,7 +48,7 @@ function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, sa
                 }}
             >
 
-                Detail Training
+                Detail Agenda
 
                 <IconButton
                     onClick={handleClose}
@@ -75,7 +75,7 @@ function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, sa
 
                 <TextField
                     name="title"
-                    label="Nama Training"
+                    label="Nama Agenda"
                     value={form.title}
                     onChange={onChange}
                     disabled={saving}
@@ -214,7 +214,7 @@ function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, sa
                                 form.useYn === "Y" ? "success.main" : "text.secondary"
                             }
                         >
-                            {form.useYn === "Y" ? "Training Aktif" : "Training Non Aktif"}
+                            {form.useYn === "Y" ? "Agenda Aktif" : "Agenda Non Aktif"}
                         </Typography>
                     }
 
@@ -233,7 +233,7 @@ function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, sa
                     disabled={saving}
                     startIcon={saving ? <CircularProgress size={18} color="inherit" /> : null}
                 >
-                    {saving ? "Menyimpan..." : editingId ? "Simpan Perubahan" : "Simpan Training"}
+                    {saving ? "Menyimpan..." : editingId ? "Simpan Perubahan" : "Simpan Agenda"}
 
                 </AppButton>
 

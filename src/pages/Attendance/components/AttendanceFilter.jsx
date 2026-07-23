@@ -118,7 +118,7 @@ function AttendanceFilter({
                     <TextField
                         select
                         fullWidth
-                        label="Training"
+                        label="Agenda"
                         value={training?.id ?? ""}
                         onChange={onTrainingChange}
                     >

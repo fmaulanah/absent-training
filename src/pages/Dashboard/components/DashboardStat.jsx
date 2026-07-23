@@ -46,7 +46,7 @@ function DashboardStat({
                 <Typography
                     variant={isMobile ? "caption" : "body2"}
                     sx={{
-                        fontSize: isMobile? 20 : 30
+                        fontSize: isMobile? 20 : 25
                     }}
                 >
                     {title}

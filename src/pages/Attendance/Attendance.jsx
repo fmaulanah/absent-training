@@ -528,7 +528,7 @@ function Attendance() {
 
                 <PageHeader
                     title="Attendance"
-                    subtitle="Kelola absensi peserta training."
+                    subtitle="Kelola absensi peserta."
                 />
 
                 <AttendanceSkeleton />
@@ -545,7 +545,7 @@ function Attendance() {
 
             <PageHeader
                 title="Attendance"
-                subtitle="Kelola absensi peserta training."
+                subtitle="Kelola absensi peserta."
             />
 
             <AttendanceFilter

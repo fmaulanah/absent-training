@@ -30,7 +30,7 @@ function DashboardUpcomingTable({ rows }) {
                     mb={2}
                 >
 
-                    Upcoming Training
+                    Upcoming Agenda
 
                 </Typography>
 
@@ -65,8 +65,8 @@ function DashboardUpcomingTable({ rows }) {
 
                                     }
 
-                                    title="Tidak ada training"
-                                    subtitle="Belum ada training mendatang pada bulan ini."
+                                    title="Tidak ada agenda"
+                                    subtitle="Belum ada agenda mendatang pada bulan ini."
 
                                 />
 

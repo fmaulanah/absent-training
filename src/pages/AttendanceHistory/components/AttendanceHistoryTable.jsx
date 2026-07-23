@@ -35,7 +35,7 @@ function AttendanceHistoryTable({ rows, loading, onDetail }) {
 
         {
             field: "TRAINING_NAME",
-            headerName: "Training",
+            headerName: "Agenda",
             minWidth: 250,
             flex: 1,
             valueGetter: (_, row) => displayValue(row.TRAINING_NAME)

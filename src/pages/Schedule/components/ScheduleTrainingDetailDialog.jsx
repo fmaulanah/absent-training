@@ -75,7 +75,7 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
                             textTransform: "uppercase"
                         }}
                     >
-                        Informasi Training
+                        Informasi Agenda
                     </Typography>
 
                     <DetailItem
@@ -147,7 +147,7 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
                     onClick={onEdit}
                 >
 
-                    Edit Training
+                    Edit Agenda
 
                 </AppButton>
 

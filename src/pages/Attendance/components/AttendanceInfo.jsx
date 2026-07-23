@@ -105,7 +105,7 @@ function AttendanceInfo({
                     align="center"
                 >
 
-                    Silakan pilih training terlebih dahulu.
+                    Silakan pilih agenda terlebih dahulu.
 
                 </Typography>
 
@@ -186,7 +186,7 @@ function AttendanceInfo({
 
                         <BoxItem
                             icon={<SchoolIcon color="primary" />}
-                            title="Training"
+                            title="Agenda"
                             value={training.title}
                         />
 

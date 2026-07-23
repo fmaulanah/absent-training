@@ -38,7 +38,7 @@ function DashboardMonthlyChart({ data, isMobile })
                     mb={3}
                 >
 
-                    Training Bulanan
+                    Agenda Bulanan
 
                 </Typography>
 
@@ -63,7 +63,7 @@ function DashboardMonthlyChart({ data, isMobile })
                                 }
 
                                 title="Belum ada data"
-                                subtitle="Belum ada data training untuk ditampilkan."
+                                subtitle="Belum ada data agenda untuk ditampilkan."
 
                             />
 

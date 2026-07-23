@@ -131,7 +131,7 @@ function LoginForm() {
                             color: "text.secondary",
                         }}
                     >
-                        HRD Training Scheduler
+                        CSG Agenda Scheduler
                     </Typography>
                 </Box>
             </Box>
