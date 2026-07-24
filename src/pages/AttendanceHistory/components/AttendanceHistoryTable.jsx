@@ -10,7 +10,7 @@ import {
 
     formatCompletion,
     formatStatus,
-    formatTrainingDate,
+    formatAgendaDate,
     displayValue
 
 } from "../../../utils/formatter/attendanceHistoryFormatter";

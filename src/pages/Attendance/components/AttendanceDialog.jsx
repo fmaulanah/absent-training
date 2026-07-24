@@ -33,7 +33,7 @@ import useResponsive from "../../../hooks/useResponsive";
 import ScanSuccessSound from "../../../assets/sounds/beep.mp3";
 import attendanceService from "../../../services/attendanceService";
 
-function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQueueChanged, onRequestFinish }) 
+function AttendanceDialog({ open, agenda, scanType, queueVersion, onClose, onQueueChanged, onRequestFinish }) 
 {
 
     const [rfid, setRfid] = useState("");
@@ -51,7 +51,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
     const loadProgress = async () => {
 
-        if (!training) {
+        if (!agenda) {
 
             return;
 
@@ -61,7 +61,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
             const result = await attendanceService.getProgress(
 
-                training.id,
+                agenda.id,
 
                 scanType
 
@@ -125,7 +125,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
             const queue = attendanceQueue.createQueue({
 
                 employee,
-                training,
+                agenda,
                 scanType,
                 manualYn
 
@@ -190,7 +190,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
     const progress = useMemo(() => {
 
-        if (!training) {
+        if (!agenda) {
 
             return {
 
@@ -204,7 +204,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
         const localProgress = attendanceQueue.getProgress({
 
-            scheduleId: training.id,
+            scheduleId: agenda.id,
 
             scanType
 
@@ -220,7 +220,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
     }, [
 
-        training,
+        agenda,
 
         scanType,
 
@@ -251,7 +251,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
 
     }, [open]);
 
-    if (!training) {
+    if (!agenda) {
 
         return null;
 
@@ -335,7 +335,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
                             fontWeight={700}
                         >
 
-                            {training.title}
+                            {agenda.title}
 
                         </Typography>
 
@@ -347,7 +347,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
                             }}
                         >
 
-                            👤 {training.trainerName}
+                            👤 {agenda.trainerName}
 
                         </Typography>
 
@@ -356,7 +356,7 @@ function AttendanceDialog({ open, training, scanType, queueVersion, onClose, onQ
                             color="text.secondary"
                         >
 
-                            🏠 {training.roomName}
+                            🏠 {agenda.roomName}
 
                         </Typography>
 

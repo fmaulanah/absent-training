@@ -27,13 +27,13 @@ function AttendanceHistory() {
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(false);
     const [detailOpen, setDetailOpen] = useState(false);
-    const [selectedTraining, setSelectedTraining] = useState(null);
+    const [selectedAgenda, setSelectedAgenda] = useState(null);
 
     const [filter, setFilter] = useState({
 
         fromDate: dayjs().startOf("month").format("YYYY-MM-DD"),
         toDate: dayjs().endOf("month") .format("YYYY-MM-DD"),
-        training: "",
+        agenda: "",
         trainer: "",
         status: ""
 
@@ -81,10 +81,10 @@ function AttendanceHistory() {
 
     };
 
-    const handleOpenDetail = (training) => {
+    const handleOpenDetail = (agenda) => {
 
-        console.log("Handle Detail :", training);
-        setSelectedTraining(training);
+        console.log("Handle Detail :", agenda);
+        setSelectedAgenda(agenda);
         setDetailOpen(true);
 
     };
@@ -92,7 +92,7 @@ function AttendanceHistory() {
     const handleCloseDetail = () => {
 
         setDetailOpen(false);
-        setSelectedTraining(null);
+        setSelectedAgenda(null);
 
     };
 
@@ -180,7 +180,7 @@ function AttendanceHistory() {
 
                 open={detailOpen}
                 onClose={handleCloseDetail}
-                training={selectedTraining}
+                agenda={selectedAgenda}
                 
             />
 

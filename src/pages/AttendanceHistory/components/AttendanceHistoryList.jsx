@@ -5,7 +5,7 @@ import {
 
     formatCompletion,
     formatStatus,
-    formatTrainingDate,
+    formatAgendaDate,
     displayValue
 
 } from "../../../utils/formatter/attendanceHistoryFormatter";
@@ -208,7 +208,7 @@ function AttendanceHistoryList({ rows, loading, onDetail })
                                                 color="text.secondary"
                                             >
 
-                                                {formatTrainingDate(row.TRAINING_DATE)}
+                                                {formatAgendaDate(row.TRAINING_DATE)}
 
                                             </Typography>
 

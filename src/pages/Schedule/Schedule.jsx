@@ -13,13 +13,13 @@ import ScheduleToolbar from "./components/ScheduleToolbar";
 import ScheduleCalendar from "./components/ScheduleCalendar";
 import ScheduleList from "./components/ScheduleList";
 import ScheduleDayDialog from "./components/ScheduleDayDialog";
-import ScheduleTrainingDialog from "./components/ScheduleTrainingDialog";
-import ScheduleTrainingDetailDialog from "./components/ScheduleTrainingDetailDialog";
+import ScheduleAgendaDialog from "./components/ScheduleAgendaDialog";
+import ScheduleAgendaDetailDialog from "./components/ScheduleAgendaDetailDialog";
 
 import calendarService from "../../services/calendarService";
 import trainerService from "../../services/trainerService";
 import roomService from "../../services/roomService";
-import trainingService from "../../services/trainingService";
+import agendaService from "../../services/agendaService";
 
 import useResponsive from "../../hooks/useResponsive";
 import useSnackbar from "../../hooks/useSnackbar";
@@ -51,9 +51,9 @@ const initialForm = {
 function Schedule() {
 
     const [month, setMonth] = useState(dayjs().startOf("month"));
-    const [trainings, setTrainings] = useState([]);
+    const [agendas, setAgendas] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [selectedTraining, setSelectedTraining] = useState(null);
+    const [selectedAgenda, setSelectedAgenda] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [form, setForm] = useState(initialForm);
     const [trainerError, setTrainerError] = useState("");
@@ -73,7 +73,7 @@ function Schedule() {
 
         open: false,
         date: "",
-        trainings: []
+        agendas: []
 
     });
 
@@ -109,16 +109,16 @@ function Schedule() {
 
     ), [rooms]);
 
-    const monthlyTrainings = useMemo(() => (
+    const monthlyAgendas = useMemo(() => (
 
-        trainings.filter(training =>
+        agendas.filter(agenda =>
 
-            dayjs(training.startDate).format("YYYY-MM") ===
+            dayjs(agenda.startDate).format("YYYY-MM") ===
             month.format("YYYY-MM")
 
         )
 
-    ), [trainings, month]);
+    ), [agendas, month]);
 
     const loadHoliday = async () => {
 
@@ -166,7 +166,7 @@ function Schedule() {
 
     };
 
-    const loadTraining = async (showLoading = true) => {
+    const loadAgenda = async (showLoading = true) => {
 
         if (showLoading) {
 
@@ -176,13 +176,13 @@ function Schedule() {
 
         try {
 
-            const result = await trainingService.getTrainings(
+            const result = await agendaService.getAgendas(
 
                 month.format("YYYYMM")
 
             );
 
-            setTrainings(
+            setAgendas(
 
                 result.map(item => ({
 
@@ -279,7 +279,7 @@ function Schedule() {
 
             if (editingId) {
 
-                await trainingService.updateTraining(
+                await agendaService.updateAgenda(
 
                     editingId,
 
@@ -292,7 +292,7 @@ function Schedule() {
             }
             else {
 
-                await trainingService.saveTraining(
+                await agendaService.saveAgenda(
 
                     form,
 
@@ -302,15 +302,15 @@ function Schedule() {
 
             }
 
-            await loadTraining();
+            await loadAgenda();
 
             closeFormDialog();
 
             showSnackbar(
 
                 editingId
-                    ? "Training berhasil diperbarui."
-                    : "Training berhasil disimpan.",
+                    ? "Agenda berhasil diperbarui."
+                    : "Agenda berhasil disimpan.",
 
                 "success"
 
@@ -325,7 +325,7 @@ function Schedule() {
 
             showSnackbar(
                 
-                "Gagal menyimpan training.",
+                "Gagal menyimpan agenda.",
                 "error"
 
             );
@@ -430,19 +430,19 @@ function Schedule() {
     };
 
     const openEditDialog = () => {
-        setEditingId(selectedTraining.id);
+        setEditingId(selectedAgenda.id);
         setForm({
-            title: selectedTraining.title,
-            startDate: selectedTraining.startDate,
-            endDate: selectedTraining.endDate,
-            room: selectedTraining.room,
-            trainerId: selectedTraining.trainerId ?? "",
-            trainerName: selectedTraining.trainerName ?? "",
-            memo: selectedTraining.memo ?? "",
-            useYn: selectedTraining.useYn ?? "Y"
+            title: selectedAgenda.title,
+            startDate: selectedAgenda.startDate,
+            endDate: selectedAgenda.endDate,
+            room: selectedAgenda.room,
+            trainerId: selectedAgenda.trainerId ?? "",
+            trainerName: selectedAgenda.trainerName ?? "",
+            memo: selectedAgenda.memo ?? "",
+            useYn: selectedAgenda.useYn ?? "Y"
         });
         
-        setSelectedTraining(null);
+        setSelectedAgenda(null);
         setDialogOpen(true);
     };
 
@@ -458,7 +458,7 @@ function Schedule() {
 
                     loadHoliday(),
                     loadRoom(),
-                    loadTraining(false)
+                    loadAgenda(false)
 
                 ]);
 
@@ -524,8 +524,8 @@ function Schedule() {
                             MONTHS={MONTHS}
                             YEARS={YEARS}
                             setMonth={setMonth}
-                            onAddTraining={openCreateDialog}
-                            onRefresh={loadTraining}
+                            onAddAgenda={openCreateDialog}
+                            onRefresh={loadAgenda}
                         />
 
                     </Box>
@@ -538,9 +538,9 @@ function Schedule() {
                     >
 
                         <ScheduleList
-                            trainings={monthlyTrainings}
+                            agendas={monthlyAgendas}
                             roomMap={roomMap}
-                            onSelectTraining={setSelectedTraining}
+                            onSelectAgenda={setSelectedAgenda}
                         />
 
                     </Box>
@@ -557,8 +557,8 @@ function Schedule() {
                             MONTHS={MONTHS}
                             YEARS={YEARS}
                             setMonth={setMonth}
-                            onAddTraining={openCreateDialog}
-                            onRefresh={loadTraining}
+                            onAddAgenda={openCreateDialog}
+                            onRefresh={loadAgenda}
                         />
                     }
                     sx={{
@@ -570,15 +570,15 @@ function Schedule() {
                     <ScheduleCalendar
                         month={month}
                         calendarDays={calendarDays}
-                        trainings={trainings}
+                        agendas={agendas}
                         holidaySet={holidaySet}
-                        onSelectTraining={setSelectedTraining}
-                        onShowMore={(date, trainings) =>
+                        onSelectAgenda={setSelectedAgenda}
+                        onShowMore={(date, agendas) =>
                             setDayDialog({
 
                                 open: true,
                                 date,
-                                trainings
+                                agendas
                             })
                         }
                     />
@@ -586,7 +586,7 @@ function Schedule() {
 
             )}
 
-            <ScheduleTrainingDialog
+            <ScheduleAgendaDialog
                 open={dialogOpen}
                 editingId={editingId}
                 form={form}
@@ -604,11 +604,11 @@ function Schedule() {
                 onClose={closeFormDialog}
             />
 
-            <ScheduleTrainingDetailDialog
-                training={selectedTraining}
+            <ScheduleAgendaDetailDialog
+                agenda={selectedAgenda}
                 rooms={rooms}
-                open={Boolean(selectedTraining)}
-                onClose={() => setSelectedTraining(null)}
+                open={Boolean(selectedAgenda)}
+                onClose={() => setSelectedAgenda(null)}
                 onEdit={openEditDialog}
             />
 
@@ -618,7 +618,7 @@ function Schedule() {
 
                 date={dayDialog.date}
 
-                trainings={dayDialog.trainings}
+                agendas={dayDialog.agendas}
 
                 onClose={() =>
 
@@ -628,13 +628,13 @@ function Schedule() {
 
                         date: "",
 
-                        trainings: []
+                        agendas: []
 
                     })
 
                 }
 
-                onSelectTraining={setSelectedTraining}
+                onSelectAgenda={setSelectedAgenda}
 
             />
         </>

@@ -12,7 +12,7 @@ const attendanceHistory = {
             type: "SEARCH",
             param01: dayjs(filter.fromDate).format("YYYYMMDD"),
             param02: dayjs(filter.toDate).format("YYYYMMDD"),
-            param03: filter.training,
+            param03: filter.agenda,
             param04: filter.trainer,
             param05: filter.status
 

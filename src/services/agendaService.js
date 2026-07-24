@@ -2,9 +2,9 @@ import dayjs from "dayjs";
 
 import systemApiService from "./systemApiService";
 
-const trainingService = {
+const agendaService = {
 
-    async getTrainings(month) {
+    async getAgendas(month) {
 
         return await systemApiService.execute({
 
@@ -16,7 +16,7 @@ const trainingService = {
 
     }, 
 
-    async saveTraining(form, roomName) {
+    async saveAgenda(form, roomName) {
 
         const loginUser = JSON.parse(
 
@@ -57,7 +57,7 @@ const trainingService = {
 
     },
 
-    async updateTraining(scheduleId, form, roomName) {
+    async updateAgenda(scheduleId, form, roomName) {
 
         const loginUser = JSON.parse(
 
@@ -100,4 +100,4 @@ const trainingService = {
 };
 
 
-export default trainingService;
+export default agendaService;

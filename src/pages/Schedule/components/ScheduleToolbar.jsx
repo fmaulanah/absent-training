@@ -12,7 +12,7 @@ import useResponsive from "../../../hooks/useResponsive";
 
 import AppCard from "../../../components/common/Card/AppCard";
 
-function ScheduleToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefresh }) 
+function ScheduleToolbar({ month, MONTHS, YEARS, setMonth, onAddAgenda, onRefresh }) 
 {
     const { isMobile } = useResponsive();
 
@@ -93,7 +93,7 @@ function ScheduleToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
                         </TextField>
 
                         <AppButton
-                            onClick={onAddTraining}
+                            onClick={onAddAgenda}
                             sx={{
                                 minWidth: 40,
                                 width: 40,
@@ -185,7 +185,7 @@ function ScheduleToolbar({ month, MONTHS, YEARS, setMonth, onAddTraining, onRefr
 
                     <AppButton
                         startIcon={<AddIcon />}
-                        onClick={onAddTraining}
+                        onClick={onAddAgenda}
                     >
                         Tambah Agenda
                     </AppButton>

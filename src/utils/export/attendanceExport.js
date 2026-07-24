@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-export async function exportAttendance(training, details) {
+export async function exportAttendance(agenda, details) {
 
     const workbook = new ExcelJS.Workbook();
 
@@ -81,17 +81,17 @@ export async function exportAttendance(training, details) {
     worksheet.addRow([]);
 
     //---------------------------------------------
-    // Training Info
+    // Agenda Info
     //---------------------------------------------
 
-    worksheet.getCell("A8").value = "Kind Of Training";
+    worksheet.getCell("A8").value = "Kind Of Agenda";
     worksheet.getCell("A9").value = "Date";
     worksheet.getCell("A10").value = "Place";
     worksheet.getCell("A11").value = "Wave";
 
-    worksheet.getCell("C8").value = training.TRAINING_NAME;
-    worksheet.getCell("C9").value = training.TRAINING_DATE;
-    worksheet.getCell("C10").value = training.ROOM_NAME;
+    worksheet.getCell("C8").value = agenda.TRAINING_NAME;
+    worksheet.getCell("C9").value = agenda.TRAINING_DATE;
+    worksheet.getCell("C10").value = agenda.ROOM_NAME;
     worksheet.getCell("C11").value = "";
 
     worksheet.mergeCells("A8:B8");
@@ -293,17 +293,17 @@ export async function exportAttendance(training, details) {
 
     const buffer = await workbook.xlsx.writeBuffer();
 
-    const trainingName = (training.TRAINING_NAME ?? "Training")
+    const agendaName = (agenda.TRAINING_NAME ?? "Agenda")
         .replace(/[\\/:*?"<>|]/g, "_");
 
-    const trainingDate = (training.TRAINING_DATE ?? "")
+    const agendaDate = (agenda.TRAINING_DATE ?? "")
         .replace(/-/g, "");
 
     saveAs(
 
         new Blob([buffer]),
 
-        `${trainingDate}_${trainingName}.xlsx`
+        `${agendaDate}_${agendaName}.xlsx`
 
     );
 

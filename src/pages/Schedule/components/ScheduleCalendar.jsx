@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
 
-function ScheduleCalendar({ month, calendarDays, trainings, holidaySet, onSelectTraining, onShowMore }) 
+function ScheduleCalendar({ month, calendarDays, agendas, holidaySet, onSelectAgenda, onShowMore }) 
 {
 
     const WEEKDAYS = [ "Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab" ];
@@ -46,10 +46,10 @@ function ScheduleCalendar({ month, calendarDays, trainings, holidaySet, onSelect
 
                 const date = day ? month.date(day).format("YYYY-MM-DD") : null;
 
-                const dayTrainings = trainings.filter(item => item.startDate === date);
+                const dayAgendas = agendas.filter(item => item.startDate === date);
 
-                const visibleTrainings = dayTrainings.slice(0, 2);
-                const hiddenCount = dayTrainings.length - visibleTrainings.length;
+                const visibleAgendas = dayAgendas.slice(0, 2);
+                const hiddenCount = dayAgendas.length - visibleAgendas.length;
 
                 const isToday = date === dayjs().format("YYYY-MM-DD");
                 const isHoliday = holidaySet.has(date);
@@ -101,19 +101,19 @@ function ScheduleCalendar({ month, calendarDays, trainings, holidaySet, onSelect
 
                                 </Box>
 
-                                {visibleTrainings.map(training => (
+                                {visibleAgendas.map(agenda => (
                                     <Box
-                                        key={training.id}
-                                        onClick={() => onSelectTraining(training)}
+                                        key={agenda.id}
+                                        onClick={() => onSelectAgenda(agenda)}
                                         sx={{
                                             mb: 0.5,
                                             p: 0.75,
                                             borderRadius: 1,
-                                            bgcolor: training.useYn === "Y" ? "primary.main" : "grey.500",
+                                            bgcolor: agenda.useYn === "Y" ? "primary.main" : "grey.500",
                                             color: "white",
                                             cursor: "pointer",
                                             "&:hover": {
-                                                bgcolor: training.useYn === "Y" ? "primary.dark" : "grey.600"
+                                                bgcolor: agenda.useYn === "Y" ? "primary.dark" : "grey.600"
                                             }
                                         }}
                                     >
@@ -124,7 +124,7 @@ function ScheduleCalendar({ month, calendarDays, trainings, holidaySet, onSelect
                                                 fontWeight: 700
                                             }}
                                         >
-                                            {training.title}
+                                            {agenda.title}
                                         </Typography>
 
                                         <Typography
@@ -134,7 +134,7 @@ function ScheduleCalendar({ month, calendarDays, trainings, holidaySet, onSelect
                                                 opacity: .8
                                             }}
                                         >
-                                            {training.trainerName}
+                                            {agenda.trainerName}
                                         </Typography>
                                     </Box>
 
@@ -144,7 +144,7 @@ function ScheduleCalendar({ month, calendarDays, trainings, holidaySet, onSelect
 
                                     <Typography
                                         variant="caption"
-                                        onClick={() => { onShowMore(date, dayTrainings) }}
+                                        onClick={() => { onShowMore(date, dayAgendas) }}
                                         sx={{
                                             display: "block",
                                             mt: .5,

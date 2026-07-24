@@ -25,17 +25,17 @@ function ScheduleSkeleton() {
 
             </Grid>
 
-            <Grid size={{ xs: 12, lg: 8 }}>
+            <Grid size={{ xs: 12, lg: 12 }}>
 
                 <SkeletonCard />
 
             </Grid>
 
-            <Grid size={{ xs: 12, lg: 4 }}>
+            {/* <Grid size={{ xs: 12, lg: 4 }}>
 
                 <SkeletonList rows={6} />
 
-            </Grid>
+            </Grid> */}
 
         </Grid>
 

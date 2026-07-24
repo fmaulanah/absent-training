@@ -23,8 +23,8 @@ import useSnackbar from "../../hooks/useSnackbar";
 function Attendance() {
 
     const [month, setMonth] = useState(dayjs());
-    const [selectedTraining, setSelectedTraining] = useState(null);
-    const [trainings, setTrainings] = useState([]);
+    const [selectedAgenda, setSelectedAgenda] = useState(null);
+    const [agendas, setAgendas] = useState([]);
     const [loading, setLoading] = useState(false);
     const [scanType, setScanType] = useState("IN");
     const [queueVersion, setQueueVersion] = useState(0);
@@ -33,13 +33,13 @@ function Attendance() {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [confirmOpenStat, setConfirmOpenStat] = useState(false);
     const [confirmUploadOpen, setConfirmUploadOpen] = useState(false);
-    const [pendingTraining, setPendingTraining] = useState(null);
+    const [pendingAgenda, setPendingAgenda] = useState(null);
     const [pendingStatus, setPendingStatus] = useState(null);
     const [attendanceSummary, setAttendanceSummary] = useState({scanIn: 0, scanOut: 0});
 
     const { showSnackbar } = useSnackbar();
 
-    const isToday = selectedTraining ? dayjs(selectedTraining.startDate).isSame(dayjs(), "day") : false;
+    const isToday = selectedAgenda ? dayjs(selectedAgenda.startDate).isSame(dayjs(), "day") : false;
 
     const restoredRef = useRef(false);
 
@@ -49,7 +49,7 @@ function Attendance() {
 
     );
 
-    const loadTraining = async (showLoading = true) => {
+    const loadAgenda = async (showLoading = true) => {
         
         if (showLoading) {
 
@@ -59,7 +59,7 @@ function Attendance() {
 
         try {
             
-            const result = await attendanceService.getTrainings(
+            const result = await attendanceService.getAgendas(
 
                 month.format("YYYYMM")
 
@@ -81,17 +81,17 @@ function Attendance() {
 
             }));
 
-            setTrainings(data);
+            setAgendas(data);
 
-            if (selectedTraining) {
+            if (selectedAgenda) {
 
-                const updatedTraining = data.find(
+                const updatedAgenda = data.find(
 
-                    item => item.id === selectedTraining.id
+                    item => item.id === selectedAgenda.id
 
                 );
 
-                setSelectedTraining(updatedTraining ?? null);
+                setSelectedAgenda(updatedAgenda ?? null);
 
             }
 
@@ -110,7 +110,7 @@ function Attendance() {
 
     const loadAttendanceSummary = async () => {
 
-        if (!selectedTraining) {
+        if (!selectedAgenda) {
 
             setAttendanceSummary({
 
@@ -125,7 +125,7 @@ function Attendance() {
         }
 
         try {
-            const result = await attendanceService.getAttendanceSummary(selectedTraining.id);
+            const result = await attendanceService.getAttendanceSummary(selectedAgenda.id);
 
             const summary = result?.[0] ?? {};
 
@@ -155,13 +155,13 @@ function Attendance() {
 
         }
 
-        const training = trainings.find(
+        const agenda = agendas.find(
 
             item=>item.id===queue.scheduleId
 
         );
         
-        if (!training) {
+        if (!agenda) {
 
             
 
@@ -171,7 +171,7 @@ function Attendance() {
 
         }
 
-        setSelectedTraining(training);
+        setSelectedAgenda(agenda);
 
         console.log("Status :", queue.status);
         setScanType( queue.status === "SCAN_IN" ? "IN" : "OUT" );
@@ -349,17 +349,17 @@ function Attendance() {
 
     };
 
-    const handleTrainingChange = (event) => {
+    const handleAgendaChange = (event) => {
 
         console.log("CHANGE", event.target.value);
 
-        const training = trainings.find(
+        const agenda = agendas.find(
 
             item => item.id === event.target.value
 
         );
 
-        if (!training) {
+        if (!agenda) {
 
             return;
 
@@ -370,17 +370,17 @@ function Attendance() {
         if (
 
             attendanceQueue.hasPendingUpload() &&
-            queueInfo?.scheduleId !== training.id
+            queueInfo?.scheduleId !== agenda.id
 
         ) {
 
-            setPendingTraining(training);
+            setPendingAgenda(agenda);
             setConfirmOpen(true);
             return;
 
         }
 
-        setSelectedTraining(training);
+        setSelectedAgenda(agenda);
 
         
 
@@ -390,7 +390,7 @@ function Attendance() {
 
         const progress = attendanceQueue.getProgress({
 
-            scheduleId: selectedTraining.id,
+            scheduleId: selectedAgenda.id,
             scanType
 
         });
@@ -422,12 +422,12 @@ function Attendance() {
 
         try {
 
-            console.log("training :", selectedTraining.id);
+            console.log("agenda :", selectedAgenda.id);
             console.log("status :", pendingStatus);
 
             await attendanceService.setAbsentStatus(
 
-                selectedTraining.id,
+                selectedAgenda.id,
                 pendingStatus
 
             );
@@ -435,7 +435,7 @@ function Attendance() {
             setConfirmOpenStat(false);
             setDialogOpen(false);
 
-            await loadTraining();
+            await loadAgenda();
             await loadAttendanceSummary();
 
             if (pendingStatus === "F") {
@@ -476,13 +476,13 @@ function Attendance() {
     
     useEffect(() => {
 
-        loadTraining();
+        loadAgenda();
 
         const timer = setInterval(() => {
 
             if (!dialogOpen) {
 
-                loadTraining(false);
+                loadAgenda(false);
 
             }
 
@@ -502,7 +502,7 @@ function Attendance() {
 
         }
 
-        if (!trainings.length) {
+        if (!agendas.length) {
 
             return;
 
@@ -512,13 +512,13 @@ function Attendance() {
 
         restoreAttendance();
 
-    }, [trainings]);
+    }, [agendas]);
 
     useEffect(() => {
 
         loadAttendanceSummary();
 
-    }, [selectedTraining, queueVersion]);
+    }, [selectedAgenda, queueVersion]);
 
     if (loading) {
 
@@ -552,21 +552,21 @@ function Attendance() {
 
                 month={month.month() + 1}
                 year={month.year()}
-                training={selectedTraining}
-                trainings={trainings.filter(
+                agenda={selectedAgenda}
+                agendas={agendas.filter(
 
                     item => item.useYn === "Y"
 
                 )}
                 onMonthChange={handleMonthChange}
                 onYearChange={handleYearChange}
-                onTrainingChange={handleTrainingChange}
+                onAgendaChange={handleAgendaChange}
 
             />
 
             <AttendanceInfo
 
-                training={selectedTraining}
+                agenda={selectedAgenda}
                 scanInCount={attendanceSummary.scanIn}
                 scanOutCount={attendanceSummary.scanOut}
                 isToday={isToday}
@@ -591,7 +591,7 @@ function Attendance() {
             <AttendanceDialog
 
                 open={dialogOpen}
-                training={selectedTraining}
+                agenda={selectedAgenda}
                 scanType={scanType}
                 queueVersion={queueVersion}
                 onClose={() => setDialogOpen(false)}
@@ -615,14 +615,14 @@ function Attendance() {
 
                     attendanceQueue.clearQueue();
                     setQueueVersion(current => current + 1);
-                    setSelectedTraining(pendingTraining);
-                    setPendingTraining(null);
+                    setSelectedAgenda(pendingAgenda);
+                    setPendingAgenda(null);
                     setConfirmOpen(false);
 
                 }}
                 onCancel={() => {
 
-                    setPendingTraining(null);
+                    setPendingAgenda(null);
                     setConfirmOpen(false);
 
                 }}

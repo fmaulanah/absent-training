@@ -4,9 +4,9 @@ import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Div
 
 import AppButton from "../../../components/common/Button/AppButton";
 
-function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }) 
+function ScheduleAgendaDetailDialog({ agenda, rooms, open, onClose, onEdit }) 
 {
-    const roomName = training ? rooms.find(room => room.ROOM_ID === training.room)?.ROOM_NM ?? training.room : "";
+    const roomName = agenda ? rooms.find(room => room.ROOM_ID === agenda.room)?.ROOM_NM ?? agenda.room : "";
 
     const DetailItem = ({ label, value }) => (
 
@@ -48,7 +48,7 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
             fullWidth
             maxWidth="xs"
         >
-            {training && (
+            {agenda && (
 
                 <DialogContent>
 
@@ -56,7 +56,7 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
                         variant="h5"
                         fontWeight={700}
                     >
-                        {training.title}
+                        {agenda.title}
                     </Typography>
 
                     <Divider
@@ -81,9 +81,9 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
                     <DetailItem
                         label="Tanggal"
                         value={
-                            training.startDate === training.endDate
-                                ? dayjs(training.startDate).format("DD MMMM YYYY")
-                                : `${dayjs(training.startDate).format("DD MMMM YYYY")} - ${dayjs(training.endDate).format("DD MMMM YYYY")}`
+                            agenda.startDate === agenda.endDate
+                                ? dayjs(agenda.startDate).format("DD MMMM YYYY")
+                                : `${dayjs(agenda.startDate).format("DD MMMM YYYY")} - ${dayjs(agenda.endDate).format("DD MMMM YYYY")}`
                         }
                     />
 
@@ -94,17 +94,17 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
 
                     <DetailItem
                         label="NIK"
-                        value={training.trainerId}
+                        value={agenda.trainerId}
                     />
 
                     <DetailItem
                         label="Nama PIC"
-                        value={training.trainerName}
+                        value={agenda.trainerName}
                     />
 
                     <DetailItem
                         label="Keterangan"
-                        value={training.memo}
+                        value={agenda.memo}
                     />
 
                     <Typography
@@ -115,8 +115,8 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
                     </Typography>
 
                     <Chip
-                        label={training.useYn === "Y" ? "Aktif" : "Non Aktif"}
-                        color={training.useYn === "Y" ? "success" : "default"}
+                        label={agenda.useYn === "Y" ? "Aktif" : "Non Aktif"}
+                        color={agenda.useYn === "Y" ? "success" : "default"}
                         size="small"
                     />
 
@@ -159,4 +159,4 @@ function ScheduleTrainingDetailDialog({ training, rooms, open, onClose, onEdit }
 
 }
     
-export default ScheduleTrainingDetailDialog;
+export default ScheduleAgendaDetailDialog;

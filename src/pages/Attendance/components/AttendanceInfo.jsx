@@ -19,7 +19,7 @@ import useResponsive from "../../../hooks/useResponsive";
 
 function AttendanceInfo({
 
-    training,
+    agenda,
     scanInCount,
     scanOutCount,
     isToday,
@@ -32,13 +32,13 @@ function AttendanceInfo({
 
     const { isMobile } = useResponsive();
 
-    const status = training?.absentStatus;
+    const status = agenda?.absentStatus;
 
     const canScanIn = !status || status === "I";
     const canScanOut = status === "O";
     const isFinished = status === "F";
 
-    if (!training) {
+    if (!agenda) {
 
         return (
 
@@ -187,7 +187,7 @@ function AttendanceInfo({
                         <BoxItem
                             icon={<SchoolIcon color="primary" />}
                             title="Agenda"
-                            value={training.title}
+                            value={agenda.title}
                         />
 
                     </Grid>
@@ -197,7 +197,7 @@ function AttendanceInfo({
                         <BoxItem
                             icon={<PersonIcon color="primary" />}
                             title="PIC"
-                            value={training.trainerName}
+                            value={agenda.trainerName}
                         />
 
                     </Grid>
@@ -207,7 +207,7 @@ function AttendanceInfo({
                         <BoxItem
                             icon={<MeetingRoomIcon color="primary" />}
                             title="Ruangan"
-                            value={training.roomName}
+                            value={agenda.roomName}
                         />
 
                     </Grid>
@@ -217,7 +217,7 @@ function AttendanceInfo({
                         <BoxItem
                             icon={<CalendarMonthIcon color="primary" />}
                             title="Tanggal"
-                            value={dayjs(training.startDate).format("DD MMM YYYY")}
+                            value={dayjs(agenda.startDate).format("DD MMM YYYY")}
                         />
 
                     </Grid>

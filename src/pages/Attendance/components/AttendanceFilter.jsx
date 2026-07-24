@@ -15,11 +15,11 @@ function AttendanceFilter({
 
     month,
     year,
-    training,
-    trainings = [],
+    agenda,
+    agendas = [],
     onMonthChange,
     onYearChange,
-    onTrainingChange,
+    onAgendaChange,
     onRefresh
 
 }) {
@@ -119,11 +119,11 @@ function AttendanceFilter({
                         select
                         fullWidth
                         label="Agenda"
-                        value={training?.id ?? ""}
-                        onChange={onTrainingChange}
+                        value={agenda?.id ?? ""}
+                        onChange={onAgendaChange}
                     >
 
-                        {trainings.map(item=>(
+                        {agendas.map(item=>(
 
                             <MenuItem
                                 key={item.id}

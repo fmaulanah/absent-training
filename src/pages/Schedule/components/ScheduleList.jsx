@@ -13,7 +13,7 @@ import AppCard from "../../../components/common/Card/AppCard";
 
 const PAGE_SIZE = 2;
 
-function ScheduleList({ trainings, roomMap, onSelectTraining }) {
+function ScheduleList({ agendas, roomMap, onSelectAgenda }) {
 
     const [page, setPage] = useState(1);
 
@@ -21,11 +21,11 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
         setPage(1);
 
-    }, [trainings]);
+    }, [agendas]);
 
-    const totalPages = Math.ceil(trainings.length / PAGE_SIZE);
+    const totalPages = Math.ceil(agendas.length / PAGE_SIZE);
 
-    const pagedTrainings = trainings.slice(
+    const pagedAgendas = agendas.slice(
 
         (page - 1) * PAGE_SIZE,
 
@@ -33,7 +33,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
     );
 
-    if (!trainings.length) {
+    if (!agendas.length) {
 
         return (
 
@@ -46,7 +46,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
                 <Typography color="text.secondary">
 
-                    Belum ada training.
+                    Belum ada agenda.
 
                 </Typography>
 
@@ -142,15 +142,15 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                 }}
             >
 
-                {pagedTrainings.map(training => (
+                {pagedAgendas.map(agenda => (
 
                     <AppCard
-                        key={training.id}
+                        key={agenda.id}
                         sx={{
                             width: "100%",
                             cursor: "pointer",
                             bgcolor:
-                                training.useYn === "Y"
+                                agenda.useYn === "Y"
                                     ? "background.paper"
                                     : "grey.300",
                             "&:hover": {
@@ -160,7 +160,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                     >
 
                         <Box
-                            onClick={() => onSelectTraining(training)}
+                            onClick={() => onSelectAgenda(agenda)}
                             sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
@@ -176,11 +176,11 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                                     variant="subtitle1"
                                     fontWeight={700}
                                     color={
-                                        training.useYn === "Y" ? "text.primary" : "text.disabled"
+                                        agenda.useYn === "Y" ? "text.primary" : "text.disabled"
                                     }
                                 >
 
-                                    {training.title}
+                                    {agenda.title}
 
                                 </Typography>
 
@@ -197,7 +197,7 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
                                     <Typography variant="body2">
 
-                                        {dayjs(training.startDate).format("DD MMM YYYY")}
+                                        {dayjs(agenda.startDate).format("DD MMM YYYY")}
 
                                     </Typography>
 
@@ -218,13 +218,13 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
                                         variant="body2"
                                         wrap = "true"
                                         color={
-                                            training.useYn === "Y"
+                                            agenda.useYn === "Y"
                                                 ? "text.primary"
                                                 : "text.secondary"
                                         }
                                     >
 
-                                        {training.trainerName}
+                                        {agenda.trainerName}
 
                                     </Typography>
 
@@ -241,8 +241,8 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
                                     <Chip
                                         label={
-                                            roomMap[training.room] ??
-                                            training.room
+                                            roomMap[agenda.room] ??
+                                            agenda.room
                                         }
                                         size="small"
                                         color="primary"
@@ -251,12 +251,12 @@ function ScheduleList({ trainings, roomMap, onSelectTraining }) {
 
                                     <Chip
                                         label={
-                                            training.useYn === "Y"
+                                            agenda.useYn === "Y"
                                                 ? "Aktif"
                                                 : "Non Aktif"
                                         }
                                         color={
-                                            training.useYn === "Y"
+                                            agenda.useYn === "Y"
                                                 ? "success"
                                                 : "default"
                                         }

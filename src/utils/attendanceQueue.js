@@ -291,7 +291,7 @@ const attendanceQueue = {
 
     },
 
-    createQueue({ employee, training, scanType, manualYn = "N", memo = ""}) 
+    createQueue({ employee, agenda, scanType, manualYn = "N", memo = ""}) 
     {
         return {
 
@@ -303,12 +303,12 @@ const attendanceQueue = {
             SCAN_EMP_NM: employee.EMP_NAME,
             SCAN_POSITION: employee.POSITION,
             SCAN_DEPT_NM: employee.DEPT_NAME,
-            SCHEDULE_ID: training.id,
-            SCHEDULE_NM: training.title,
-            ROOM_ID: training.room,
-            ROOM_NAME: training.roomName,
-            TRAINER_EMPID: training.trainerId,
-            TRAINER_EMP_NM: training.trainerName,
+            SCHEDULE_ID: agenda.id,
+            SCHEDULE_NM: agenda.title,
+            ROOM_ID: agenda.room,
+            ROOM_NAME: agenda.roomName,
+            TRAINER_EMPID: agenda.trainerId,
+            TRAINER_EMP_NM: agenda.trainerName,
             MANUAL_YN: manualYn,
             MEMO: employee.PHONE_NO
 

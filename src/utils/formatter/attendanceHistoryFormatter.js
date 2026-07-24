@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const formatTrainingDate = (value) => {
+export const formatAgendaDate = (value) => {
 
     if (!value) {
 

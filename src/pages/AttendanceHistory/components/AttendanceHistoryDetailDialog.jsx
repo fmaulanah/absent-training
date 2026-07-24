@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Box, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack, Typography, Tooltip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
-import { displayValue, formatStatus, formatTrainingDate, formatYesNo } from "../../../utils/formatter/attendanceHistoryFormatter";
+import { displayValue, formatStatus, formatAgendaDate, formatYesNo } from "../../../utils/formatter/attendanceHistoryFormatter";
 import { exportAttendance } from "../../../utils/export/attendanceExport";
 
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
@@ -15,7 +15,7 @@ import attendanceHistoryService from "../../../services/attendanceHistoryService
 
 import AppButton from "../../../components/common/Button/AppButton";
 
-function AttendanceHistoryDetailDialog({ open, onClose, training }) 
+function AttendanceHistoryDetailDialog({ open, onClose, agenda }) 
 {
 
     const [rows, setRows] = useState([]); 
@@ -23,15 +23,15 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
 
     const status = formatStatus(
 
-        training?.ABSENT_STATUS
+        agenda?.ABSENT_STATUS
 
     );
 
     const loadDetail = async () => {
 
-        console.log("Detail :", training);
+        console.log("Detail :", agenda);
 
-        if (!training?.SCHEDULE_ID) {
+        if (!agenda?.SCHEDULE_ID) {
 
             return;
 
@@ -41,7 +41,7 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
 
             setLoading(true);
 
-            const result = await attendanceHistoryService.getHistoryDetail(training.SCHEDULE_ID);
+            const result = await attendanceHistoryService.getHistoryDetail(agenda.SCHEDULE_ID);
 
             console.log(result);
 
@@ -67,7 +67,7 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
 
             await exportAttendance(
 
-                training,
+                agenda,
                 rows
 
             );
@@ -155,7 +155,7 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
 
         }
 
-    }, [open, training]);
+    }, [open, agenda]);
 
     return (
 
@@ -195,7 +195,7 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
                                 variant="h5"
                                 fontWeight={700}
                             >
-                                {displayValue(training?.TRAINING_NAME)}
+                                {displayValue(agenda?.TRAINING_NAME)}
                             </Typography>
 
                             <Tooltip
@@ -250,7 +250,7 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
                                 color="text.secondary"
                             >
 
-                                {formatTrainingDate(training?.TRAINING_DATE)}
+                                {formatAgendaDate(agenda?.TRAINING_DATE)}
 
                             </Typography>
 
@@ -290,7 +290,7 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
                                         fontWeight={600}
                                     >
 
-                                        {displayValue(training?.TRAINER_NAME)}
+                                        {displayValue(agenda?.TRAINER_NAME)}
 
                                     </Typography>
 
@@ -324,7 +324,7 @@ function AttendanceHistoryDetailDialog({ open, onClose, training })
                                         fontWeight={600}
                                     >
 
-                                        {displayValue(training?.ROOM_NAME)}
+                                        {displayValue(agenda?.ROOM_NAME)}
 
                                     </Typography>
 

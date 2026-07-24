@@ -4,7 +4,7 @@ import systemApiService from "./systemApiService";
 
 const attendanceService = {
 
-    async getTrainings(month) {
+    async getAgendas(month) {
 
         return await systemApiService.execute({
 

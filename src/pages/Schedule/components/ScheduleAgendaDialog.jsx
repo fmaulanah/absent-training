@@ -8,7 +8,7 @@ import AppButton from "../../../components/common/Button/AppButton";
 import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import LoadingOverlay from "../../../components/common/Loading/LoadingOverlay";
 
-function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, saving,
+function ScheduleAgendaDialog({ open, editingId, form, rooms, trainerError, saving,
                                   confirmOpen, setConfirmOpen, isDirty, setIsDirty,
                                   onChange, onSearchTrainer, onTrainerKeyDown, onClose, 
                                   onSubmit, onUseYnChange, }) 
@@ -275,4 +275,4 @@ function ScheduleTrainingDialog({ open, editingId, form, rooms, trainerError, sa
 
 }
 
-export default ScheduleTrainingDialog;
+export default ScheduleAgendaDialog;

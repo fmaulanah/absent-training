@@ -12,7 +12,7 @@ import {
     PolarAngleAxis
 } from "recharts";
 
-function DashboardTrainingGauge({ total, running, isMobile}) 
+function DashboardAgendaGauge({ total, running, isMobile}) 
 {
     const percent = total === 0 ? 0 : Math.round((running / total) * 100);
 
@@ -47,7 +47,7 @@ function DashboardTrainingGauge({ total, running, isMobile})
                     mb={3}
                 >
 
-                    Training Berjalan
+                    Agenda Berjalan
 
                 </Typography>
 
@@ -119,7 +119,7 @@ function DashboardTrainingGauge({ total, running, isMobile})
                         color="text.secondary"
                     >
 
-                        {running} / {total} Training
+                        {running} / {total} Agenda
 
                     </Typography>
 
@@ -133,4 +133,4 @@ function DashboardTrainingGauge({ total, running, isMobile})
 
 }
 
-export default DashboardTrainingGauge;
+export default DashboardAgendaGauge;

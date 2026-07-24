@@ -14,11 +14,11 @@ import DashboardSkeleton from "../../components/common/Loading/DashboardSkeleton
 
 import DashboardStat from "./components/DashboardStat";
 import DashboardMonthlyChart from "./components/DashboardMonthlyChart";
-import DashboardTrainingGauge from "./components/DashboardTrainingGauge";
+import DashboardAgendaGauge from "./components/DashboardAgendaGauge";
 import DashboardUpcomingTable from "./components/DashboardUpcomingTable";
 
 import roomService from "../../services/roomService";
-import trainingService from "../../services/trainingService";
+import agendaService from "../../services/agendaService";
 import dashboardService from "../../services/dashboardService";
 
 import useResponsive from "../../hooks/useResponsive";
@@ -31,7 +31,7 @@ function Dashboard() {
     const currentMonth = dayjs().format("YYYYMM");
 
     const [rooms, setRooms] = useState([]);
-    const [trainings, setTrainings] = useState([]);
+    const [agendas, setAgendas] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState("");
     const [chartData, setChartData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -46,9 +46,9 @@ function Dashboard() {
 
     const { isMobile } = useResponsive();
 
-    const upcomingTrainings = trainings.filter(training => training.useYn === "Y" &&
-                                                           training.startDate >= today &&
-                                                           dayjs(training.startDate).format("YYYYMM") === currentMonth)
+    const upcomingAgendas = agendas.filter(agenda => agenda.useYn === "Y" &&
+                                                           agenda.startDate >= today &&
+                                                           dayjs(agenda.startDate).format("YYYYMM") === currentMonth)
                                                 .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
     const loadMonthlyChart = async () => {
@@ -122,13 +122,13 @@ function Dashboard() {
 
     };
 
-    const loadTraining = async () => {
+    const loadAgenda = async () => {
 
         try {
 
-            const result = await trainingService.getTrainings(currentMonth);
+            const result = await agendaService.getAgendas(currentMonth);
 
-            setTrainings(
+            setAgendas(
 
                 result.map(item => ({
 
@@ -169,7 +169,7 @@ function Dashboard() {
 
     ), [rooms]);
 
-    const filteredTrainings = upcomingTrainings.filter(training => {
+    const filteredAgendas = upcomingAgendas.filter(agenda => {
 
         if (!selectedRoom) {
 
@@ -177,7 +177,7 @@ function Dashboard() {
 
         }
 
-        return training.room === selectedRoom;
+        return agenda.room === selectedRoom;
 
     });
 
@@ -192,7 +192,7 @@ function Dashboard() {
                 await Promise.all([
 
                     loadRooms(),
-                    loadTraining(),
+                    loadAgenda(),
                     loadMonthlyChart(),
                     loadSummary()
 
@@ -314,7 +314,7 @@ function Dashboard() {
 
                         <DashboardUpcomingTable
 
-                            rows={filteredTrainings}
+                            rows={filteredAgendas}
 
                         />
 

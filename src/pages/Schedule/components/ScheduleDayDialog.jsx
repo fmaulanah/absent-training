@@ -14,7 +14,7 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close";
 
-function ScheduleDayDialog({ open, date, trainings, onClose, onSelectTraining}) 
+function ScheduleDayDialog({ open, date, agendas, onClose, onSelectAgenda}) 
 {
     return (
 
@@ -53,22 +53,22 @@ function ScheduleDayDialog({ open, date, trainings, onClose, onSelectTraining})
 
                 <List disablePadding>
 
-                    {trainings.map((training, index) => (
+                    {agendas.map((agenda, index) => (
 
-                        <div key={training.id}>
+                        <div key={agenda.id}>
 
                             <ListItemButton
                                 onClick={() => {
 
                                     onClose();
-                                    onSelectTraining(training);
+                                    onSelectAgenda(agenda);
 
                                 }}
                                 sx={{
 
-                                    bgcolor: training.useYn === "N" ? "grey.100" : "background.paper",
+                                    bgcolor: agenda.useYn === "N" ? "grey.100" : "background.paper",
                                     "&:hover": {
-                                        bgcolor: training.useYn === "N" ? "grey.200" : "action.hover"
+                                        bgcolor: agenda.useYn === "N" ? "grey.200" : "action.hover"
                                     }
 
                                 }}
@@ -76,14 +76,14 @@ function ScheduleDayDialog({ open, date, trainings, onClose, onSelectTraining})
 
                                 <ListItemText
 
-                                    primary={training.title}
+                                    primary={agenda.title}
                                     secondary={
                                         <>
                                             <Typography
                                                 variant="body2"
                                                 component="span"
                                             >
-                                                {training.trainerName}
+                                                {agenda.trainerName}
                                             </Typography>
 
                                             <br />
@@ -92,7 +92,7 @@ function ScheduleDayDialog({ open, date, trainings, onClose, onSelectTraining})
                                                 variant="caption"
                                                 component="span"
                                             >
-                                                {training.roomName}
+                                                {agenda.roomName}
                                             </Typography>
                                         </>
                                     }
@@ -101,7 +101,7 @@ function ScheduleDayDialog({ open, date, trainings, onClose, onSelectTraining})
 
                             </ListItemButton>
 
-                            {index < trainings.length - 1 && (
+                            {index < agendas.length - 1 && (
 
                                 <Divider />
 
