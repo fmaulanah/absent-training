@@ -48,6 +48,7 @@ function AttendanceDialog({ open, agenda, scanType, queueVersion, onClose, onQue
     const { isMobile } = useResponsive();
 
     const audioRef = useRef(new Audio(ScanSuccessSound));
+    const isSingleScan = agenda?.scanOutYn === "N";
 
     const loadProgress = async () => {
 
@@ -122,22 +123,58 @@ function AttendanceDialog({ open, agenda, scanType, queueVersion, onClose, onQue
 
             }
 
-            const queue = attendanceQueue.createQueue({
+            if (agenda.scanOutYn === "N") {
 
-                employee,
-                agenda,
-                scanType,
-                manualYn
+                const { scanIn, scanOut } =
+                    attendanceQueue.createSingleScanQueues({
 
-            });
+                        employee,
+                        agenda,
+                        manualYn
 
-            const result = attendanceQueue.addQueue(queue);
+                    });
 
-            if (!result.success) {
+                const resultIn = attendanceQueue.addQueue(scanIn);
 
-                showSnackbar(result.message, "warning");
+                if (!resultIn.success) {
 
-                return;
+                    showSnackbar(resultIn.message, "warning");
+
+                    return;
+
+                }
+
+                const resultOut = attendanceQueue.addQueue(scanOut);
+
+                if (!resultOut.success) {
+
+                    showSnackbar(resultOut.message, "warning");
+
+                    return;
+
+                }
+
+            }
+            else {
+
+                const queue = attendanceQueue.createQueue({
+
+                    employee,
+                    agenda,
+                    scanType,
+                    manualYn
+
+                });
+
+                const result = attendanceQueue.addQueue(queue);
+
+                if (!result.success) {
+
+                    showSnackbar(result.message, "warning");
+
+                    return;
+
+                }
 
             }
 
@@ -296,18 +333,20 @@ function AttendanceDialog({ open, agenda, scanType, queueVersion, onClose, onQue
                 <Typography
                     fontWeight={700}
                     color={
-                        scanType === "IN"
-                            ? "success.dark"
-                            : "warning.dark"
+                        isSingleScan
+                            ? "primary.main"
+                            : scanType === "IN"
+                                ? "success.dark"
+                                : "warning.dark"
                     }
                 >
-
-                    {scanType === "IN"
-
-                        ? "🟢 SCAN IN"
-
-                        : "🟠 SCAN OUT"}
-
+                    {
+                        isSingleScan
+                            ? "🔵 ATTENDANCE"
+                            : scanType === "IN"
+                                ? "🟢 SCAN IN"
+                                : "🟠 SCAN OUT"
+                    }
                 </Typography>
 
                 <Typography

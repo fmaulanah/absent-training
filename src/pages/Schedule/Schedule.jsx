@@ -44,7 +44,8 @@ const initialForm = {
     trainerId: "",
     trainerName: "",
     memo: "",
-    useYn: "Y"
+    useYn: "Y",
+    scanOutYn: "Y"
 
 };
 
@@ -194,7 +195,9 @@ function Schedule() {
                     trainerId: item.TRAINER_EMPID,
                     trainerName: item.TRAINER_EMP_NM,
                     memo: item.MEMO,
-                    useYn: item.USE_YN
+                    useYn: item.USE_YN,
+                    absentStatus: item.ABSENT_STATUS,
+                    scanOutYn: item.SCAN_OUT_YN ?? "Y"
 
                 }))
 
@@ -430,7 +433,26 @@ function Schedule() {
     };
 
     const openEditDialog = () => {
+
+        if (!selectedAgenda) {
+
+            return;
+
+        }
+
+        if (selectedAgenda.absentStatus === "F") {
+
+            showSnackbar(
+                "Agenda yang sudah selesai tidak dapat diedit.",
+                "warning"
+            );
+
+            return;
+
+        }
+
         setEditingId(selectedAgenda.id);
+        
         setForm({
             title: selectedAgenda.title,
             startDate: selectedAgenda.startDate,
@@ -439,7 +461,8 @@ function Schedule() {
             trainerId: selectedAgenda.trainerId ?? "",
             trainerName: selectedAgenda.trainerName ?? "",
             memo: selectedAgenda.memo ?? "",
-            useYn: selectedAgenda.useYn ?? "Y"
+            useYn: selectedAgenda.useYn ?? "Y",
+            scanOutYn: selectedAgenda.scanOutYn ?? "Y"
         });
         
         setSelectedAgenda(null);

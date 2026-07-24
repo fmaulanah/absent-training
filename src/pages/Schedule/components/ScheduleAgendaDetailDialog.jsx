@@ -145,6 +145,7 @@ function ScheduleAgendaDetailDialog({ agenda, rooms, open, onClose, onEdit })
 
                 <AppButton
                     onClick={onEdit}
+                    disabled={agenda?.absentStatus === "F"}
                 >
 
                     Edit Agenda

@@ -1,5 +1,6 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, MenuItem,
-         TextField, FormControlLabel, Checkbox, Switch, Typography, IconButton  } from "@mui/material";
+         TextField, FormControlLabel, Checkbox, Switch, Typography, IconButton,
+         Radio, RadioGroup, FormLabel, FormControl  } from "@mui/material";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
@@ -175,6 +176,37 @@ function ScheduleAgendaDialog({ open, editingId, form, rooms, trainerError, savi
                     ))}
 
                 </TextField>
+
+                <FormControl
+                    sx={{
+                        gridColumn: "1 / -1"
+                    }}
+                >
+                    <FormLabel>
+                        Metode Attendance
+                    </FormLabel>
+
+                    <RadioGroup
+                        row
+                        name="scanOutYn"
+                        value={form.scanOutYn}
+                        onChange={onChange}
+                    >
+                        <FormControlLabel
+                            value="Y"
+                            control={<Radio />}
+                            label="Scan In & Scan Out"
+                            disabled={saving}
+                        />
+
+                        <FormControlLabel
+                            value="N"
+                            control={<Radio />}
+                            label="Sekali Scan"
+                            disabled={saving}
+                        />
+                    </RadioGroup>
+                </FormControl>
 
                 <TextField
                     name="memo"

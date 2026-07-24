@@ -33,6 +33,7 @@ function AttendanceInfo({
     const { isMobile } = useResponsive();
 
     const status = agenda?.absentStatus;
+    const isSingleScan = agenda?.scanOutYn === "N";
 
     const canScanIn = !status || status === "I";
     const canScanOut = status === "O";
@@ -128,28 +129,49 @@ function AttendanceInfo({
                     flexwrap="wrap"
                 >
 
-                    <AppButton
-                        size="small"
-                        startIcon={<PlayArrowIcon />}
-                        onClick={onScanIn}
-                        disabled={!canScanIn || !isToday}
-                    >
+                    {isSingleScan ? (
 
-                        {isMobile ? "IN" : "Scan In"}
+                        <AppButton
+                            size="small"
+                            startIcon={<PlayArrowIcon />}
+                            onClick={onScanIn}
+                            disabled={!canScanIn || !isToday}
+                        >
 
-                    </AppButton>
+                            Absen
 
-                    <AppButton
-                        size="small"
-                        color="success"
-                        startIcon={<PlayArrowIcon />}
-                        onClick={onScanOut}
-                        disabled={!canScanOut  || !isToday}
-                    >
+                        </AppButton>
 
-                        {isMobile ? "OUT" : "Scan Out"}
+                    ) : (
 
-                    </AppButton>
+                        <>
+
+                            <AppButton
+                                size="small"
+                                startIcon={<PlayArrowIcon />}
+                                onClick={onScanIn}
+                                disabled={!canScanIn || !isToday}
+                            >
+
+                                {isMobile ? "IN" : "Scan In"}
+
+                            </AppButton>
+
+                            <AppButton
+                                size="small"
+                                color="success"
+                                startIcon={<PlayArrowIcon />}
+                                onClick={onScanOut}
+                                disabled={!canScanOut || !isToday}
+                            >
+
+                                {isMobile ? "OUT" : "Scan Out"}
+
+                            </AppButton>
+
+                        </>
+
+                    )}
 
                     <AppButton
 
@@ -222,9 +244,21 @@ function AttendanceInfo({
 
                     </Grid>
 
-                    {/* {!isMobile && (
+                    {isSingleScan ? (
 
-                        <> */}
+                        <Grid size={{ xs: 12 }}>
+
+                            <BoxItem
+                                icon={<GroupsIcon color="primary" />}
+                                title="Attendance"
+                                value={`${scanInCount} Peserta`}
+                            />
+
+                        </Grid>
+
+                    ) : (
+
+                        <>
 
                             <Grid size={{ xs: 6 }}>
 
@@ -246,9 +280,9 @@ function AttendanceInfo({
 
                             </Grid>
 
-                        {/* </>
+                        </>
 
-                    )} */}
+                    )}
 
                 </Grid>
 

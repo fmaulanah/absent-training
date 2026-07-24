@@ -90,6 +90,14 @@ const attendanceQueue = {
 
     },
 
+    getNotUploadedCount() {
+
+        return this.countAttendance(
+            this.getNotUploadedQueue()
+        );
+
+    },
+
     getProgress({
 
         scheduleId,
@@ -131,6 +139,20 @@ const attendanceQueue = {
         );
 
         this.replaceQueue(remain);
+
+    },
+
+    countAttendance(queue) {
+
+        const uniqueAttendance = new Set(
+
+            queue.map(item =>
+                `${item.SCHEDULE_ID}_${item.SCAN_EMPID}`
+            )
+
+        );
+
+        return uniqueAttendance.size;
 
     },
 
@@ -291,12 +313,14 @@ const attendanceQueue = {
 
     },
 
-    createQueue({ employee, agenda, scanType, manualYn = "N", memo = ""}) 
+    createQueue({ employee, agenda, scanType, manualYn = "N", memo = "", scanDttm = null}) 
     {
+        const timestamp = scanDttm ?? dayjs().toISOString();
+
         return {
 
-            SCAN_DATE: dayjs().format("YYYYMMDD"),
-            SCAN_DTTM: dayjs().toISOString(),
+            SCAN_DATE: dayjs(timestamp).format("YYYYMMDD"),
+            SCAN_DTTM: timestamp,
             SCAN_TYPE: scanType,
             SCAN_RF_ID: employee.RF_ID,
             SCAN_EMPID: employee.EMPID,
@@ -311,6 +335,40 @@ const attendanceQueue = {
             TRAINER_EMP_NM: agenda.trainerName,
             MANUAL_YN: manualYn,
             MEMO: employee.PHONE_NO
+
+        };
+
+    },
+
+    createSingleScanQueues({ employee, agenda, manualYn = "N" }) 
+    {
+
+        const scanDttm = dayjs().toISOString();
+
+        const scanIn = this.createQueue({
+
+            employee,
+            agenda,
+            scanType: "IN",
+            manualYn,
+            scanDttm
+
+        });
+
+        const scanOut = this.createQueue({
+
+            employee,
+            agenda,
+            scanType: "OUT",
+            manualYn,
+            scanDttm
+
+        });
+
+        return {
+
+            scanIn,
+            scanOut
 
         };
 

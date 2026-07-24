@@ -36,7 +36,8 @@ const agendaService = {
             param07: form.trainerName,
             param08: form.memo,
             param09: form.useYn,
-            param10: loginUser?.EMPID
+            param10: loginUser?.EMPID,
+            param11: form.scanOutYn
         });
 
         return await systemApiService.execute({
@@ -52,7 +53,8 @@ const agendaService = {
             param07: form.trainerName,
             param08: form.memo,
             param09: form.useYn,
-            param10: loginUser?.EMPID ?? ""
+            param10: loginUser?.EMPID ?? "",
+            param11: form.scanOutYn
         });
 
     },
@@ -68,30 +70,19 @@ const agendaService = {
         return await systemApiService.execute({
 
             apiCd: "UPDATE_TRAINING",
-
             type: "SAVE",
-
             param01: scheduleId,
-
             param02: form.title,
-
             param03: dayjs(form.startDate).format("YYYYMMDD"),
-
             param04: dayjs(form.endDate).format("YYYYMMDD"),
-
             param05: form.room,
-
             param06: roomName,
-
             param07: form.trainerId,
-
             param08: form.trainerName,
-
             param09: form.memo,
-
             param10: form.useYn,
-
-            param11: loginUser?.EMPID ?? ""
+            param11: loginUser?.EMPID ?? "",
+            param12: form.scanOutYn
 
         });
 

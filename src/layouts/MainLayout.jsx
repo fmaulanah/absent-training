@@ -3,8 +3,11 @@ import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
+
 import Sidebar from "../components/Sidebar/Sidebar";
 import Header from "../components/Header/Header";
+
+import useMasterDataPolling from "../hooks/useMasterDataPolling";
 
 import {
     AppBar,
@@ -18,6 +21,8 @@ import {
 const drawerWidth = 260;
 
 function MainLayout() {
+
+    useMasterDataPolling();
 
     const theme = useTheme();
 

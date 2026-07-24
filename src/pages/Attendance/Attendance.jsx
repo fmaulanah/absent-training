@@ -77,7 +77,8 @@ function Attendance() {
                 trainerName: item.TRAINER_EMP_NM,
                 memo: item.MEMO,
                 useYn: item.USE_YN,
-                absentStatus: item.ABSENT_STATUS
+                absentStatus: item.ABSENT_STATUS,
+                scanOutYn: item.SCAN_OUT_YN ?? "Y"
 
             }));
 
@@ -303,17 +304,17 @@ function Attendance() {
             setQueueVersion(current => current + 1);
 
             const failedCount = queue.length - uploadedQueue.length;
+            const uploadedCount = attendanceQueue.countAttendance(uploadedQueue);
 
             if (failedCount === 0) {
 
                 showSnackbar(
 
-                    `${uploadedQueue.length} attendance berhasil diupload.`,
+                    `${uploadedCount} attendance berhasil diupload.`,
 
                     "success"
 
                 );
-
             }
             else {
 
@@ -410,7 +411,11 @@ function Attendance() {
 
         setPendingStatus(
 
-            scanType === "IN" ? "O" : "F"
+            selectedAgenda.scanOutYn === "N"
+                ? "F"
+                : scanType === "IN"
+                    ? "O"
+                    : "F"
 
         );
 
@@ -633,7 +638,7 @@ function Attendance() {
 
                 open={confirmUploadOpen}
                 title="Upload Attendance"
-                message={`Upload ${attendanceQueue.getNotUploadedQueue().length} attendance ke server?`}
+                message={`Upload ${attendanceQueue.getNotUploadedCount()} attendance ke server?`}
                 confirmText="Upload"
                 cancelText="Batal"
                 onConfirm={handleUpload}
